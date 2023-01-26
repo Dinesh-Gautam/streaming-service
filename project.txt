@@ -1,0 +1,17 @@
+user-
+sign in 
+sign up
+home
+search
+live tv
+movies
+tv shows
+profile (optional)
+Info page for movies and tv shows
+movie player page
+live tv player page
+
+admin-
+main page
+users edit page
+movie upload page
