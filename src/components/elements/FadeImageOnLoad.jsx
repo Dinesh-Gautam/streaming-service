@@ -29,6 +29,9 @@ function FadeImageOnLoad(props) {
   };
   return (
     <motion.div
+      styles={{
+        position: "relative",
+      }}
       initial="initial"
       animate="animate"
       variants={!imageLoaded ? initialVariant : imageLoadedVariant}
@@ -42,13 +45,16 @@ function FadeImageOnLoad(props) {
               // onLoadingComplete={() => setImageLoaded(true)}
               alt={props.imageSrc}
               style={{
-                filter: "blur(24px)",
+                filter: `blur(${props.ambientOptions?.blur || 24}px)`,
                 opacity: 0.7,
                 position: "absolute",
-                top: 0,
-                left: 0,
-                transform: "scale(2)",
-                zIndex: -1,
+                top: "50%",
+                left: "50%",
+                transform: `translate(-50%,-50%) scale(${
+                  props.ambientOptions?.scale || 2
+                })`,
+                ...props.ambientOptions,
+                zIndex: -100,
               }}
               //   objectFit="cover"
               //   height={208}

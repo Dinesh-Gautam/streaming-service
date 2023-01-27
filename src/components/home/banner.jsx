@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { getImageUrl } from "../../tmdbapi/tmdbApi";
 import styles from "./banner.module.scss";
+import FadeImageOnLoad from "../elements/FadeImageOnLoad";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -81,11 +82,21 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   : "")
               }
             >
-              <Image
-                src={getImageUrl(popularMovies[index].backdrop_path)}
-                alt={popularMovies[index].title}
-                width={1300}
-                height={1300 / 2}
+              <FadeImageOnLoad
+                imageSrc={popularMovies[index].backdrop_path}
+                ambientMode
+                positionAbsolute
+                ambientOptions={{ blur: 128, scale: 1 }}
+                attr={{
+                  imageContainer: {
+                    className: styles.bannerImageContainer,
+                  },
+                  image: {
+                    objectFit: "cover",
+                    height: 1300 / 2,
+                    width: 1300,
+                  },
+                }}
               />
             </div>
           );

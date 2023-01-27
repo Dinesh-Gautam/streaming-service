@@ -58,6 +58,11 @@ function Suggestions({ searchSuggestions }) {
               <FadeImageOnLoad
                 imageSrc={suggestion.poster_path}
                 ambientMode
+                ambientOptions={{
+                  top: 0,
+                  left: 0,
+                  transform: "translate(0% , 0%)",
+                }}
                 attr={{
                   imageContainer: {
                     className: styles.suggestionImageContainer,
