@@ -1,66 +1,21 @@
-const api_key = "fd8ea79bd59be3f0f50502ac5ec6031e";
+// todo: implement this on the server side and protect api key
+
+import { tmdbApiKey } from "../pages/api/tmdb/config";
+
+const api_key = tmdbApiKey;
 
 export async function searchSuggest(query, options = {}) {
   // console.log("fetching movie Info....");
   if (typeof query === "string") {
-    try {
-      const url = `
-          https://api.themoviedb.org/3/search/multi?api_key=fd8ea79bd59be3f0f50502ac5ec6031e&language=en-US&query=${query}&page=1&include_adult=false`;
-      const suggestions = await fetch(url).then((res) => res.json());
-      const filter = suggestions.results.filter(
-        (item) =>
-          (item.media_type === "movie" || item.media_type === "tv") &&
-          item.poster_path &&
-          (item.title || item.original_title || item.original_name)
-      );
-      const filteredSuggestions = filter.map(
-        ({
-          release_date = null,
-          media_type,
-          poster_path,
-          title = null,
-          id,
-          original_name = null,
-          original_title = null,
-          name = null,
-          first_air_date = null,
-          genre_ids,
-          overview,
-          backdrop_path,
-        }) => {
-          switch (options.type) {
-            case "detailed":
-              return {
-                media_type,
-                poster_path,
-                title,
-                original_name,
-                original_title,
-                name,
-                id,
-                first_air_date: first_air_date || release_date,
-                genre_ids,
-                overview,
-                backdrop_path,
-              };
+    const result = await fetch(
+      "/api/tmdb/search?q=" +
+        query +
+        Object.keys(options).map((key) => "&" + key + "=" + options[key])
+    );
+    const data = await result.json();
 
-            default:
-              return {
-                first_air_date: first_air_date || release_date,
-                media_type,
-                poster_path,
-                title,
-                original_name,
-                original_title,
-                name,
-                id,
-              };
-          }
-        }
-      );
-      return filteredSuggestions;
-    } catch (e) {
-      console.error(e);
+    if (data.success) {
+      return data.data;
     }
   }
   return null;
