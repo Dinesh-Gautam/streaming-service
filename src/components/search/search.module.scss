@@ -34,7 +34,7 @@
   flex-direction: column;
   border-radius: 12px;
   overflow: hidden;
-  gap: 2px;
+
   background-color: rgba($color: rgb(32, 32, 32), $alpha: 0.2);
   width: 100%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
@@ -43,7 +43,7 @@
   transform: translateY(100%);
   left: 0;
   right: 0;
-  max-height: 20rem;
+  // max-height: 20rem;
   overflow-y: scroll;
   overflow-x: clip;
   box-sizing: border-box;
@@ -107,7 +107,7 @@
 }
 
 .suggestionResultContainer:hover {
-  background-color: rgba($color: rgb(46, 46, 46), $alpha: 1);
+  background-color: rgba($color: rgb(60, 60, 60), $alpha: 1);
   // * {
   //   text-rendering: optimizeLegibility;
   // }

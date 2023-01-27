@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
-import { getImageUrl } from "../tmdbapi/tmdbApi";
+import { getImageUrl } from "../../tmdbapi/tmdbApi";
 
 function FadeImageOnLoad(props) {
   const [imageLoaded, setImageLoaded] = useState(false);

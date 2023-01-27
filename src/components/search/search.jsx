@@ -5,10 +5,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useData } from "../../context/stateContext";
-import FadeImageOnLoad from "../FadeImageOnLoad";
-import Separator from "../Separator";
+
 import { searchSuggest } from "../../tmdbapi/tmdbApi";
 import { useViewRedirect } from "../../Utils";
+import Suggestions from "./searchSuggestion";
 
 function Search({ manual, initialValue = "" }) {
   const { data, dataDispatch } = useData();
@@ -118,75 +118,6 @@ function Search({ manual, initialValue = "" }) {
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-function Suggestions({ searchSuggestions }) {
-  const containerRef = useRef(null);
-  const onClick = useViewRedirect();
-  const [height, setHeight] = useState(0);
-  useEffect(() => {
-    setHeight(containerRef.current?.offsetHeight || 0);
-  }, [searchSuggestions]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 1,
-        transition: { ease: "easeOut", delay: 0.2, duration: 0.3 },
-      }}
-      exit={{
-        opacity: 0,
-        height: 0,
-      }}
-      style={{
-        height: height,
-        transition: `height 0.5s ease-out`,
-        cursor: "pointer",
-      }}
-      className={styles.suggestionContainer}
-    >
-      <div ref={containerRef}>
-        {searchSuggestions.map((suggestion) => {
-          return (
-            <motion.div
-              layout
-              transition={{ type: "ease", duration: 0.5 }}
-              onClick={onClick(suggestion)}
-              className={styles.suggestionResultContainer}
-              key={suggestion.id}
-            >
-              <FadeImageOnLoad
-                imageSrc={suggestion.poster_path}
-                attr={{
-                  imageContainer: {
-                    className: styles.suggestionImageContainer,
-                  },
-                  image: { objectFit: "cover", height: 80, width: 60 },
-                }}
-              />
-
-              <div className={styles.suggestionInfoContainer}>
-                <h4>
-                  {suggestion.title ||
-                    suggestion.name ||
-                    suggestion.original_title ||
-                    suggestion.original_name}
-                </h4>
-                <Separator
-                  gap={4}
-                  values={[
-                    suggestion.media_type,
-                    new Date(suggestion.first_air_date).getFullYear(),
-                  ]}
-                />
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
   );
 }
 
