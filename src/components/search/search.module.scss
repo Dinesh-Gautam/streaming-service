@@ -2,19 +2,18 @@
 
 .div {
   min-width: 600px;
-  width: 30vw;
-  margin: auto;
+  max-width: 30vw;
+  // margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 100;
+  flex: 1;
 }
 
 .searchContainer {
   width: 100%;
-  margin: 0.5rem;
-  margin-top: 1rem;
   background-color: rgba($color: rgb(40, 40, 40), $alpha: 1);
   color: rgba($color: #fff, $alpha: 1);
   display: flex;
@@ -34,12 +33,12 @@
   flex-direction: column;
   border-radius: 12px;
   overflow: hidden;
-
-  background-color: rgba($color: rgb(32, 32, 32), $alpha: 0.2);
+  backdrop-filter: blur(64px);
+  background-color: rgba($color: rgb(32, 32, 32), $alpha: 0.5);
   width: 100%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   position: absolute;
-  bottom: 0;
+  bottom: -0.5rem;
   transform: translateY(100%);
   left: 0;
   right: 0;
@@ -48,9 +47,9 @@
   overflow-x: clip;
   box-sizing: border-box;
   margin-right: 4px;
-  border-right: 1px solid rgba($color: rgb(32, 32, 32), $alpha: 1);
+  border-right: 1px solid rgba($color: rgb(32, 32, 32), $alpha: 0.5);
   &::-webkit-scrollbar {
-    background-color: rgba($color: rgb(32, 32, 32), $alpha: 1);
+    background-color: rgba($color: rgb(32, 32, 32), $alpha: 0.2);
     width: 8px;
     border-radius: 0 12px 12px 0;
   }
@@ -64,11 +63,13 @@
 }
 .suggestionResultContainer {
   display: flex;
-  background-color: rgba($color: rgb(32, 32, 32), $alpha: 1);
+  background-color: rgba($color: rgb(32, 32, 32), $alpha: 0.2);
   overflow: hidden;
   align-items: center;
   min-height: 72px;
   max-height: 72px;
+  position: relative;
+  z-index: 11;
 }
 
 .suggestionImageContainer {
@@ -85,7 +86,7 @@
   flex: 1;
   padding: 12px 24px;
   overflow: hidden;
-
+  z-index: 100;
   h4 {
     margin: 0;
     color: rgba($color: #fff, $alpha: 0.8);
@@ -107,7 +108,7 @@
 }
 
 .suggestionResultContainer:hover {
-  background-color: rgba($color: rgb(60, 60, 60), $alpha: 1);
+  background-color: rgba($color: rgb(90, 90, 90), $alpha: 0.5);
   // * {
   //   text-rendering: optimizeLegibility;
   // }

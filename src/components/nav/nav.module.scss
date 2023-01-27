@@ -1,0 +1,22 @@
+.navContainer {
+  width: 100%;
+  padding: 0.5rem;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.navLeftContainer {
+  align-self: flex-end;
+  flex: 1;
+  //   max-width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navRightContainer {
+  align-self: flex-start;
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}

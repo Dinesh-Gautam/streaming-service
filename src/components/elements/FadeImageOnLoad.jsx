@@ -35,15 +35,37 @@ function FadeImageOnLoad(props) {
       {...props.attr.imageContainer}
     >
       {
-        <Image
-          src={getImageUrl(props.imageSrc)}
-          onLoadingComplete={() => setImageLoaded(true)}
-          alt={props.imageSrc}
-          //   objectFit="cover"
-          //   height={208}
-          //   width={148}
-          {...props.attr.image}
-        />
+        <>
+          {props.ambientMode && (
+            <Image
+              src={getImageUrl(props.imageSrc)}
+              // onLoadingComplete={() => setImageLoaded(true)}
+              alt={props.imageSrc}
+              style={{
+                filter: "blur(24px)",
+                opacity: 0.7,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                transform: "scale(2)",
+                zIndex: -1,
+              }}
+              //   objectFit="cover"
+              //   height={208}
+              //   width={148}
+              {...props.attr.image}
+            />
+          )}
+          <Image
+            src={getImageUrl(props.imageSrc)}
+            onLoadingComplete={() => setImageLoaded(true)}
+            alt={props.imageSrc}
+            //   objectFit="cover"
+            //   height={208}
+            //   width={148}
+            {...props.attr.image}
+          />
+        </>
       }
     </motion.div>
   );

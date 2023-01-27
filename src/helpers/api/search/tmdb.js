@@ -59,3 +59,14 @@ export async function tmdbSearch(options) {
   );
   return filteredSuggestions;
 }
+
+export async function getPopularMovies() {
+  const data = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}`
+  )
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err);
+    });
+  return data;
+}

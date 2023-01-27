@@ -57,6 +57,7 @@ function Suggestions({ searchSuggestions }) {
             >
               <FadeImageOnLoad
                 imageSrc={suggestion.poster_path}
+                ambientMode
                 attr={{
                   imageContainer: {
                     className: styles.suggestionImageContainer,
@@ -64,7 +65,15 @@ function Suggestions({ searchSuggestions }) {
                   image: { objectFit: "cover", height: 80, width: 60 },
                 }}
               />
-
+              {/* <FadeImageOnLoad
+                imageSrc={suggestion.poster_path}
+                attr={{
+                  imageContainer: {
+                    className: styles.backgroundImageContainer,
+                  },
+                  image: { objectFit: "cover", height: 100, width: 200 },
+                }}
+              /> */}
               <div className={styles.suggestionInfoContainer}>
                 <h4>
                   {suggestion.title ||
