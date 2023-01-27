@@ -1,8 +1,6 @@
 // todo: implement this on the server side and protect api key
 
-import { tmdbApiKey } from "../pages/api/tmdb/config";
-
-const api_key = tmdbApiKey;
+const api_key = process.env.TMDB_API_KEY;
 
 export async function searchSuggest(query, options = {}) {
   // console.log("fetching movie Info....");
