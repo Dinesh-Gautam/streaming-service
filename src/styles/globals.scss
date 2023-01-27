@@ -1,0 +1,38 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgba($color: rgb(16, 16, 16), $alpha: 1);
+  font-size: 16px;
+}
+
+input,
+button {
+  padding: 20px 32px;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 18px;
+  color: inherit;
+}
+
+button {
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
