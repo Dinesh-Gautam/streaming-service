@@ -15,7 +15,7 @@
   transition: all 1s ease-in-out;
   transform: translateX(-50%) scale(1);
   z-index: 9;
-  opacity: 1;
+  opacity: 0;
 
   // overflow: hidden;
 }
@@ -38,7 +38,7 @@
   left: 50%;
   transform: translateX(-50%) scale(1.1);
   // transform: translateX(-50%);
-  z-index: 10;
+  z-index: 9;
   opacity: 1;
 }
 .left {
@@ -49,13 +49,13 @@
 .extremeLeft {
   opacity: 0;
   left: 50%;
-  transform: translateX(-400%) scale(1);
-  z-index: -100;
+  transform: translateX(-300%) scale(1);
+  // z-index: -100;
 }
 .extremeRight {
   opacity: 0;
   left: 50%;
-  z-index: -100;
+  // z-index: -100;
   transform: translateX(200%) scale(1);
 }
 .right {
@@ -68,7 +68,8 @@
   left: 0;
   position: absolute;
   height: 100%;
-  width: 15vw;
+  width: 26vw;
+  // background-color: red;
   z-index: 100;
   opacity: 0;
 }

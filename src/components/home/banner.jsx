@@ -84,7 +84,14 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   : "")
               }
             >
-              <Link href={"/home/test?q=" + popularMovies[index].backdrop_path}>
+              <Link
+                href={
+                  "/home/test?q=" +
+                  popularMovies[index].backdrop_path +
+                  "&i=" +
+                  index
+                }
+              >
                 <FadeImageOnLoad
                   imageSrc={popularMovies[index].backdrop_path}
                   ambientMode

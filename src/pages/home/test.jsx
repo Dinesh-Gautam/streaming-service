@@ -15,7 +15,7 @@ function Test() {
         width: "100vw",
         position: "absolute",
       }}
-      layoutId={"banner1"}
+      layoutId={"banner" + router.query.i}
       className={styles.bannerImageContainer}
     >
       <Image
