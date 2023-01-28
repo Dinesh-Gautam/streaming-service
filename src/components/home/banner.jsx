@@ -4,6 +4,8 @@ import Image from "next/image";
 import { getImageUrl } from "../../tmdbapi/tmdbApi";
 import styles from "./banner.module.scss";
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
+import Link from "next/link";
+import { red } from "@mui/material/colors";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -82,22 +84,25 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   : "")
               }
             >
-              <FadeImageOnLoad
-                imageSrc={popularMovies[index].backdrop_path}
-                ambientMode
-                positionAbsolute
-                ambientOptions={{ blur: 128, scale: 1 }}
-                attr={{
-                  imageContainer: {
-                    className: styles.bannerImageContainer,
-                  },
-                  image: {
-                    objectFit: "cover",
-                    height: 1300 / 2,
-                    width: 1300,
-                  },
-                }}
-              />
+              <Link href={"/home/test?q=" + popularMovies[index].backdrop_path}>
+                <FadeImageOnLoad
+                  imageSrc={popularMovies[index].backdrop_path}
+                  ambientMode
+                  positionAbsolute
+                  ambientOptions={{ blur: 128, scale: 1 }}
+                  attr={{
+                    imageContainer: {
+                      layoutId: "banner" + index,
+                      className: styles.bannerImageContainer,
+                    },
+                    image: {
+                      objectFit: "cover",
+                      height: 1300 / 2,
+                      width: 1300,
+                    },
+                  }}
+                />
+              </Link>
             </div>
           );
         })}

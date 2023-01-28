@@ -9,33 +9,35 @@
 
 .banner {
   height: 100%;
-  width: 60vw;
+  width: 40vw;
   position: absolute;
   top: 0;
   transition: all 1s ease-in-out;
   transform: translateX(-50%) scale(1);
   z-index: 9;
-  opacity: 0;
+  opacity: 1;
 
   // overflow: hidden;
-  .bannerImageContainer {
+}
+
+.bannerImageContainer {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  img {
     object-fit: cover;
-    width: 100%;
     height: 100%;
-    overflow: hidden;
-    border-radius: 12px;
-    img {
-      object-fit: cover;
-      height: 100%;
-      width: 100%;
-      object-position: top;
-    }
+    width: 100%;
+    object-position: center;
   }
 }
 
 .middle {
   left: 50%;
   transform: translateX(-50%) scale(1.1);
+  // transform: translateX(-50%);
   z-index: 10;
   opacity: 1;
 }
@@ -47,7 +49,7 @@
 .extremeLeft {
   opacity: 0;
   left: 50%;
-  transform: translateX(-200%) scale(1);
+  transform: translateX(-400%) scale(1);
   z-index: -100;
 }
 .extremeRight {
