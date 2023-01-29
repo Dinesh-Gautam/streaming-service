@@ -27,6 +27,7 @@ function consoleEncode(fn) {
     [240, 350],
     [480, 700],
     [720, 2500],
+    [1080, 10000],
   ];
   const fallback = [480, 400];
 

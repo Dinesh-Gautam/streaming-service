@@ -28,6 +28,15 @@ function upload() {
       // Handle error
       console.error("An error occurred while uploading the video");
     }
+
+    const xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        // Update the progress bar
+        const percentComplete = event.loaded / event.total;
+        console.log(percentComplete);
+      }
+    });
   }
 
   return (
