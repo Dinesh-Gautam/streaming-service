@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     res.send({
       processingDone: true,
     });
-    consoleEncode(req.file.path);
+    consoleEncode(req.file.path, req.query.title);
   });
 }
 
@@ -39,19 +39,47 @@ function saveMovieData(data) {
   }
   console.log("saving data");
   try {
-    const fileData = JSON.parse(fs.readFileSync("data.json").toString()) || [];
+    const fileData =
+      JSON.parse(fs.readFileSync("tmpData.json").toString()) || [];
     if (fileData.some((e) => e.title === data.title)) {
       console.log("movie already exists");
       return;
     }
     fileData.push(data);
-    fs.writeFileSync("data.json", JSON.stringify(fileData));
+    fs.writeFileSync("tmpData.json", JSON.stringify(fileData));
   } catch (error) {
-    fs.writeFileSync("data.json", JSON.stringify([data]));
+    fs.writeFileSync("tmpData.json", JSON.stringify([data]));
   }
 }
 
-function consoleEncode(fn) {
+function saveProgressData(title, data) {
+  if (!data) {
+    return;
+  }
+  console.log("saving data");
+  try {
+    const fileData =
+      JSON.parse(fs.readFileSync("tmpData.json").toString()) || [];
+
+    const movie = fileData.find((e) => e.title === title);
+    if (!movie) {
+      console.log("can't find movie");
+      return;
+    }
+    fileData.map((e) => {
+      if (e.title === title) {
+        e.progress = data;
+      }
+      return e;
+    });
+    fs.writeFileSync("tmpData.json", JSON.stringify(fileData));
+  } catch (error) {
+    // fs.writeFileSync("data.json", JSON.stringify([data]));
+    console.error("some error occurred");
+  }
+}
+
+function consoleEncode(fn, title) {
   // height, bitrate
   const sizes = [
     [240, 350],
@@ -150,11 +178,24 @@ function consoleEncode(fn) {
   proc.on("start", function (commandLine) {
     console.log("progress", "Spawned Ffmpeg with command: " + commandLine);
   });
+  let totalTime;
 
   proc
-    .on("progress", function (info) {
-      console.log("progress", info);
+    .on("codecData", (data) => {
+      totalTime = parseInt(data.duration.replace(/:/g, ""));
     })
+    .on("progress", function (info) {
+      if (!info.percent && totalTime !== undefined) {
+        const time = parseInt(info.timemark.replace(/:/g, ""));
+
+        // AND HERE IS THE CALCULATION
+        const percent = (time / totalTime) * 100;
+        info.percent = percent.toFixed(2);
+      }
+      console.log("progress", info);
+      saveProgressData(title, info);
+    })
+
     .on("stderr", function (stderrLine) {
       // console.log("Stderr output: " + stderrLine);
     })

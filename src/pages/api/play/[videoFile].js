@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   console.log(filePath);
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      res.status(500).send({ error: err });
+      res.status(500).send({ success: false, error: "can't find path" });
     } else {
       res.setHeader("Content-Type", "application/dash+xml");
       res.send(data);
