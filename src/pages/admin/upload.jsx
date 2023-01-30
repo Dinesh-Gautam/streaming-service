@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 function upload() {
 const [inputTitle, setInputTitle] = useState("")
-
+const [progressData, setProgressData] = useState();
+const progressInterval = useRef(null);
   async function inputFileHandler(event) {
     const file = event.target.files[0];
 
@@ -18,14 +19,14 @@ const [inputTitle, setInputTitle] = useState("")
 
     // Handle the response
     if (response.ok) {
-      // Get the video URL from the response
-      const videoUrl = await response.text();
-
-      // Update the video player source
-      //   const videoPlayer = document.getElementById("video-player");
-      //   videoPlayer.src = videoUrl;
-
-      console.log(videoUrl);
+      // get progress
+      if(!progressInterval.current){
+        progressInterval.current = setInterval(() => {
+          const progressData = fetch('/api/progress?title=' + inputTitle)
+          setProgressData(progressData.percent)
+          console.log(progressData)
+        } , 1000)
+      }
     } else {
       // Handle error
       console.error("An error occurred while uploading the video");
@@ -49,7 +50,18 @@ function inputTitleHandler(event) {
     <div>
       <input type="text" value={inputTitle} onChange={(event) => inputTitleHandler(event)} placeholder="title of the video" />
       <input type="file" onChange={(event) => inputFileHandler(event)} />
+      <div>
+        {
+          progressData && 
+            <span>
+              {progressData + "%"} 
+            </span>
+          
+        }
+       
+      </div>
     </div>
+
   );
 }
 
