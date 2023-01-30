@@ -1,9 +1,21 @@
-import React, { useRef, useState } from "react";
+import { getPendingUploads } from "@/helpers/api/data";
+import React, { useRef, useState, useEffect } from "react";
+import Link from "next/link";
+function Upload({ pending }) {
+  const [inputTitle, setInputTitle] = useState(pending?.title || "");
+  const [progressData, setProgressData] = useState(
+    pending?.progress?.completed ? 100 : null
+  );
+  const progressInterval = useRef(null);
 
-function upload() {
-const [inputTitle, setInputTitle] = useState("")
-const [progressData, setProgressData] = useState();
-const progressInterval = useRef(null);
+  useEffect(() => {
+    return () => {
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    };
+  }, []);
+
   async function inputFileHandler(event) {
     const file = event.target.files[0];
 
@@ -20,12 +32,19 @@ const progressInterval = useRef(null);
     // Handle the response
     if (response.ok) {
       // get progress
-      if(!progressInterval.current){
-        progressInterval.current = setInterval(() => {
-          const progressData = fetch('/api/progress?title=' + inputTitle)
-          setProgressData(progressData.percent)
-          console.log(progressData)
-        } , 1000)
+      if (!progressInterval.current) {
+        progressInterval.current = setInterval(async () => {
+          const progressData = await fetch(
+            "/api/progress?title=" + inputTitle
+          ).then((res) => res.json());
+          if (progressData.completed) {
+            clearInterval(progressInterval.current);
+            setProgressData(100);
+            return;
+          }
+          setProgressData(Math.round(progressData.percent));
+          console.log(progressData);
+        }, 1000);
       }
     } else {
       // Handle error
@@ -42,27 +61,55 @@ const progressInterval = useRef(null);
     // });
   }
 
-function inputTitleHandler(event) {
-  setInputTitle(event.target.value)
-}
+  async function publishVideo(event) {
+    if (pending.uid) {
+      event.preventDefault();
 
+      const publish = await fetch("/api/publish?id=" + pending.uid);
+    }
+  }
+
+  function inputTitleHandler(event) {
+    setInputTitle(event.target.value);
+  }
+  // console.log(pending);
   return (
     <div>
-      <input type="text" value={inputTitle} onChange={(event) => inputTitleHandler(event)} placeholder="title of the video" />
-      <input type="file" onChange={(event) => inputFileHandler(event)} />
+      <input
+        type="text"
+        value={inputTitle}
+        onChange={(event) => inputTitleHandler(event)}
+        placeholder="title of the video"
+      />
+      {pending ? (
+        progressData > 99 && <button onClick={publishVideo}>publish</button>
+      ) : (
+        <input type="file" onChange={(event) => inputFileHandler(event)} />
+      )}
       <div>
-        {
-          progressData && 
-            <span>
-              {progressData + "%"} 
-            </span>
-          
-        }
-       
+        {progressData && <span>converting Video: {progressData + "%"}</span>}
       </div>
     </div>
-
   );
 }
 
-export default upload;
+export function getServerSideProps(context) {
+  const { id } = context.query;
+
+  if (!id) {
+    return {
+      props: {},
+    };
+  }
+
+  const pending = getPendingUploads(id);
+  return {
+    props: pending
+      ? {
+          pending,
+        }
+      : {},
+  };
+}
+
+export default Upload;

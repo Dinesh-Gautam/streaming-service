@@ -1,3 +1,9 @@
+import {
+  saveMovieData,
+  saveProgressData,
+  saveVideoMetadata,
+} from "@/helpers/api/data";
+
 const multer = require("multer");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
@@ -27,59 +33,13 @@ export default async function handler(req, res) {
     saveMovieData(movieData);
 
     res.send({
-      processingDone: true,
+      uploadDone: true,
     });
-    consoleEncode(req.file.path, req.query.title);
+    consoleEncode(req.file.path, movieData.title, movieData.uid);
   });
 }
 
-function saveMovieData(data) {
-  if (!data) {
-    return;
-  }
-  console.log("saving data");
-  try {
-    const fileData =
-      JSON.parse(fs.readFileSync("tmpData.json").toString()) || [];
-    if (fileData.some((e) => e.title === data.title)) {
-      console.log("movie already exists");
-      return;
-    }
-    fileData.push(data);
-    fs.writeFileSync("tmpData.json", JSON.stringify(fileData));
-  } catch (error) {
-    fs.writeFileSync("tmpData.json", JSON.stringify([data]));
-  }
-}
-
-function saveProgressData(title, data) {
-  if (!data) {
-    return;
-  }
-  console.log("saving data");
-  try {
-    const fileData =
-      JSON.parse(fs.readFileSync("tmpData.json").toString()) || [];
-
-    const movie = fileData.find((e) => e.title === title);
-    if (!movie) {
-      console.log("can't find movie");
-      return;
-    }
-    fileData.map((e) => {
-      if (e.title === title) {
-        e.progress = data;
-      }
-      return e;
-    });
-    fs.writeFileSync("tmpData.json", JSON.stringify(fileData));
-  } catch (error) {
-    // fs.writeFileSync("data.json", JSON.stringify([data]));
-    console.error("some error occurred");
-  }
-}
-
-function consoleEncode(fn, title) {
+function consoleEncode(fn, title, uid) {
   // height, bitrate
   const sizes = [
     [240, 350],
@@ -201,6 +161,12 @@ function consoleEncode(fn, title) {
     })
     .on("end", function () {
       console.log("complete");
+      saveProgressData(title, { completed: true });
+      saveVideoMetadata({
+        title,
+        uid,
+        path: `${name + "Output"}.mpd`,
+      });
     })
     .on("error", function (err) {
       console.log("error", err);

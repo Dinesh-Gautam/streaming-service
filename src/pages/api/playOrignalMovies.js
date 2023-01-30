@@ -24,7 +24,7 @@ function getMovieData(id) {
   // read file containing movie data such as url and other data
 
   const movieData =
-    JSON.parse(fs.readFileSync("movieData.json").toString()) || [];
+    JSON.parse(fs.readFileSync("db/movieData.json").toString()) || [];
   const data = movieData.find((e) => e.id == id);
   return data;
 }
