@@ -25,7 +25,11 @@ export default async function handler(req, res) {
     };
 
     saveMovieData(movieData);
-    // consoleEncode(req.file.path);
+
+    res.send({
+      processingDone: true,
+    });
+    consoleEncode(req.file.path);
   });
 }
 
