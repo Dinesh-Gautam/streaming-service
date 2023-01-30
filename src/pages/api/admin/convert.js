@@ -4,7 +4,9 @@ const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 const path = require("path");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 console.log("storage created");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
@@ -17,8 +19,32 @@ const upload = multer({ storage }).single("video");
 
 export default async function handler(req, res) {
   return await upload(req, res, (err) => {
-    consoleEncode(req.file.path);
+    const movieData = {
+      title: req.query.title,
+      uid: uuidv4(),
+    };
+
+    saveMovieData(movieData);
+    // consoleEncode(req.file.path);
   });
+}
+
+function saveMovieData(data) {
+  if (!data) {
+    return;
+  }
+  console.log("saving data");
+  try {
+    const fileData = JSON.parse(fs.readFileSync("data.json").toString()) || [];
+    if (fileData.some((e) => e.title === data.title)) {
+      console.log("movie already exists");
+      return;
+    }
+    fileData.push(data);
+    fs.writeFileSync("data.json", JSON.stringify(fileData));
+  } catch (error) {
+    fs.writeFileSync("data.json", JSON.stringify([data]));
+  }
 }
 
 function consoleEncode(fn) {
