@@ -1,6 +1,6 @@
-import { getPendingUploads } from "@/helpers/api/data";
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import { getPendingMovies } from "@/helpers/api/data/admin";
 function Upload({ pending }) {
   const [inputTitle, setInputTitle] = useState(pending?.title || "");
   const [progressData, setProgressData] = useState(
@@ -102,7 +102,7 @@ export function getServerSideProps(context) {
     };
   }
 
-  const pending = getPendingUploads(id);
+  const pending = getPendingMovies(id);
   return {
     props: pending
       ? {

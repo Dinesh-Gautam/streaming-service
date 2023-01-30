@@ -1,4 +1,4 @@
-import { publishMovie } from "@/helpers/api/data";
+import { publishMovie } from "@/helpers/api/data/config";
 
 export default async function handler(req, res) {
   const id = req.query.id;

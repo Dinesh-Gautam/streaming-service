@@ -1,4 +1,4 @@
-import { getOriginalMovies } from "@/helpers/api/data";
+import { getOriginalMovies } from "@/helpers/api/data/config";
 
 export default async function handler(req, res) {
   // gat movies from data.json

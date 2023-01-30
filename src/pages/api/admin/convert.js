@@ -1,8 +1,8 @@
 import {
   saveMovieData,
-  saveProgressData,
-  saveVideoMetadata,
-} from "@/helpers/api/data";
+  savePendingMovieData,
+  updateMovieProgressData,
+} from "@/helpers/api/data/movie";
 
 const multer = require("multer");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       uid: uuidv4(),
     };
 
-    saveMovieData(movieData);
+    savePendingMovieData(movieData);
 
     res.send({
       uploadDone: true,
@@ -153,7 +153,7 @@ function consoleEncode(fn, title, uid) {
         info.percent = percent.toFixed(2);
       }
       console.log("progress", info);
-      saveProgressData(title, info);
+      updateMovieProgressData(title, info);
     })
 
     .on("stderr", function (stderrLine) {
@@ -161,8 +161,8 @@ function consoleEncode(fn, title, uid) {
     })
     .on("end", function () {
       console.log("complete");
-      saveProgressData(title, { completed: true });
-      saveVideoMetadata({
+      updateMovieProgressData(title, { completed: true });
+      saveMovieData({
         title,
         uid,
         path: `${name + "Output"}.mpd`,

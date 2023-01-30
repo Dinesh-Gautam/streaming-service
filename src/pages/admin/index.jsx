@@ -1,6 +1,7 @@
-import { getOriginalMovies, getPendingUploads } from "@/helpers/api/data";
 import React from "react";
 import Link from "next/link";
+import { getPendingMovies } from "@/helpers/api/data/admin";
+import { getPublishedMovies } from "@/helpers/api/data/movie";
 
 function index({ pendingUploads, uploadedVideos }) {
   return (
@@ -31,7 +32,7 @@ function index({ pendingUploads, uploadedVideos }) {
           ))}
         </div>
       ) : (
-        <h2>No pending uploads</h2>
+        <h2>No movies published</h2>
       )}
 
       <div>
@@ -42,11 +43,11 @@ function index({ pendingUploads, uploadedVideos }) {
 }
 
 export async function getServerSideProps() {
-  const data = getPendingUploads();
-  const uploadedVideos = getOriginalMovies();
+  const data = getPendingMovies();
+  const uploadedVideos = getPublishedMovies();
   return {
     props: {
-      pendingUploads: data.length ? data : null,
+      pendingUploads: data && data.length ? data : null,
       uploadedVideos,
     },
   };
