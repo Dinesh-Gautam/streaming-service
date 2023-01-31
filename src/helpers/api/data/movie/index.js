@@ -160,3 +160,23 @@ export function updateMovieProgressData(title, data) {
   }
   return null;
 }
+
+export function getMovieData(id) {
+  // read file containing movie data such as url and other data
+
+  try {
+    const movieData =
+      JSON.parse(fs.readFileSync(config.dir + config.movieData).toString()) ||
+      [];
+    const data = movieData.find((e) => e.id == id);
+    if (!data) {
+      console.log("can't find movie data");
+      return null;
+    }
+    return data;
+  } catch (e) {
+    console.log(config.dir + config.movieData, "does not exists");
+  }
+
+  return null;
+}
