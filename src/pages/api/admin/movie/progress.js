@@ -16,6 +16,6 @@ export default async function handler(req, res) {
     const progress = data.progress || {};
     res.send(progress);
   } catch (e) {
-    res.send("some error occurred");
+    res.send({ success: false, error: "some error occurred" });
   }
 }

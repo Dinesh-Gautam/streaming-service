@@ -4,5 +4,9 @@ export default async function handler(req, res) {
   // gat movies from data.json
   const movies = getPublishedMovies();
   // return movies list isth with id
-  res.send(movies);
+  if (data) {
+    res.send(movies);
+  } else {
+    res.send({ success: false });
+  }
 }

@@ -8,7 +8,11 @@ export default async function handler(req, res) {
     return;
   }
 
-  publishMovie(id);
+  const data = publishMovie(id);
 
-  res.send({ success: true });
+  if (data) {
+    res.send({ success: true });
+  } else {
+    res.send({ success: false });
+  }
 }
