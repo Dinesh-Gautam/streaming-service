@@ -11,15 +11,29 @@ export function publishMovie(id) {
         fs.readFileSync(config.dir + config.pendingMovies).toString()
       ) || [];
 
+    if (!fileData.length) {
+      console.log("info:", "fileData:", config.pendingMovies, "length is zero");
+    }
+
     const movieData = fileData.find((e) => e.uid === id);
+    if (!movieData) {
+      console.log("can't find movie in:", config.pendingMovies);
+      return;
+    }
     const updatedTempFileData = fileData.filter((e) => e.uid !== id);
     saveToOriginalMovies(movieData);
     fs.writeFileSync(
       config.dir + config.pendingMovies,
       JSON.stringify(updatedTempFileData)
     );
+    return movieData;
   } catch (e) {
-    console.log(e);
+    console.log(
+      "error in publishMovie function:",
+      config.pendingMovies,
+      "does not exists"
+    );
+    return null;
   }
 }
 
@@ -36,7 +50,7 @@ export function getPendingMovies(id) {
 
     return data;
   } catch (e) {
-    console.log("tmpData.json does not exists");
+    console.log(config.pendingMovies, "does not exists");
     return null;
   }
 }

@@ -4,13 +4,18 @@ import fs from "fs";
 
 export function getPublishedMovies() {
   // get all the original movies
-  const fileData =
-    JSON.parse(
-      fs.readFileSync(config.dir + config.publishedMovies).toString()
-    ) || [];
+  try {
+    const fileData =
+      JSON.parse(
+        fs.readFileSync(config.dir + config.publishedMovies).toString()
+      ) || [];
 
-  if (fileData.length) {
-    return fileData;
+    if (fileData.length) {
+      return fileData;
+    }
+    return null;
+  } catch (e) {
+    console.log(config.publishedMovies, "does not exists");
   }
   return null;
 }
@@ -18,9 +23,14 @@ export function getPublishedMovies() {
 export function saveMovieToPublishedMovie(data) {
   // publishing movies
   if (!data) {
-    return;
+    console.log("data is required when publishing movies");
+    return data;
   }
   const { uid, title } = data;
+  if (!uid || !title) {
+    console.log("Some of the key values are missing", Object.keys(data));
+    return null;
+  }
   console.log("saving original movies");
   try {
     const fileData =
@@ -37,9 +47,9 @@ export function saveMovieToPublishedMovie(data) {
         }
         return e;
       });
+    } else {
+      fileData.push({ uid, title });
     }
-
-    fileData.push({ uid, title });
 
     fs.writeFileSync(
       config.dir + config.publishedMovies,
@@ -53,15 +63,17 @@ export function saveMovieToPublishedMovie(data) {
       JSON.stringify(fileData)
     );
   }
+  return null;
 }
 
 export function saveMovieData(data) {
   // contains urls for the movie
   if (!data) {
-    return;
+    console.log("data is required when saving movie data");
+    return null;
   }
   const { uid } = data;
-  console.log("saving metaData");
+  console.log("saving movie data");
   try {
     const fileData =
       JSON.parse(fs.readFileSync(config.dir + config.movieData).toString()) ||
@@ -76,6 +88,8 @@ export function saveMovieData(data) {
         }
         return e;
       });
+    } else {
+      fileData.push(data);
     }
 
     fs.writeFileSync(config.dir + config.movieData, JSON.stringify(fileData));
@@ -84,6 +98,7 @@ export function saveMovieData(data) {
     //  fs.writeFileSync("data.json", JSON.stringify([data]));
     fs.writeFileSync(config.dir + config.movieData, JSON.stringify(fileData));
   }
+  return null;
 }
 
 export function savePendingMovieData(data) {
@@ -99,7 +114,7 @@ export function savePendingMovieData(data) {
       ) || [];
     if (fileData.some((e) => e.title === data.title)) {
       console.log("movie already exists");
-      return;
+      return null;
     }
     fileData.push(data);
     fs.writeFileSync(
@@ -109,12 +124,13 @@ export function savePendingMovieData(data) {
   } catch (error) {
     fs.writeFileSync(config.dir + config.pendingMovies, JSON.stringify([data]));
   }
+  return null;
 }
 
 export function updateMovieProgressData(title, data) {
   // updates the progress of the movie conversion to mpeg-dash format
   if (!data) {
-    return;
+    return null;
   }
   console.log("saving data");
   try {
@@ -126,7 +142,7 @@ export function updateMovieProgressData(title, data) {
     const movie = fileData.find((e) => e.title === title);
     if (!movie) {
       console.log("can't find movie");
-      return;
+      return null;
     }
     fileData.map((e) => {
       if (e.title === title) {
@@ -142,4 +158,5 @@ export function updateMovieProgressData(title, data) {
     // fs.writeFileSync("data.json", JSON.stringify([data]));
     console.error("some error occurred");
   }
+  return null;
 }
