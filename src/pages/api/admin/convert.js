@@ -50,12 +50,15 @@ function consoleEncode(fn, title, uid) {
   ];
   const fallback = [480, 400];
 
-  let name = path.basename(fn, path.extname(fn));
+  const name = path.basename(fn, path.extname(fn));
+
+  const dirName = title;
+
   const targetdir = path.resolve(
     path.join(
       // "/Users/dines/Desktop/major project (OTT streaming service)/streaming-service/converted/mpdVideos",
       "converted/mpdVideos",
-      name
+      dirName
     )
   );
   const sourcefn = path.resolve(fn);
@@ -79,7 +82,7 @@ function consoleEncode(fn, title, uid) {
     cwd: targetdir,
   });
 
-  var targetfn = path.join(targetdir, `${name + "Output"}.mpd`);
+  var targetfn = path.join(targetdir, `${name}.mpd`);
   console.log("targetFIleName : " + targetfn);
   proc
     .addOption("-loglevel", "debug")
@@ -166,7 +169,8 @@ function consoleEncode(fn, title, uid) {
       saveMovieData({
         title,
         uid,
-        path: `${name + "Output"}.mpd`,
+        videoFileName: `${name}.mpd`,
+        videoFileDir: dirName,
       });
     })
     .on("error", function (err) {

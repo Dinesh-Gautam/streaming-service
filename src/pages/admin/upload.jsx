@@ -1,20 +1,28 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { getPendingMovies } from "@/helpers/api/data/admin";
+import { useRouter } from "next/router";
 function Upload({ pending }) {
+  console.log(pending);
   const [inputTitle, setInputTitle] = useState(pending?.title || "");
   const [progressData, setProgressData] = useState(
     pending?.progress?.completed ? 100 : null
   );
   const progressInterval = useRef(null);
-
+  const router = useRouter();
   useEffect(() => {
-    return () => {
-      if (progressInterval.current) {
-        clearInterval(progressInterval.current);
-      }
-    };
-  }, []);
+    if (!progressInterval.current && pending && !pending.progress?.completed) {
+      console.log("starting progress interval");
+      startProgressInterval(pending.uid);
+    }
+
+    // return () => {
+    //   if (progressInterval.current) {
+    //     console.log("clearing progress interval");
+    //     clearInterval(progressInterval.current);
+    //   }
+    // };
+  }, [pending]);
 
   async function inputFileHandler(event) {
     const file = event.target.files[0];
@@ -27,13 +35,35 @@ function Upload({ pending }) {
     const response = await fetch("/api/admin/convert?title=" + inputTitle, {
       method: "POST",
       body: formData,
-    }).then((e) => e.json());
+    });
 
-    const uid = response.data.uid;
+    if (response.ok) {
+      const { data } = await response.json();
+      console.log(data);
+      router.replace(location.href + "?id=" + data.uid);
+    }
+    // const uid = response.data.uid;
 
     // Handle the response
 
     // get progress
+
+    // startProgressInterval(uid);
+
+    // const xhr = new XMLHttpRequest();
+    // xhr.upload.addEventListener("progress", (event) => {
+    //   if (event.lengthComputable) {
+    //     // Update the progress bar
+    //     const percentComplete = event.loaded / event.total;
+    //     console.log(percentComplete);
+    //   }
+    // });
+  }
+
+  function startProgressInterval(uid) {
+    if (!uid) {
+      return;
+    }
     if (!progressInterval.current) {
       progressInterval.current = setInterval(async () => {
         const progressData = await fetch(
@@ -48,15 +78,6 @@ function Upload({ pending }) {
         console.log(progressData);
       }, 1000);
     }
-
-    // const xhr = new XMLHttpRequest();
-    // xhr.upload.addEventListener("progress", (event) => {
-    //   if (event.lengthComputable) {
-    //     // Update the progress bar
-    //     const percentComplete = event.loaded / event.total;
-    //     console.log(percentComplete);
-    //   }
-    // });
   }
 
   async function publishVideo(event) {
