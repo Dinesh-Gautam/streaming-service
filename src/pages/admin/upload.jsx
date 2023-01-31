@@ -27,28 +27,26 @@ function Upload({ pending }) {
     const response = await fetch("/api/admin/convert?title=" + inputTitle, {
       method: "POST",
       body: formData,
-    });
+    }).then((e) => e.json());
+
+    const uid = response.data.uid;
 
     // Handle the response
-    if (response.ok) {
-      // get progress
-      if (!progressInterval.current) {
-        progressInterval.current = setInterval(async () => {
-          const progressData = await fetch(
-            "/api/progress?title=" + inputTitle
-          ).then((res) => res.json());
-          if (progressData.completed) {
-            clearInterval(progressInterval.current);
-            setProgressData(100);
-            return;
-          }
-          setProgressData(Math.round(progressData.percent));
-          console.log(progressData);
-        }, 1000);
-      }
-    } else {
-      // Handle error
-      console.error("An error occurred while uploading the video");
+
+    // get progress
+    if (!progressInterval.current) {
+      progressInterval.current = setInterval(async () => {
+        const progressData = await fetch(
+          "/api/admin/movie/progress?id=" + uid
+        ).then((res) => res.json());
+        if (progressData.completed) {
+          clearInterval(progressInterval.current);
+          setProgressData(100);
+          return;
+        }
+        setProgressData(Math.round(progressData.percent));
+        console.log(progressData);
+      }, 1000);
     }
 
     // const xhr = new XMLHttpRequest();

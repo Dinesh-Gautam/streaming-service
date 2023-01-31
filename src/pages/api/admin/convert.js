@@ -34,6 +34,7 @@ export default async function handler(req, res) {
 
     res.send({
       uploadDone: true,
+      data: movieData,
     });
     consoleEncode(req.file.path, movieData.title, movieData.uid);
   });
@@ -153,7 +154,7 @@ function consoleEncode(fn, title, uid) {
         info.percent = percent.toFixed(2);
       }
       console.log("progress", info);
-      updateMovieProgressData(title, info);
+      updateMovieProgressData(uid, info);
     })
 
     .on("stderr", function (stderrLine) {
@@ -161,7 +162,7 @@ function consoleEncode(fn, title, uid) {
     })
     .on("end", function () {
       console.log("complete");
-      updateMovieProgressData(title, { completed: true });
+      updateMovieProgressData(uid, { completed: true });
       saveMovieData({
         title,
         uid,

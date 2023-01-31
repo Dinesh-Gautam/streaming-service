@@ -112,7 +112,7 @@ export function savePendingMovieData(data) {
       JSON.parse(
         fs.readFileSync(config.dir + config.pendingMovies).toString()
       ) || [];
-    if (fileData.some((e) => e.title === data.title)) {
+    if (fileData.some((e) => e.uid === data.uid)) {
       console.log("movie already exists");
       return null;
     }
@@ -127,25 +127,30 @@ export function savePendingMovieData(data) {
   return null;
 }
 
-export function updateMovieProgressData(title, data) {
+export function updateMovieProgressData(id, data) {
   // updates the progress of the movie conversion to mpeg-dash format
   if (!data) {
+    console.log("progress data not provided");
     return null;
   }
-  console.log("saving data");
+  if (!id) {
+    console.log("no id provided for updating the progress data");
+    return;
+  }
+  console.log("updating progress data");
   try {
     const fileData =
       JSON.parse(
         fs.readFileSync(config.dir + config.pendingMovies).toString()
       ) || [];
 
-    const movie = fileData.find((e) => e.title === title);
+    const movie = fileData.find((e) => e.uid === id);
     if (!movie) {
-      console.log("can't find movie");
+      console.log("can't find movie for updating progress data");
       return null;
     }
     fileData.map((e) => {
-      if (e.title === title) {
+      if (e.uid === id) {
         e.progress = data;
       }
       return e;
@@ -156,19 +161,22 @@ export function updateMovieProgressData(title, data) {
     );
   } catch (error) {
     // fs.writeFileSync("data.json", JSON.stringify([data]));
-    console.error("some error occurred");
+    console.error("some error occurred while updating the progress data");
   }
   return null;
 }
 
 export function getMovieData(id) {
   // read file containing movie data such as url and other data
-
+  if (!id) {
+    console.log("id is required when getting movie data");
+    return null;
+  }
   try {
     const movieData =
       JSON.parse(fs.readFileSync(config.dir + config.movieData).toString()) ||
       [];
-    const data = movieData.find((e) => e.id == id);
+    const data = movieData.find((e) => e.uid == id);
     if (!data) {
       console.log("can't find movie data");
       return null;

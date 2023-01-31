@@ -1,9 +1,10 @@
 import { config } from "../config";
 import fs from "fs";
+import { saveMovieToPublishedMovie } from "../movie";
 export function publishMovie(id) {
   if (!id) {
     console.log("id is not provided");
-    return;
+    return null;
   }
   try {
     const fileData =
@@ -18,10 +19,11 @@ export function publishMovie(id) {
     const movieData = fileData.find((e) => e.uid === id);
     if (!movieData) {
       console.log("can't find movie in:", config.pendingMovies);
-      return;
+      return null;
     }
+
     const updatedTempFileData = fileData.filter((e) => e.uid !== id);
-    saveToOriginalMovies(movieData);
+    saveMovieToPublishedMovie(movieData);
     fs.writeFileSync(
       config.dir + config.pendingMovies,
       JSON.stringify(updatedTempFileData)
