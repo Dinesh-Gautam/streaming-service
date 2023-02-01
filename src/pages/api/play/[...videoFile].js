@@ -2,7 +2,8 @@ import fs from "fs";
 
 export default async function handler(req, res) {
   const { videoFile } = req.query;
-  const filePath = `converted/mpdVideos/1675168824280-prototype v0.1 (2)/${videoFile}`;
+  const [dirName, fileName] = videoFile;
+  const filePath = `converted/mpdVideos/${dirName}/${fileName}`;
 
   try {
     const data = fs.readFileSync(filePath);

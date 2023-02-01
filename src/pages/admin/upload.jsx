@@ -13,6 +13,9 @@ function Upload({ pending }) {
   useEffect(() => {
     if (!progressInterval.current && pending && !pending.progress?.completed) {
       console.log("starting progress interval");
+      if (pending?.progress?.percent) {
+        setProgressData(percent);
+      }
       startProgressInterval(pending.uid);
     }
 

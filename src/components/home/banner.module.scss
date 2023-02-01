@@ -46,22 +46,25 @@
   transform: translateX(-160%) scale(1);
   opacity: 1;
 }
+.right {
+  left: 50%;
+  transform: translateX(60%) scale(1);
+  opacity: 1;
+}
 .extremeLeft {
   opacity: 0;
   left: 50%;
   transform: translateX(-300%) scale(1);
   // z-index: -100;
+  visibility: hidden;
 }
+
 .extremeRight {
   opacity: 0;
   left: 50%;
   // z-index: -100;
   transform: translateX(200%) scale(1);
-}
-.right {
-  left: 50%;
-  transform: translateX(60%) scale(1);
-  opacity: 1;
+  visibility: hidden;
 }
 
 .leftButton {

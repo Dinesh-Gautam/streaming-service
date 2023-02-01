@@ -50,9 +50,9 @@ function consoleEncode(fn, title, uid) {
   ];
   const fallback = [480, 400];
 
-  const name = path.basename(fn, path.extname(fn));
-
-  const dirName = title;
+  // const name = path.basename(fn, path.extname(fn));
+  const name = title;
+  const dirName = uid;
 
   const targetdir = path.resolve(
     path.join(
@@ -85,6 +85,7 @@ function consoleEncode(fn, title, uid) {
   var targetfn = path.join(targetdir, `${name}.mpd`);
   console.log("targetFIleName : " + targetfn);
   proc
+
     .addOption("-loglevel", "debug")
 
     .output(targetfn)
@@ -93,6 +94,7 @@ function consoleEncode(fn, title, uid) {
     .audioCodec("aac")
     .audioChannels(2)
     .audioFrequency(44100)
+
     .outputOptions([
       "-preset veryfast",
       "-keyint_min 60",

@@ -93,7 +93,17 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                 }
               >
                 <FadeImageOnLoad
-                  imageSrc={popularMovies[index].backdrop_path}
+                  imageSrc={
+                    index == nextIndex ||
+                    index === prevIndex ||
+                    index === currentIndex ||
+                    index === prevIndex - 1 ||
+                    index === nextIndex + 1 ||
+                    index === 0 ||
+                    index === popularMovies.length - 1
+                      ? popularMovies[index].backdrop_path
+                      : ""
+                  }
                   ambientMode
                   positionAbsolute
                   ambientOptions={{ blur: 128, scale: 1 }}
