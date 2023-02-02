@@ -17,7 +17,7 @@ function Slider({ data }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [nextIndex, setNextIndex] = useState(1);
-
+  const timeOutRef = useRef(null);
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
 
@@ -71,6 +71,32 @@ function Slider({ data }) {
         {Array.from({ length }).map((movie, index) => {
           return (
             <div
+              onMouseMove={(e) => {
+                if (e.target.id === "imageContainer") {
+                  console.log(e.target.dataset.index);
+                  if (!hoverCardActive) {
+                    console.log("imageContainer");
+                    const rect = e.target.getBoundingClientRect();
+                    console.log("entering");
+                    setHoverCardPosition({
+                      x: rect.left,
+                      y: rect.top,
+                      height: rect.height,
+                      width: rect.width,
+                      index: e.target.dataset.index,
+                    });
+                    if (!animating) {
+                      setHoverCardActive(true);
+                    } else {
+                      clearTimeout(timeOutRef.current);
+
+                      timeOutRef.current = setTimeout(() => {
+                        setHoverCardActive(true);
+                      }, 300);
+                    }
+                  }
+                }
+              }}
               key={index}
               className={
                 styles.item +
@@ -102,20 +128,9 @@ function Slider({ data }) {
                     attr={{
                       imageContainer: {
                         className: styles.imageContainer,
-                        onMouseMove: (e) => {
-                          if (!hoverCardActive && !animating) {
-                            const rect = e.target.getBoundingClientRect();
-                            console.log("entering");
-                            setHoverCardPosition({
-                              x: rect.left,
-                              y: rect.top,
-                              height: rect.height,
-                              width: rect.width,
-                            });
-
-                            setHoverCardActive(true);
-                          }
-                        },
+                        id: "imageContainer",
+                        "data-index":
+                          imgIndex + index + (itemsLength - 1) * index,
                       },
                       image: {
                         objectFit: "cover",
@@ -155,20 +170,20 @@ function Slider({ data }) {
               width: hoverCardPosition.width,
             }}
             onMouseLeave={(e) => {
-              if (hoverCardActive && !animating) {
+              if (hoverCardActive) {
                 setHoverCardActive(false);
               }
               setAnimating(true);
             }}
             initial={{
-              transform: "perspective(1000px) translate3d(0, 0%, 0px)",
+              transform: "perspective(200px) translate3d(0, 0%, 0px)",
             }}
             animate={{
-              transform: "perspective(1000px) translate3d(0 , -20%, 200px)",
+              transform: "perspective(200px) translate3d(0 , -30%, 50px)",
               duration: 1,
               type: "ease",
             }}
-            exit={{ transform: "perspective(1000px) translate3d(0, 0%, 0px)" }}
+            exit={{ transform: "perspective(200px) translate3d(0, 0%, 0px)" }}
             transition={{
               type: "ease",
               ease: "easeInOut",
@@ -183,7 +198,9 @@ function Slider({ data }) {
           >
             <div className={styles.imageContainer}>
               <Image
-                src={getImageUrl(data[2]?.backdrop_path || "")}
+                src={getImageUrl(
+                  data[hoverCardPosition.index]?.backdrop_path || ""
+                )}
                 //   ambientMode
                 //   positionAbsolute
                 //   ambientOptions={{ blur: 128, scale: 1 }}
@@ -201,7 +218,7 @@ function Slider({ data }) {
                   opacity: 0,
                 }}
               >
-                This is a title
+                {data[hoverCardPosition.index].title}
               </motion.span>
             </div>
           </motion.div>

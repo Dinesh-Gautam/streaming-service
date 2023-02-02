@@ -83,12 +83,14 @@
   top: 0;
   left: 0;
   z-index: 99999999;
+
   // transition: all 0.2s ease-out;
   // transform: perspective(1000px) translate3d(0, 0%, 0px);
   // opacity: 0;
 
   // transform: perspective(1000px) translate3d(0, -20%, 200px);
   // opacity: 1;
+  background-color: black;
   div {
     background-color: black;
   }
