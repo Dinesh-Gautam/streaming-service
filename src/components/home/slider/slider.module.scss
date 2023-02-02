@@ -9,7 +9,7 @@
   left: 50%;
   height: 100%;
   width: 92%;
-  transition: transform 1s ease-in-out;
+  transition: all 1s ease-in-out;
   z-index: 100;
   display: flex;
   flex: 0 0 25%;
@@ -28,11 +28,13 @@
     transform: translateX(-201%);
     opacity: 0;
     pointer-events: none;
+    z-index: 90;
   }
   &.extremeRight {
     transform: translateX(101%);
     opacity: 0;
     pointer-events: none;
+    z-index: 90;
   }
 }
 
@@ -40,6 +42,7 @@
   background: rgba(255, 255, 255, 0.1);
   height: 100%;
   //   flex: 1;
+
   width: 25%;
   border-radius: 12px;
   overflow: hidden;

@@ -2,9 +2,9 @@ import FadeImageOnLoad from "@/components/elements/FadeImageOnLoad";
 import React, { useRef, useState } from "react";
 import styles from "./slider.module.scss";
 function Slider({ data }) {
-  const popularMovies = { length: 5 };
+  const length = 5;
 
-  const itemsLength = Math.floor(data.length / 5);
+  const itemsLength = Math.floor(data.length / length);
 
   const [prevIndex, setPrevIndex] = useState(itemsLength);
 
@@ -32,7 +32,7 @@ function Slider({ data }) {
 
   function setIndexNext(prev) {
     const index = prev + 1;
-    if (index > popularMovies.length - 1) {
+    if (index > length - 1) {
       return 0;
     }
     return index;
@@ -40,7 +40,7 @@ function Slider({ data }) {
   function setIndexPrev(prev) {
     const index = prev - 1;
     if (index < 0) {
-      return popularMovies.length - 1;
+      return length - 1;
     }
     return index;
   }
@@ -61,7 +61,7 @@ function Slider({ data }) {
 
   return (
     <div className={styles.container}>
-      {Array.from({ length: itemsLength }).map((movie, index) => {
+      {Array.from({ length }).map((movie, index) => {
         return (
           <div
             key={index}
@@ -81,27 +81,29 @@ function Slider({ data }) {
                 : "")
             }
           >
-            {Array.from({ length: 5 }).map((e, imgIndex) => (
-              <FadeImageOnLoad
-                key={imgIndex}
-                imageSrc={
-                  data[imgIndex + index + itemsLength * index]?.backdrop_path ||
-                  ""
-                }
-                //   ambientMode
-                //   positionAbsolute
-                //   ambientOptions={{ blur: 128, scale: 1 }}
-                attr={{
-                  imageContainer: {
-                    className: styles.imageContainer,
-                  },
-                  image: {
-                    objectFit: "cover",
-                    height: 1300 / 2,
-                    width: 1300,
-                  },
-                }}
-              />
+            {Array.from({ length: itemsLength }).map((e, imgIndex) => (
+              <>
+                <FadeImageOnLoad
+                  key={imgIndex}
+                  imageSrc={
+                    data[imgIndex + index + (itemsLength - 1) * index]
+                      ?.backdrop_path || ""
+                  }
+                  //   ambientMode
+                  //   positionAbsolute
+                  //   ambientOptions={{ blur: 128, scale: 1 }}
+                  attr={{
+                    imageContainer: {
+                      className: styles.imageContainer,
+                    },
+                    image: {
+                      objectFit: "cover",
+                      height: 1300 / 2,
+                      width: 1300,
+                    },
+                  }}
+                />
+              </>
             ))}
           </div>
         );
