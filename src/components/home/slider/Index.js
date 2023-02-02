@@ -1,6 +1,10 @@
 import FadeImageOnLoad from "@/components/elements/FadeImageOnLoad";
+import { style } from "@mui/system";
 import React, { useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./slider.module.scss";
+import Image from "next/image";
+import { getImageUrl } from "@/tmdbapi/tmdbApi";
 function Slider({ data }) {
   const length = 5;
 
@@ -8,8 +12,10 @@ function Slider({ data }) {
 
   const [prevIndex, setPrevIndex] = useState(itemsLength);
 
+  const [hoverCardPosition, setHoverCardPosition] = useState({ x: 0, y: 0 });
+  const [hoverCardActive, setHoverCardActive] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [animating, setAnimating] = useState(false);
   const [nextIndex, setNextIndex] = useState(1);
 
   const [disable, setDisable] = useState(false);
@@ -60,70 +66,148 @@ function Slider({ data }) {
   };
 
   return (
-    <div className={styles.container}>
-      {Array.from({ length }).map((movie, index) => {
-        return (
-          <div
-            key={index}
-            className={
-              styles.item +
-              " " +
-              (index == nextIndex
-                ? styles.right
-                : index === prevIndex
-                ? styles.left
-                : index === currentIndex
-                ? styles.middle
-                : index === nextIndex + 1 || index < prevIndex - 1
-                ? styles.extremeRight
-                : index > nextIndex + 1 || index === prevIndex - 1
-                ? styles.extremeLeft
-                : "")
-            }
-          >
-            {Array.from({ length: itemsLength }).map((e, imgIndex) => (
-              <>
-                <FadeImageOnLoad
-                  key={imgIndex}
-                  imageSrc={
-                    data[imgIndex + index + (itemsLength - 1) * index]
-                      ?.backdrop_path || ""
-                  }
-                  //   ambientMode
-                  //   positionAbsolute
-                  //   ambientOptions={{ blur: 128, scale: 1 }}
-                  attr={{
-                    imageContainer: {
-                      className: styles.imageContainer,
-                    },
-                    image: {
-                      objectFit: "cover",
-                      height: 1300 / 2,
-                      width: 1300,
-                    },
-                  }}
-                />
-              </>
-            ))}
-          </div>
-        );
-      })}
+    <>
+      <div className={styles.container}>
+        {Array.from({ length }).map((movie, index) => {
+          return (
+            <div
+              key={index}
+              className={
+                styles.item +
+                " " +
+                (index == nextIndex
+                  ? styles.right
+                  : index === prevIndex
+                  ? styles.left
+                  : index === currentIndex
+                  ? styles.middle
+                  : index === nextIndex + 1 || index < prevIndex - 1
+                  ? styles.extremeRight
+                  : index > nextIndex + 1 || index === prevIndex - 1
+                  ? styles.extremeLeft
+                  : "")
+              }
+            >
+              {Array.from({ length: itemsLength }).map((e, imgIndex) => (
+                <>
+                  <FadeImageOnLoad
+                    key={imgIndex}
+                    imageSrc={
+                      data[imgIndex + index + (itemsLength - 1) * index]
+                        ?.backdrop_path || ""
+                    }
+                    //   ambientMode
+                    //   positionAbsolute
+                    //   ambientOptions={{ blur: 128, scale: 1 }}
+                    attr={{
+                      imageContainer: {
+                        className: styles.imageContainer,
+                        onMouseMove: (e) => {
+                          if (!hoverCardActive && !animating) {
+                            const rect = e.target.getBoundingClientRect();
+                            console.log("entering");
+                            setHoverCardPosition({
+                              x: rect.left,
+                              y: rect.top,
+                              height: rect.height,
+                              width: rect.width,
+                            });
 
-      <button
-        disabled={disable}
-        className={styles.leftButton}
-        onClick={handlePrev}
-      >
-        {"<"}
-      </button>
-      <button
-        disabled={disable}
-        className={styles.rightButton}
-        onClick={handleNext}
-      >
-        {">"}
-      </button>
-    </div>
+                            setHoverCardActive(true);
+                          }
+                        },
+                      },
+                      image: {
+                        objectFit: "cover",
+                        height: 1300 / 2,
+                        width: 1300,
+                      },
+                    }}
+                  />
+                </>
+              ))}
+            </div>
+          );
+        })}
+
+        <button
+          disabled={disable}
+          className={styles.leftButton}
+          onClick={handlePrev}
+        >
+          {"<"}
+        </button>
+        <button
+          disabled={disable}
+          className={styles.rightButton}
+          onClick={handleNext}
+        >
+          {">"}
+        </button>
+      </div>
+      <AnimatePresence>
+        {hoverCardActive && (
+          <motion.div
+            style={{
+              left: hoverCardPosition.x,
+              top: hoverCardPosition.y,
+              height: hoverCardPosition.height,
+              width: hoverCardPosition.width,
+            }}
+            onMouseLeave={(e) => {
+              if (hoverCardActive && !animating) {
+                setHoverCardActive(false);
+              }
+              setAnimating(true);
+            }}
+            initial={{
+              transform: "perspective(1000px) translate3d(0, 0%, 0px)",
+            }}
+            animate={{
+              transform: "perspective(1000px) translate3d(0 , -20%, 200px)",
+              duration: 1,
+              type: "ease",
+            }}
+            exit={{ transform: "perspective(1000px) translate3d(0, 0%, 0px)" }}
+            transition={{
+              type: "ease",
+              ease: "easeInOut",
+            }}
+            onAnimationComplete={() => {
+              setAnimating(false);
+            }}
+            onAnimationStart={() => {
+              setAnimating(true);
+            }}
+            className={styles.hoverCard}
+          >
+            <div className={styles.imageContainer}>
+              <Image
+                src={getImageUrl(data[2]?.backdrop_path || "")}
+                //   ambientMode
+                //   positionAbsolute
+                //   ambientOptions={{ blur: 128, scale: 1 }}
+                alt={"img"}
+                objectFit={"cover"}
+                height={1300 / 2}
+                width={1300}
+              />
+            </div>
+            <div>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                }}
+              >
+                This is a title
+              </motion.span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

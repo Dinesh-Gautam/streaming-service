@@ -29,7 +29,7 @@ function FadeImageOnLoad(props) {
   };
   return (
     <motion.div
-      styles={{
+      style={{
         position: "relative",
       }}
       initial="initial"
