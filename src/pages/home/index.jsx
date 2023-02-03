@@ -30,7 +30,7 @@ function MainHome({ session, popularMovies, movies }) {
             </div>
           </div>
         )}
-        <Slider data={popularMovies.results} />
+        <Slider title="Trending Movies" data={popularMovies.results} />
       </div>
     </ContextProvider>
   );

@@ -59,26 +59,23 @@
   }
 }
 
-.leftButton {
-  left: 0;
+.btn {
   position: absolute;
   height: 100%;
   width: 3%;
-  background-color: black;
+  background-color: rgba(0,0,0,0.5);
   z-index: 100;
-  opacity: 0.5;
   border-radius: 0;
+  display: flex;
+  align-items: center;
+  &.leftButton {
+    left: 0;
+  }
+  &.rightButton {
+    right: 0;
+  }
 }
-.rightButton {
-  right: 0;
-  position: absolute;
-  height: 100%;
-  width: 3%;
-  z-index: 100;
-  background-color: black;
-  border-radius: 0;
-  opacity: 0.5;
-}
+
 
 .hoverCard {
   position: absolute;

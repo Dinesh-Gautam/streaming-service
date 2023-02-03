@@ -5,7 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./slider.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
-function Slider({ data }) {
+
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+function Slider({ title, data }) {
   const length = 5;
 
   const itemsLength = Math.floor(data.length / length);
@@ -34,6 +37,9 @@ function Slider({ data }) {
         disableTimeoutRef.current = null;
       }, 800);
     }
+
+    setAnimating(true);
+    clearTimeout(timeOutRef.current);
   }
 
   function setIndexNext(prev) {
@@ -67,6 +73,7 @@ function Slider({ data }) {
 
   return (
     <>
+      {title && <h2>{title}</h2>}
       <div className={styles.container}>
         {Array.from({ length }).map((movie, index) => {
           return (
@@ -147,17 +154,17 @@ function Slider({ data }) {
 
         <button
           disabled={disable}
-          className={styles.leftButton}
+          className={styles.leftButton + " " + styles.btn}
           onClick={handlePrev}
         >
-          {"<"}
+          <ArrowForwardIosIcon style={{ transform: "rotate(-180deg)" }} />
         </button>
         <button
           disabled={disable}
-          className={styles.rightButton}
+          className={styles.rightButton + " " + styles.btn}
           onClick={handleNext}
         >
-          {">"}
+          <ArrowForwardIosIcon />
         </button>
       </div>
       <AnimatePresence>
@@ -170,9 +177,7 @@ function Slider({ data }) {
               width: hoverCardPosition.width,
             }}
             onMouseLeave={(e) => {
-              if (hoverCardActive) {
-                setHoverCardActive(false);
-              }
+              setHoverCardActive(false);
               setAnimating(true);
             }}
             initial={{
