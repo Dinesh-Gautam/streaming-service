@@ -18,28 +18,33 @@ function Slider({ title, data }) {
   const [hoverCardPosition, setHoverCardPosition] = useState({ x: 0, y: 0 });
   const [hoverCardActive, setHoverCardActive] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
+  const [inContainer, setInContainer] = useState(false);
   const [nextIndex, setNextIndex] = useState(1);
   const timeOutRef = useRef(null);
+  const hoverEndTimeOutRef = useRef(null);
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
-
+  const [isScrolling, setIsScrolling] = useState(false);
   function buttonClick() {
     setDisable(true);
     clearTimeout(disableTimeoutRef.current);
 
     if (!disableTimeoutRef.current) {
       console.log("clicking", disableTimeoutRef.current);
-
+      // setHoverCardActive(false);
+      // setAnimating(true);
+      setIsScrolling(true);
       disableTimeoutRef.current = setTimeout(() => {
         setDisable(false);
+        setIsScrolling(false);
+        // setAnimating(false);
         console.log("removing", disableTimeoutRef.current);
         disableTimeoutRef.current = null;
       }, 800);
     }
 
-    setAnimating(true);
-    clearTimeout(timeOutRef.current);
+    // setAnimating(true);
+    // clearTimeout(timeOutRef.current);
   }
 
   function setIndexNext(prev) {
@@ -77,32 +82,97 @@ function Slider({ title, data }) {
       <div className={styles.container}>
         {Array.from({ length }).map((movie, index) => {
           return (
-            <div
+            <motion.div
+              // onMouseLeave={() => {
+              //   setHoverCardActive(false);
+              //   setHoverCardPosition({});
+              //   console.log(timeOutRef.current);
+
+              //   clearTimeout(timeOutRef.current);
+
+              //   // setAnimating(false);
+              // }}
+              onMouseLeave={() => {
+                if (!inContainer) {
+                  setHoverCardActive(false);
+                  setHoverCardPosition({});
+                  console.log("hover end");
+                  clearTimeout(timeOutRef.current);
+                }
+              }}
               onMouseMove={(e) => {
                 if (e.target.id === "imageContainer") {
-                  console.log(e.target.dataset.index);
-                  if (!hoverCardActive) {
-                    console.log("imageContainer");
-                    const rect = e.target.getBoundingClientRect();
-                    console.log("entering");
-                    setHoverCardPosition({
-                      x: rect.left,
-                      y: rect.top,
-                      height: rect.height,
-                      width: rect.width,
-                      index: e.target.dataset.index,
-                    });
-                    if (!animating) {
-                      setHoverCardActive(true);
-                    } else {
-                      clearTimeout(timeOutRef.current);
+                  if (
+                    e.target.dataset.index !== hoverCardPosition.index &&
+                    index === currentIndex &&
+                    !isScrolling
+                  ) {
+                    // setAnimating(false);
+                    setHoverCardActive(false);
 
-                      timeOutRef.current = setTimeout(() => {
-                        setHoverCardActive(true);
-                      }, 300);
-                    }
+                    clearTimeout(timeOutRef.current);
+                    timeOutRef.current = setTimeout(() => {
+                      // if (!animating) {
+
+                      console.log("imageContainer");
+                      const rect = e.target.getBoundingClientRect();
+                      setHoverCardPosition({
+                        x: rect.left,
+                        y: rect.top,
+                        height: rect.height,
+                        width: rect.width,
+                        index: e.target.dataset.index,
+                      });
+                      setHoverCardActive(true);
+                      setInContainer(true);
+                      // setAnimating(true);
+                      // }
+                    }, 200);
                   }
+                } else {
+                  setHoverCardActive(false);
+                  setHoverCardPosition({});
+                  console.log(timeOutRef.current);
+                  clearTimeout(timeOutRef.current);
                 }
+
+                // if (
+                //   e.target.id === "imageContainer" &&
+                //   index === currentIndex
+                // ) {
+                //   if (!hoverCardActive) {
+                //     if (!animating) {
+                //       console.log("imageContainer");
+                //       const rect = e.target.getBoundingClientRect();
+                //       console.log("entering");
+                //       setHoverCardPosition({
+                //         x: rect.left,
+                //         y: rect.top,
+                //         height: rect.height,
+                //         width: rect.width,
+                //         index: e.target.dataset.index,
+                //       });
+                //       setHoverCardActive(true);
+                //     } else {
+                //       clearTimeout(timeOutRef.current);
+                //       timeOutRef.current = setTimeout(() => {
+                //         console.log("imageContainer");
+                //         const rect = e.target.getBoundingClientRect();
+                //         console.log("entering");
+                //         setHoverCardPosition({
+                //           x: rect.left,
+                //           y: rect.top,
+                //           height: rect.height,
+                //           width: rect.width,
+                //           index: e.target.dataset.index,
+                //         });
+                //         setHoverCardActive(true);
+                //       }, 300);
+                //     }
+                //   } else {
+                //     setHoverCardActive(false);
+                //   }
+                // }
               }}
               key={index}
               className={
@@ -124,7 +194,7 @@ function Slider({ title, data }) {
               {Array.from({ length: itemsLength }).map((e, imgIndex) => (
                 <>
                   <FadeImageOnLoad
-                    key={imgIndex}
+                    key={imgIndex + index + (itemsLength - 1) * index}
                     imageSrc={
                       data[imgIndex + index + (itemsLength - 1) * index]
                         ?.backdrop_path || ""
@@ -148,7 +218,7 @@ function Slider({ title, data }) {
                   />
                 </>
               ))}
-            </div>
+            </motion.div>
           );
         })}
 
@@ -176,28 +246,47 @@ function Slider({ title, data }) {
               height: hoverCardPosition.height,
               width: hoverCardPosition.width,
             }}
-            onMouseLeave={(e) => {
+            onHoverEnd={(e) => {
+              // setHoverCardActive(false);
+              // setAnimating(true);
               setHoverCardActive(false);
-              setAnimating(true);
+              setHoverCardPosition({});
+              console.log(timeOutRef.current);
+              clearTimeout(timeOutRef.current);
+              setInContainer(false);
+            }}
+            onHoverStart={(e) => {
+              console.log("mouse entered");
+              // if()
+              // clearTimeout(hoverEndTimeOutRef.current);
+              setInContainer(true);
             }}
             initial={{
-              transform: "perspective(200px) translate3d(0, 0%, 0px)",
+              transform: "perspective(200px) translate3d(0%, 0%, 0px)",
             }}
             animate={{
-              transform: "perspective(200px) translate3d(0 , -30%, 50px)",
+              transform: `perspective(200px) translate3d(${
+                100 > hoverCardPosition.x
+                  ? "10"
+                  : hoverCardPosition.x >
+                    innerWidth - hoverCardPosition.width - 100
+                  ? -10
+                  : "0"
+              }% , -30%, 50px)`,
+
               duration: 1,
               type: "ease",
             }}
-            exit={{ transform: "perspective(200px) translate3d(0, 0%, 0px)" }}
+            exit={{ transform: "perspective(200px) translate3d(0%, 0%, 0px)" }}
             transition={{
               type: "ease",
               ease: "easeInOut",
             }}
             onAnimationComplete={() => {
-              setAnimating(false);
+              // setAnimating(false);
             }}
             onAnimationStart={() => {
-              setAnimating(true);
+              // setAnimating(true);
             }}
             className={styles.hoverCard}
           >
@@ -237,7 +326,7 @@ function Slider({ title, data }) {
                 opacity: 0,
               }}
             >
-              <Image
+              {/* <Image
                 src={getImageUrl(
                   data[hoverCardPosition.index]?.backdrop_path || ""
                 )}
@@ -257,7 +346,7 @@ function Slider({ title, data }) {
                 objectFit={"cover"}
                 height={1300 / 2}
                 width={1300}
-              />
+              /> */}
             </motion.div>
           </motion.div>
         )}
