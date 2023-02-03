@@ -20,9 +20,11 @@
   }
   &.left {
     transform: translateX(-151%);
+    pointer-events: none;
   }
   &.right {
     transform: translateX(51%);
+    pointer-events: none;
   }
   &.extremeLeft {
     transform: translateX(-201%);
