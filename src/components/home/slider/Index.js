@@ -209,6 +209,10 @@ function Slider({ title, data }) {
                 //   ambientMode
                 //   positionAbsolute
                 //   ambientOptions={{ blur: 128, scale: 1 }}
+                style={{
+                  position: "relative",
+                  zIndex: 100,
+                }}
                 alt={"img"}
                 objectFit={"cover"}
                 height={1300 / 2}
@@ -226,6 +230,35 @@ function Slider({ title, data }) {
                 {data[hoverCardPosition.index].title}
               </motion.span>
             </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+              <Image
+                src={getImageUrl(
+                  data[hoverCardPosition.index]?.backdrop_path || ""
+                )}
+                //   ambientMode
+                //   positionAbsolute
+                //   ambientOptions={{ blur: 128, scale: 1 }}
+                alt={"img"}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: "100%",
+                  filter: "blur(64px)",
+                  zIndex: 1,
+                }}
+                objectFit={"cover"}
+                height={1300 / 2}
+                width={1300}
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
