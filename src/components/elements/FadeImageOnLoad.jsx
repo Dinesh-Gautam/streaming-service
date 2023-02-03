@@ -29,9 +29,9 @@ function FadeImageOnLoad(props) {
   };
   return (
     <motion.div
-      style={{
-        position: "relative",
-      }}
+      // style={{
+      //   position: "relative",
+      // }}
       initial="initial"
       animate="animate"
       variants={!imageLoaded ? initialVariant : imageLoadedVariant}

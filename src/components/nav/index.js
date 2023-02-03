@@ -1,10 +1,10 @@
 import Search from "../search";
 import styles from "./nav.module.scss";
-function Nav() {
+function Nav({ searchInitialValue }) {
   return (
     <div className={styles.navContainer}>
       <div className={styles.navRightContainer}></div>
-      <Search />
+      <Search initialValue={searchInitialValue} />
       <div className={styles.navLeftContainer}>
         <button
           onClick={() =>

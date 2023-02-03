@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 60vw;
+  margin: auto;
+  margin-top: 1rem;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.itemContainer {
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: rgba(16, 16, 16, 0.5);
+  backdrop-filter: blur(164px) saturate(1);
+  z-index: 1;
+  max-height: 208px;
+}
+
+.imageContainer {
+  background-color: transparent;
+  height: fit-content;
+  width: fit-content;
+  border-radius: 12px;
+  display: flex;
+  overflow: hidden;
+}
+
+.infoContainer {
+  font-family: "Poppins", sans-serif;
+  padding: 32px;
+  flex: 1;
+  overflow: hidden;
+
+  h1 {
+    margin: 0;
+    text-transform: capitalize;
+    line-height: 120%;
+    font-size: 32px;
+    color: rgba($color: #fff, $alpha: 0.9);
+    font-weight: 500;
+    letter-spacing: 2px;
+  }
+  span {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  p {
+    color: rgba($color: #fff, $alpha: 0.9);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.description {
+  max-width: 60%;
+  max-height: 6vh;
+  margin-top: 24px;
+}
+.movieInfo {
+  display: flex;
+  align-items: center;
+}
+.separator {
+  background-color: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  height: 2ch;
+  width: 2px;
+  margin: 6px;
+}
+.arrowRight {
+  margin-right: 4rem;
+  color: #fff;
+}
+.backgroundImg {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background-color: gray;
+  display: flex;
+}
