@@ -31,6 +31,9 @@ function MainHome({ session, popularMovies, movies }) {
           </div>
         )}
         <Slider title="Trending Movies" data={popularMovies.results} />
+        <Slider title="Popular Movies" data={popularMovies.results} />
+        <Slider title="Playing Now" data={popularMovies.results} />
+        <Slider title="Top 10" data={popularMovies.results} />
       </div>
     </ContextProvider>
   );

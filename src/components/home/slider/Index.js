@@ -83,6 +83,7 @@ function Slider({ title, data }) {
         {Array.from({ length }).map((movie, index) => {
           return (
             <motion.div
+              key={index}
               // onMouseLeave={() => {
               //   setHoverCardActive(false);
               //   setHoverCardPosition({});
@@ -117,8 +118,8 @@ function Slider({ title, data }) {
                       console.log("imageContainer");
                       const rect = e.target.getBoundingClientRect();
                       setHoverCardPosition({
-                        x: rect.left,
-                        y: rect.top,
+                        x: rect.left + window.scrollX,
+                        y: rect.top + window.scrollY,
                         height: rect.height,
                         width: rect.width,
                         index: e.target.dataset.index,
@@ -174,7 +175,6 @@ function Slider({ title, data }) {
                 //   }
                 // }
               }}
-              key={index}
               className={
                 styles.item +
                 " " +
@@ -196,8 +196,16 @@ function Slider({ title, data }) {
                   <FadeImageOnLoad
                     key={imgIndex + index + (itemsLength - 1) * index}
                     imageSrc={
-                      data[imgIndex + index + (itemsLength - 1) * index]
-                        ?.backdrop_path || ""
+                      index == nextIndex ||
+                      index === prevIndex ||
+                      index === currentIndex ||
+                      index === prevIndex - 1 ||
+                      index === nextIndex + 1 ||
+                      index === 0 ||
+                      index === length - 1
+                        ? data[imgIndex + index + (itemsLength - 1) * index]
+                            ?.backdrop_path || ""
+                        : ""
                     }
                     //   ambientMode
                     //   positionAbsolute
