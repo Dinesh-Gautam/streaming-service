@@ -1,4 +1,4 @@
-import Search from "../search";
+import Search from "../Search";
 import styles from "./nav.module.scss";
 function Nav({ searchInitialValue }) {
   return (

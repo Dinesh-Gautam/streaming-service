@@ -84,14 +84,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   : "")
               }
             >
-              <Link
-                href={
-                  "/home/test?q=" +
-                  popularMovies[index].backdrop_path +
-                  "&i=" +
-                  index
-                }
-              >
+              <Link href={"/title?id=" + movie.id + "&type=" + "movie"}>
                 <FadeImageOnLoad
                   imageSrc={
                     index == nextIndex ||
@@ -109,7 +102,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   ambientOptions={{ blur: 128, scale: 1 }}
                   attr={{
                     imageContainer: {
-                      layoutId: "banner" + index,
+                      layoutId: "banner" + movie.id,
                       className: styles.bannerImageContainer,
                     },
                     image: {

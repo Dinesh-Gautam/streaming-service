@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import Banner from "../../components/home/banner";
 import Nav from "../../components/nav";
-import Search from "../../components/search";
+import Search from "../../components/Search";
 import { ContextProvider } from "../../context/stateContext";
 import { getPopularMovies } from "../../helpers/api/search/tmdb";
 import { redirectIfUserIsNotAuthenticated } from "../../helpers/redirect";
