@@ -1,3 +1,4 @@
+import HomePageSliders from "@/components/home/slider/HomePageSlider";
 import Slider from "@/components/home/slider/Index";
 import { getPublishedMovies } from "@/helpers/api/data/movie";
 import { signOut, useSession } from "next-auth/react";
@@ -30,10 +31,7 @@ function MainHome({ session, popularMovies, movies }) {
             </div>
           </div>
         )}
-        <Slider title="Trending Movies" data={popularMovies.results} />
-        <Slider title="Popular Movies" data={popularMovies.results} />
-        <Slider title="Playing Now" data={popularMovies.results} />
-        <Slider title="Top 10" data={popularMovies.results} />
+        <HomePageSliders popularMovies={popularMovies} />
       </div>
     </ContextProvider>
   );
