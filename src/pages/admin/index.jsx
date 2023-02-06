@@ -2,43 +2,117 @@ import React from "react";
 import Link from "next/link";
 import { getPendingMovies } from "@/helpers/api/data/admin";
 import { getPublishedMovies } from "@/helpers/api/data/movie";
+import { Box, Button, Card, Sheet, Typography } from "@mui/joy";
+import { Add } from "@mui/icons-material";
 
 function index({ pendingUploads, uploadedVideos }) {
   return (
-    <div>
-      <h1>Admin Page:</h1>
-      {pendingUploads ? (
+    <Box>
+      <Box sx={{ m: 2 }}>
+        <Typography level="h3">Admin</Typography>
+      </Box>
+      <Box sx={{ display: "flex", width: "100%", gap: 2, m: 2 }}>
+        {pendingUploads ? (
+          <Sheet
+            variant="outlined"
+            sx={{
+              borderRadius: "md",
+              p: 2,
+              flex: 1,
+            }}
+          >
+            {pendingUploads && (
+              <Typography level="h4" fontWeight="bold">
+                Pending Uploads
+              </Typography>
+            )}
+
+            {pendingUploads.map((e) => (
+              <Link key={e.uid} href={"admin/upload?id=" + e.uid}>
+                <Card variant="soft" sx={{ p: 2, mt: 2 }}>
+                  {e.title}
+                </Card>
+              </Link>
+            ))}
+          </Sheet>
+        ) : (
+          <Sheet
+            variant="outlined"
+            sx={{
+              borderRadius: "md",
+              p: 4,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            <Typography level="h4" fontWeight={"bold"} style={{ opacity: 0.5 }}>
+              No pending uploads
+            </Typography>
+          </Sheet>
+        )}
+
+        {uploadedVideos ? (
+          <Sheet
+            variant="outlined"
+            sx={{
+              borderRadius: "md",
+              p: 2,
+              flex: 1,
+              gap: 2,
+            }}
+          >
+            {uploadedVideos && (
+              <Typography level="h4" fontWeight="bold">
+                Uploaded Movies
+              </Typography>
+            )}
+
+            {uploadedVideos.map((e) => (
+              <Link href={"admin/upload?id=" + e.uid} key={e.uid}>
+                <Card variant="soft" sx={{ p: 2, mt: 2 }}>
+                  {e.title}
+                </Card>
+              </Link>
+            ))}
+          </Sheet>
+        ) : (
+          <Sheet
+            variant="outlined"
+            sx={{
+              borderRadius: "md",
+              p: 4,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            <Typography level="h4" fontWeight={"bold"} style={{ opacity: 0.5 }}>
+              No movies published
+            </Typography>
+          </Sheet>
+        )}
+
         <div>
-          {pendingUploads && <h2>Pending Uploads</h2>}
-
-          {pendingUploads.map((e) => (
-            <div key={e.uid}>
-              <Link href={"admin/upload?id=" + e.uid}>{e.title}</Link>
-            </div>
-          ))}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              p: 4,
+            }}
+          >
+            <Link href="admin/upload">
+              <Button size="lg" startDecorator={<Add />}>
+                Upload
+              </Button>
+            </Link>
+          </Box>
         </div>
-      ) : (
-        <h2>No pending uploads</h2>
-      )}
-
-      {uploadedVideos ? (
-        <div>
-          {uploadedVideos && <h2>uploaded Movies</h2>}
-
-          {uploadedVideos.map((e) => (
-            <div key={e.uid}>
-              <Link href={"admin/upload?id=" + e.uid}>{e.title}</Link>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <h2>No movies published</h2>
-      )}
-
-      <div>
-        <Link href="admin/upload">upload video</Link>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
