@@ -140,6 +140,9 @@ function HomePageSliders({ popularMovies }) {
             }}
             className={styles.hoverCard}
           >
+            <div className={styles.hoverCardWrapper}>
+
+          
             <div className={styles.imageContainer}>
               <Image
                 src={getImageUrl(
@@ -158,8 +161,19 @@ function HomePageSliders({ popularMovies }) {
                 height={1300 / 2}
                 width={1300}
               />
+               <Image
+                src={getImageUrl(
+                  popularMovies.results[hoverCardPosition.index]
+                    ?.backdrop_path || ""
+                )}
+                className={styles.backgroundImage}
+                alt={"img"}
+                objectFit={"cover"}
+                height={1300 / 2}
+                width={1300}
+              />
             </div>
-            <div>
+            <div className={styles.hoverCardInfo}>
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -170,35 +184,7 @@ function HomePageSliders({ popularMovies }) {
                 {popularMovies.results[hoverCardPosition.index]?.title}
               </motion.span>
             </div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{
-                opacity: 0,
-              }}
-            >
-              {/* <Image
-             src={getImageUrl(
-               data[hoverCardPosition.index]?.backdrop_path || ""
-             )}
-             //   ambientMode
-             //   positionAbsolute
-             //   ambientOptions={{ blur: 128, scale: 1 }}
-             alt={"img"}
-             style={{
-               position: "absolute",
-               top: 0,
-               left: 0,
-               height: "100%",
-               width: "100%",
-               filter: "blur(64px)",
-               zIndex: 1,
-             }}
-             objectFit={"cover"}
-             height={1300 / 2}
-             width={1300}
-           /> */}
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
