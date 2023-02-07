@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   return (
     <SessionProvider session={pageProps.session}>
       <AnimateSharedLayout>
-        <CssVarsProvider>
+        <CssVarsProvider defaultMode="dark">
           <Component {...pageProps} />
         </CssVarsProvider>
       </AnimateSharedLayout>
