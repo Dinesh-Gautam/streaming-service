@@ -91,7 +91,7 @@ function HomePageSliders({ popularMovies }) {
             style={{
               left: hoverCardPosition.x,
               top: hoverCardPosition.y,
-              height: hoverCardPosition.height,
+              minHeight: hoverCardPosition.height,
               width: hoverCardPosition.width,
             }}
             onHoverEnd={(e) => {
@@ -122,7 +122,7 @@ function HomePageSliders({ popularMovies }) {
                     innerWidth - hoverCardPosition.width - 100
                   ? -10
                   : "0"
-              }% , -30%, 50px)`,
+              }% , -25%, 50px)`,
 
               duration: 1,
               type: "ease",
@@ -161,17 +161,7 @@ function HomePageSliders({ popularMovies }) {
                 height={1300 / 2}
                 width={1300}
               />
-               <Image
-                src={getImageUrl(
-                  popularMovies.results[hoverCardPosition.index]
-                    ?.backdrop_path || ""
-                )}
-                className={styles.backgroundImage}
-                alt={"img"}
-                objectFit={"cover"}
-                height={1300 / 2}
-                width={1300}
-              />
+              
             </div>
             <div className={styles.hoverCardInfo}>
               <motion.span
@@ -184,6 +174,26 @@ function HomePageSliders({ popularMovies }) {
                 {popularMovies.results[hoverCardPosition.index]?.title}
               </motion.span>
             </div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                }}>
+            <Image
+            
+            src={getImageUrl(
+              popularMovies.results[hoverCardPosition.index]
+                ?.backdrop_path || ""
+            )}
+            className={styles.backgroundImage}
+            alt={"img"}
+            objectFit={"cover"}
+            height={1300 / 2}
+            width={1300}
+          />
+            </motion.div>
+           
             </div>
           </motion.div>
         )}
