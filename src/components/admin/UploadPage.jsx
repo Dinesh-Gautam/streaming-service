@@ -15,7 +15,19 @@ import {
 import { Add, Check } from "@mui/icons-material";
 
 function UploadPage({ pending }) {
-  const [inputTitle, setInputTitle] = useState(pending?.title || "");
+  // const [inputTitle, setInputTitle] = useState(pending?.title || "");
+
+  const [inputValue, setInputValue] = useState({
+    title: "",
+    description: "",
+    genres: "",
+  });
+
+  function updateInputValue(event) {
+    const value = event.target.value;
+    const name = event.target.name;
+    setInputValue((prev) => ({ ...prev, [name]: value }));
+  }
   const [progressData, setProgressData] = useState(
     pending?.progress?.completed ? 100 : 0
     // 89
@@ -59,15 +71,20 @@ function UploadPage({ pending }) {
       }, 1000);
     }
   }
+
   async function inputFileHandler(event) {
     const file = event.target.files[0];
-
     // Create a new FormData object to send the file
     const formData = new FormData();
     formData.append("video", file);
 
+    Object.keys(inputValue).forEach((key) => {
+      const value = inputValue[key];
+      formData.append(key, value);
+    });
+
     // Send the file to the server
-    const response = await fetch("/api/admin/convert?title=" + inputTitle, {
+    const response = await fetch("/api/admin/convert", {
       method: "POST",
       body: formData,
     });
@@ -77,30 +94,6 @@ function UploadPage({ pending }) {
       console.log(data);
       router.replace(location.href + "?id=" + data.uid);
     }
-  }
-
-  async function inputFileHandler(event) {
-    const file = event.target.files[0];
-
-    // Create a new FormData object to send the file
-    const formData = new FormData();
-    formData.append("video", file);
-
-    // Send the file to the server
-    const response = await fetch("/api/admin/convert?title=" + inputTitle, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (response.ok) {
-      const { data } = await response.json();
-      console.log(data);
-      router.replace(location.href + "?id=" + data.uid);
-    }
-  }
-
-  function inputTitleHandler(event) {
-    setInputTitle(event.target.value);
   }
 
   async function publishVideo(event) {
@@ -121,8 +114,9 @@ function UploadPage({ pending }) {
           <FormLabel>Title</FormLabel>
           <Input
             type="text"
-            value={inputTitle}
-            onChange={(event) => inputTitleHandler(event)}
+            name="title"
+            value={inputValue.title}
+            onChange={(event) => updateInputValue(event)}
             placeholder="Title of the video"
           />
         </FormControl>
@@ -130,8 +124,9 @@ function UploadPage({ pending }) {
           <FormLabel>Description</FormLabel>
           <Textarea
             type="text"
-            value={inputTitle}
-            onChange={(event) => inputTitleHandler(event)}
+            value={inputValue.description}
+            name="description"
+            onChange={(event) => updateInputValue(event)}
             minRows="4"
             placeholder="Description of the video"
           />
@@ -140,9 +135,9 @@ function UploadPage({ pending }) {
           <FormLabel>Genres</FormLabel>
           <Input
             type="text"
-            value={inputTitle}
-            onChange={(event) => inputTitleHandler(event)}
-            minRows="4"
+            value={inputValue.genres}
+            name="genres"
+            onChange={(event) => updateInputValue(event)}
             placeholder="Drama, Thriller, Mystery"
           />
         </FormControl>

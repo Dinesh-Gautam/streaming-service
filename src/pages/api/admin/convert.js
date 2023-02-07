@@ -26,10 +26,10 @@ const upload = multer({ storage }).single("video");
 export default async function handler(req, res) {
   return await upload(req, res, (err) => {
     const movieData = {
-      title: req.query.title,
-      uid: uuidv4(),
+      title: req.body.title,
+      uid: req.body?.uuid || uuidv4(),
     };
-
+    console.log(req.body);
     savePendingMovieData(movieData);
 
     res.send({
