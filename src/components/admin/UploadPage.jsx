@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import {
   Box,
   Button,
@@ -9,7 +8,6 @@ import {
   FormLabel,
   Input,
   Textarea,
-  TextField,
   Typography,
 } from "@mui/joy";
 import { Add, Check } from "@mui/icons-material";
@@ -18,9 +16,9 @@ function UploadPage({ pending }) {
   // const [inputTitle, setInputTitle] = useState(pending?.title || "");
 
   const [inputValue, setInputValue] = useState({
-    title: "",
-    description: "",
-    genres: "",
+    title: pending?.title || "",
+    description: pending?.description || "",
+    genres: pending?.genres || "",
   });
 
   function updateInputValue(event) {

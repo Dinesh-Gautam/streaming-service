@@ -24,14 +24,16 @@ export function saveMovieToPublishedMovie(data) {
   // publishing movies
   if (!data) {
     console.log("data is required when publishing movies");
-    return data;
-  }
-  const { uid, title } = data;
-  if (!uid || !title) {
-    console.log("Some of the key values are missing", Object.keys(data));
     return null;
   }
+
+  if (!data.uid || !data.title) {
+    console.log("uid and title are required when publishing movie");
+    return null;
+  }
+
   console.log("saving original movies");
+
   try {
     const fileData =
       JSON.parse(
@@ -40,15 +42,15 @@ export function saveMovieToPublishedMovie(data) {
 
     const movie = fileData.find((e) => e.uid === uid);
     if (movie) {
-      console.log("movie metadata already exists");
+      console.log("movie already exists");
       fileData.map((e) => {
-        if (e.uid === uid) {
-          return { uid, title };
+        if (e.uid === data.uid) {
+          return data;
         }
         return e;
       });
     } else {
-      fileData.push({ uid, title });
+      fileData.push(data);
     }
 
     fs.writeFileSync(
@@ -56,7 +58,7 @@ export function saveMovieToPublishedMovie(data) {
       JSON.stringify(fileData)
     );
   } catch (error) {
-    const fileData = [{ uid, title }];
+    const fileData = [data];
     // fs.writeFileSync("data.json", JSON.stringify([data]));
     fs.writeFileSync(
       config.dir + config.publishedMovies,
