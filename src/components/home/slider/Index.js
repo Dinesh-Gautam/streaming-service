@@ -73,7 +73,7 @@ function Slider({ title, data, setIsScrolling }) {
 
   return (
     <>
-      {title && <h2>{title}</h2>}
+      {title && <h2 style={{ marginLeft: "2rem" }}>{title}</h2>}
       <div className={styles.container}>
         {Array.from({ length }).map((movie, index) => {
           return (

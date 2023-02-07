@@ -79,21 +79,47 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 999999;
+  z-index: 999;
+  overflow: hidden;
+  border-radius: 12px;
   // transition: all 0.2s ease-out;
   // transform: perspective(1000px) translate3d(0, 0%, 0px);
   // opacity: 0;
 
   // transform: perspective(1000px) translate3d(0, -20%, 200px);
   // opacity: 1;
-  background-color: black;
-  div {
+
+  .hoverCardInfo {
+    // background-color: black;
+
+    padding:0.5rem 1rem;
+    // border-radius: 0 0 12px 12px;
+    position: relative;
+    top : -2px;
+  }
+  .imageContainer {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .hoverCardWrapper {
+    // height: fit-content;
+    // background-color: red;
     background-color: black;
+    // overflow: hidden;
+    // border-radius: 12px;
+  }
+  .backgroundImage {
+    position: absolute;
+    left: 0;top: 0;
+    height : 100%;
+    width : 100%;
+    filter : blur(64px);
+    opacity: 0.5;
   }
   span {
     display: block;
     padding-bottom: 1rem;
-    background-color: black;
+    // background-color: black;
     width: 100%;
   }
 }
