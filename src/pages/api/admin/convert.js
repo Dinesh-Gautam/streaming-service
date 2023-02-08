@@ -21,13 +21,15 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
-const upload = multer({ storage }).single("video");
+const upload = multer({ storage }).array("video", "poster", "backdrop");
 
 export default async function handler(req, res) {
   return await upload(req, res, (err) => {
     const movieData = {
       ...req.body,
       uid: req.body?.uuid || uuidv4(),
+      posterPath: req.files[1].path,
+      backdropPath: req.files[2].path,
     };
 
     savePendingMovieData(movieData);
@@ -36,7 +38,7 @@ export default async function handler(req, res) {
       uploadDone: true,
       data: movieData,
     });
-    consoleEncode(req.file.path, movieData.title, movieData.uid);
+    consoleEncode(req.files[0].path, movieData.title, movieData.uid);
   });
 }
 

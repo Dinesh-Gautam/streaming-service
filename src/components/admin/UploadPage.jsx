@@ -88,6 +88,22 @@ function UploadPage({ pending }) {
     if (!file) {
       return;
     }
+    if(elementName == "video"){
+      videoInputHandler(file , elementName)
+    }
+    if(elementName == "poster"){
+      posterInputHandler(file , elementName)
+    }
+    if(elementName == "backdrop"){
+      posterInputHandler(file , elementName)
+    }
+  }
+  useEffect(() => {
+    console.log(inputFileRef.current)
+  }, [inputFileRef])
+
+
+  async function videoInputHandler(file , elementName) {
     const URL = window.URL || window.webkitURL;
     const videoURL = URL.createObjectURL(file);
     const video = document.createElement("video");
@@ -122,6 +138,30 @@ function UploadPage({ pending }) {
     }));
   }
 
+  async function posterInputHandler(file , elementName) {
+    console.log(file)
+    const name = file.name;
+    const URL = window.URL || window.webkitURL;
+    const photoUrl = URL.createObjectURL(file);
+    setVideoFileInfo((prev) => ({
+      ...prev,
+      [elementName]: {
+        name,
+        size: formatFileSize(file.size),
+        thumbnailUrl: photoUrl,
+      },
+    }));
+  }
+
+  function formatFileSize(bytes,decimalPoint) {
+    if(bytes == 0) return '0 Bytes';
+    var k = 1000,
+        dm = decimalPoint || 2,
+        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+ }
+
   async function publishVideo(event) {
     if (pending.uid) {
       event.preventDefault();
@@ -135,10 +175,14 @@ function UploadPage({ pending }) {
   }
 
   async function uploadDataAndFiles(event) {
-    const file = event.target.files[0];
+    // const file = event.target.files[0];
     // Create a new FormData object to send the file
     const formData = new FormData();
-    formData.append("video", file);
+    console.log(inputFileRef)
+    Object.keys(inputFileRef.current).forEach((key) => {
+      const value = inputFileRef.current[key]
+      formData.append(key , value.files[0])
+    })
 
     Object.keys(inputValue).forEach((key) => {
       const value = inputValue[key];
@@ -288,7 +332,11 @@ function UploadPage({ pending }) {
             }}
           >
             {["video", "poster", "backdrop"].map((item) => {
-              return videoFileInfo[item] ? (
+
+              return <Box key={item}>
+            
+                <Typography>{`${item} file`.toUpperCase()}</Typography>
+             {  videoFileInfo[item] ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <Card
                   orientation="horizontal"
@@ -308,7 +356,7 @@ function UploadPage({ pending }) {
                       {[videoFileInfo[item].name]}
                     </Typography>
                     <Typography level="body2">
-                      {videoFileInfo[item].duration}
+                      {videoFileInfo[item].duration || videoFileInfo[item].size}
                     </Typography>
                   </CardContent>
                   {/* <Divider /> */}
@@ -333,7 +381,6 @@ function UploadPage({ pending }) {
                 //   <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
                 // </Card>
                 <FormControl key={item}>
-                  <FormLabel>{`${item} file`.toUpperCase()}</FormLabel>
                   <FormLabel
                     sx={{
                       p: 4,
@@ -356,14 +403,15 @@ function UploadPage({ pending }) {
                     </h2>
                   </FormLabel>
                   <Input
-                    ref={() => inputFileRef.current[item]}
+                    ref={(e) => inputFileRef.current[item] = e}
                     sx={{ display: "none" }}
                     name={item}
                     type="file"
                     onChange={(event) => inputFileHandler(event)}
                   />
                 </FormControl>
-              );
+              )}
+            </Box>
             })}
           </Card>
         </>
