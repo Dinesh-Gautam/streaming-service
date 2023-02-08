@@ -21,10 +21,11 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
-const upload = multer({ storage }).array("video", "poster", "backdrop");
+const upload = multer({ storage }).array("data", 3);
 
 export default async function handler(req, res) {
   return await upload(req, res, (err) => {
+    console.log(req.files);
     const movieData = {
       ...req.body,
       uid: req.body?.uuid || uuidv4(),

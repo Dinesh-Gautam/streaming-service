@@ -134,6 +134,7 @@ function UploadPage({ pending }) {
         name,
         duration: formattedDuration,
         thumbnailUrl: thumbnail,
+        file,
       },
     }));
   }
@@ -149,6 +150,7 @@ function UploadPage({ pending }) {
         name,
         size: formatFileSize(file.size),
         thumbnailUrl: photoUrl,
+        file
       },
     }));
   }
@@ -178,16 +180,18 @@ function UploadPage({ pending }) {
     // const file = event.target.files[0];
     // Create a new FormData object to send the file
     const formData = new FormData();
-    console.log(inputFileRef)
-    Object.keys(inputFileRef.current).forEach((key) => {
-      const value = inputFileRef.current[key]
-      formData.append(key , value.files[0])
+    console.log(videoFileInfo)
+    Object.keys(videoFileInfo).forEach((key) => {
+      const value = videoFileInfo[key]
+      formData.append("data" , value.file)
     })
 
     Object.keys(inputValue).forEach((key) => {
       const value = inputValue[key];
       formData.append(key, value);
     });
+   
+  
 
     // Send the file to the server
     const response = await fetch("/api/admin/convert", {
