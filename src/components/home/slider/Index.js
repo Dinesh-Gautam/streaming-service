@@ -35,7 +35,7 @@ function Slider({ title, data, setIsScrolling }) {
         // setAnimating(false);
         console.log("removing", disableTimeoutRef.current);
         disableTimeoutRef.current = null;
-      }, 800);
+      }, 1000);
     }
 
     // setAnimating(true);

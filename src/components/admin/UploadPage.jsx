@@ -39,7 +39,11 @@ function UploadPage({ pending }) {
   const progressInterval = useRef(null);
   const router = useRouter();
   const inputFileRef = useRef({});
-  const [videoFileInfo, setVideoFileInfo] = useState({});
+  const [videoFileInfo, setVideoFileInfo] = useState({
+    video: pending?.video,
+    poster: pending?.poster,
+    backdrop: pending?.backdrop,
+  });
 
   useEffect(() => {
     if (!progressInterval.current && pending && !pending.progress?.completed) {
@@ -58,6 +62,8 @@ function UploadPage({ pending }) {
     //     clearInterval(progressInterval.current);
     //   }
     // };
+
+    console.log(pending);
   }, [pending]);
   function startProgressInterval(uid) {
     if (!uid) {
@@ -71,6 +77,11 @@ function UploadPage({ pending }) {
         if (progressData.completed) {
           clearInterval(progressInterval.current);
           setProgressData(100);
+          return;
+        }
+        if (progressData.error) {
+          clearInterval(progressInterval.current);
+          setProgressData(progressData);
           return;
         }
         setProgressData(Math.round(progressData.percent));
@@ -88,22 +99,21 @@ function UploadPage({ pending }) {
     if (!file) {
       return;
     }
-    if(elementName == "video"){
-      videoInputHandler(file , elementName)
+    if (elementName == "video") {
+      videoInputHandler(file, elementName);
     }
-    if(elementName == "poster"){
-      posterInputHandler(file , elementName)
+    if (elementName == "poster") {
+      posterInputHandler(file, elementName);
     }
-    if(elementName == "backdrop"){
-      posterInputHandler(file , elementName)
+    if (elementName == "backdrop") {
+      posterInputHandler(file, elementName);
     }
   }
   useEffect(() => {
-    console.log(inputFileRef.current)
-  }, [inputFileRef])
+    console.log(inputFileRef.current);
+  }, [inputFileRef]);
 
-
-  async function videoInputHandler(file , elementName) {
+  async function videoInputHandler(file, elementName) {
     const URL = window.URL || window.webkitURL;
     const videoURL = URL.createObjectURL(file);
     const video = document.createElement("video");
@@ -134,13 +144,15 @@ function UploadPage({ pending }) {
         name,
         duration: formattedDuration,
         thumbnailUrl: thumbnail,
+        size: formatFileSize(file.size),
+        type: file.type.split("/")[0],
         file,
       },
     }));
   }
 
-  async function posterInputHandler(file , elementName) {
-    console.log(file)
+  async function posterInputHandler(file, elementName) {
+    console.log(file);
     const name = file.name;
     const URL = window.URL || window.webkitURL;
     const photoUrl = URL.createObjectURL(file);
@@ -150,19 +162,20 @@ function UploadPage({ pending }) {
         name,
         size: formatFileSize(file.size),
         thumbnailUrl: photoUrl,
-        file
+        type: file.type.split("/")[0],
+        file,
       },
     }));
   }
 
-  function formatFileSize(bytes,decimalPoint) {
-    if(bytes == 0) return '0 Bytes';
+  function formatFileSize(bytes, decimalPoint) {
+    if (bytes == 0) return "0 Bytes";
     var k = 1000,
-        dm = decimalPoint || 2,
-        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
- }
+      dm = decimalPoint || 2,
+      sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
 
   async function publishVideo(event) {
     if (pending.uid) {
@@ -180,18 +193,29 @@ function UploadPage({ pending }) {
     // const file = event.target.files[0];
     // Create a new FormData object to send the file
     const formData = new FormData();
-    console.log(videoFileInfo)
+    console.log(videoFileInfo);
     Object.keys(videoFileInfo).forEach((key) => {
-      const value = videoFileInfo[key]
-      formData.append("data" , value.file)
-    })
+      const value = videoFileInfo[key];
+      formData.append("data", value.file);
+    });
+
+    Object.keys(videoFileInfo).forEach((key) => {
+      const { name, type } = videoFileInfo[key];
+      formData.append(
+        key,
+        JSON.stringify({
+          name,
+          duration: videoFileInfo[key]?.duration,
+          size,
+          type,
+        })
+      );
+    });
 
     Object.keys(inputValue).forEach((key) => {
       const value = inputValue[key];
       formData.append(key, value);
     });
-   
-  
 
     // Send the file to the server
     const response = await fetch("/api/admin/convert", {
@@ -277,6 +301,15 @@ function UploadPage({ pending }) {
                   >
                     Conversion done
                   </Typography>
+                ) : progressData && progressData.error ? (
+                  <>
+                    <Typography
+                      endDecorator={<Check color="danger" />}
+                      level="h5"
+                    >
+                      Conversion failed
+                    </Typography>
+                  </>
                 ) : (
                   <>
                     <Typography level="h5">
@@ -331,40 +364,48 @@ function UploadPage({ pending }) {
               width: "30vw",
               display: "flex",
               flexDirection: "column",
-              flexWrap: "wrap",
-              mr: 2,
             }}
           >
             {["video", "poster", "backdrop"].map((item) => {
-
-              return <Box key={item}>
-            
-                <Typography>{`${item} file`.toUpperCase()}</Typography>
-             {  videoFileInfo[item] ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <Card
-                  orientation="horizontal"
-                  variant="outlined"
-                  sx={{ width: "100%", bgcolor: "background.body" }}
-                >
-                  <CardOverflow>
-                    <AspectRatio ratio="1" sx={{ width: 130 }}>
-                      {
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
-                      }
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ px: 2 }}>
-                    <Typography fontWeight="md" mb={0.5}>
-                      {[videoFileInfo[item].name]}
-                    </Typography>
-                    <Typography level="body2">
-                      {videoFileInfo[item].duration || videoFileInfo[item].size}
-                    </Typography>
-                  </CardContent>
-                  {/* <Divider /> */}
-                  {/* <CardOverflow
+              return (
+                <Box key={item}>
+                  <Typography>{`${item} file`.toUpperCase()}</Typography>
+                  {videoFileInfo[item] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <Card
+                      orientation="horizontal"
+                      variant="outlined"
+                      sx={{ m: 2, bgcolor: "background.body" }}
+                    >
+                      {videoFileInfo[item].thumbnailUrl && (
+                        <CardOverflow>
+                          <AspectRatio ratio="1" sx={{ width: 150 }}>
+                            {
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={videoFileInfo[item].thumbnailUrl}
+                                alt="img"
+                              />
+                            }
+                          </AspectRatio>
+                        </CardOverflow>
+                      )}
+                      <CardContent sx={{ px: 2 }}>
+                        <Typography fontWeight="md" mb={0.5}>
+                          {[videoFileInfo[item].name]}
+                        </Typography>
+                        <Typography level="body2">
+                          {videoFileInfo[item].duration
+                            ? videoFileInfo[item].duration + ", "
+                            : ""}
+                          {videoFileInfo[item].size}
+                        </Typography>
+                        <Typography level="body2">
+                          Type: {videoFileInfo[item].type}
+                        </Typography>
+                      </CardContent>
+                      {/* <Divider /> */}
+                      {/* <CardOverflow
         variant="soft"
         color="primary"
         sx={{
@@ -379,43 +420,43 @@ function UploadPage({ pending }) {
       >
         Ticket
       </CardOverflow> */}
-                </Card>
-              ) : (
-                // <Card key={item}>
-                //   <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
-                // </Card>
-                <FormControl key={item}>
-                  <FormLabel
-                    sx={{
-                      p: 4,
-                      borderRadius: "md",
-                      border: "1px solid",
-                      borderColor: "neutral.800",
-                      backgroundColor: "neutral.900",
-                      cursor: "pointer",
-                      m: 2,
-                      width: "100%",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <h2
-                      style={{
-                        opacity: 0.2,
-                      }}
-                    >
-                      Select {item} file
-                    </h2>
-                  </FormLabel>
-                  <Input
-                    ref={(e) => inputFileRef.current[item] = e}
-                    sx={{ display: "none" }}
-                    name={item}
-                    type="file"
-                    onChange={(event) => inputFileHandler(event)}
-                  />
-                </FormControl>
-              )}
-            </Box>
+                    </Card>
+                  ) : (
+                    // <Card key={item}>
+                    //   <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
+                    // </Card>
+                    <FormControl key={item}>
+                      <FormLabel
+                        sx={{
+                          p: 4,
+                          borderRadius: "md",
+                          border: "1px solid",
+                          borderColor: "neutral.800",
+                          backgroundColor: "neutral.900",
+                          cursor: "pointer",
+                          m: 2,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h2
+                          style={{
+                            opacity: 0.2,
+                          }}
+                        >
+                          Select {item} file
+                        </h2>
+                      </FormLabel>
+                      <Input
+                        ref={(e) => (inputFileRef.current[item] = e)}
+                        sx={{ display: "none" }}
+                        name={item}
+                        type="file"
+                        onChange={(event) => inputFileHandler(event)}
+                      />
+                    </FormControl>
+                  )}
+                </Box>
+              );
             })}
           </Card>
         </>
