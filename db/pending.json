@@ -1,21 +1,14 @@
 [
   {
-    "video": {
-      "name": "prototype v0.1 (2).mp4",
-      "duration": "15s"
-    },
-    "poster": {
-      "name": "wedding card.jpg",
-      "size": "2.31 MB"
-    },
-    "backdrop": {
-      "name": "wedding card.jpg",
-      "size": "2.31 MB"
-    },
-    "title": "dfasdf",
-    "description": "asedfasd",
-    "genres": "fadfasdf",
-    "uid": "629f9dab-77dc-4f6c-bf78-5cbbd016d6c0",
+    "video": "{\"name\":\"prototype v0.1 (2).mp4\",\"duration\":\"15s\",\"size\":\"3.18 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "title": "Title",
+    "description": "description",
+    "genres": "drama , thriller , mystery",
+    "uid": "b6f02750-7bf9-4f30-b64e-7e665f5ac50f",
+    "posterPath": "uploads\\1675870641006-wedding card.jpg",
+    "backdropPath": "uploads\\1675870641022-wedding card.jpg",
     "progress": { "completed": true }
   }
 ]

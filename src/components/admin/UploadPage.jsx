@@ -200,7 +200,7 @@ function UploadPage({ pending }) {
     });
 
     Object.keys(videoFileInfo).forEach((key) => {
-      const { name, type } = videoFileInfo[key];
+      const { name, type, size } = videoFileInfo[key];
       formData.append(
         key,
         JSON.stringify({

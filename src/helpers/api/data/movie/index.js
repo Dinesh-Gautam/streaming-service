@@ -183,7 +183,8 @@ export function getMovieData(id) {
       console.log("can't find movie data");
       return null;
     }
-    return data;
+    const { title, description, genres } = data;
+    return { title, description, genres };
   } catch (e) {
     console.log(config.dir + config.movieData, "does not exists");
   }

@@ -29,8 +29,9 @@ export default async function handler(req, res) {
     const movieData = {
       ...req.body,
       uid: req.body?.uuid || uuidv4(),
+      posterPath: req.files[1].path,
+      backdropPath: req.files[2].path,
     };
-    console.log(req.files[0]);
 
     savePendingMovieData(movieData);
 
