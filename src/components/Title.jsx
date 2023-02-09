@@ -56,7 +56,6 @@ function TitleView({ result }) {
           imageContainer: { className: styles.backdropImage },
           image: {
             layout: "fill",
-            objectFit: "cover",
           },
         }}
       />
@@ -64,8 +63,7 @@ function TitleView({ result }) {
         <Image
           src={getImageUrl(result.backdrop_path || result.poster_path)}
           alt="image"
-          layout="fill"
-          objectFit="cover"
+          fill
         />
       </div>
       {/* <FadeImageOnLoad

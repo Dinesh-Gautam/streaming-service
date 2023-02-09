@@ -53,7 +53,6 @@ function Results({ item }) {
               attr={{
                 imageContainer: { className: styles.imageContainer },
                 image: {
-                  objectFit: "cover",
                   height: 208,
                   width: 148,
                 },
@@ -92,7 +91,6 @@ function Results({ item }) {
             attr={{
               imageContainer: { className: styles.backgroundImg },
               image: {
-                objectFit: "cover",
                 height: 208,
                 width: 548,
               },

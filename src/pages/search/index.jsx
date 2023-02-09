@@ -1,6 +1,5 @@
 import SearchResult from "../../components/SearchResult";
-import { getGenre, searchSuggest } from "../../tmdbapi/tmdbApi";
-import Search from "../../components/Search";
+import { getGenre } from "../../tmdbapi/tmdbApi";
 import { tmdbSearch } from "@/helpers/api/search/tmdb";
 import { ContextProvider } from "@/context/stateContext";
 import Nav from "@/components/nav";

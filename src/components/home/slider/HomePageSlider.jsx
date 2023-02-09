@@ -141,59 +141,54 @@ function HomePageSliders({ popularMovies }) {
             className={styles.hoverCard}
           >
             <div className={styles.hoverCardWrapper}>
-
-          
-            <div className={styles.imageContainer}>
-              <Image
-                src={getImageUrl(
-                  popularMovies.results[hoverCardPosition.index]
-                    ?.backdrop_path || ""
-                )}
-                //   ambientMode
-                //   positionAbsolute
-                //   ambientOptions={{ blur: 128, scale: 1 }}
-                style={{
-                  position: "relative",
-                  zIndex: 100,
-                }}
-                alt={"img"}
-                objectFit={"cover"}
-                height={1300 / 2}
-                width={1300}
-              />
-              
-            </div>
-            <div className={styles.hoverCardInfo}>
-              <motion.span
+              <div className={styles.imageContainer}>
+                <Image
+                  src={getImageUrl(
+                    popularMovies.results[hoverCardPosition.index]
+                      ?.backdrop_path || ""
+                  )}
+                  //   ambientMode
+                  //   positionAbsolute
+                  //   ambientOptions={{ blur: 128, scale: 1 }}
+                  style={{
+                    position: "relative",
+                    zIndex: 100,
+                  }}
+                  alt={"img"}
+                  objectFit={"cover"}
+                  height={1300 / 2}
+                  width={1300}
+                />
+              </div>
+              <div className={styles.hoverCardInfo}>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                >
+                  {popularMovies.results[hoverCardPosition.index]?.title}
+                </motion.span>
+              </div>
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{
                   opacity: 0,
                 }}
               >
-                {popularMovies.results[hoverCardPosition.index]?.title}
-              </motion.span>
-            </div>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{
-                  opacity: 0,
-                }}>
-            <Image
-            
-            src={getImageUrl(
-              popularMovies.results[hoverCardPosition.index]
-                ?.backdrop_path || ""
-            )}
-            className={styles.backgroundImage}
-            alt={"img"}
-            objectFit={"cover"}
-            height={1300 / 2}
-            width={1300}
-          />
-            </motion.div>
-           
+                <Image
+                  src={getImageUrl(
+                    popularMovies.results[hoverCardPosition.index]
+                      ?.backdrop_path || ""
+                  )}
+                  className={styles.backgroundImage}
+                  alt={"img"}
+                  height={1300 / 2}
+                  width={1300}
+                />
+              </motion.div>
             </div>
           </motion.div>
         )}

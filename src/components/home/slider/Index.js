@@ -79,54 +79,6 @@ function Slider({ title, data, setIsScrolling }) {
           return (
             <motion.div
               key={index}
-              // onMouseLeave={() => {
-              //   setHoverCardActive(false);
-              //   setHoverCardPosition({});
-              //   console.log(timeOutRef.current);
-
-              //   clearTimeout(timeOutRef.current);
-
-              //   // setAnimating(false);
-              // }}
-
-              // if (
-              //   e.target.id === "imageContainer" &&
-              //   index === currentIndex
-              // ) {
-              //   if (!hoverCardActive) {
-              //     if (!animating) {
-              //       console.log("imageContainer");
-              //       const rect = e.target.getBoundingClientRect();
-              //       console.log("entering");
-              //       setHoverCardPosition({
-              //         x: rect.left,
-              //         y: rect.top,
-              //         height: rect.height,
-              //         width: rect.width,
-              //         index: e.target.dataset.index,
-              //       });
-              //       setHoverCardActive(true);
-              //     } else {
-              //       clearTimeout(timeOutRef.current);
-              //       timeOutRef.current = setTimeout(() => {
-              //         console.log("imageContainer");
-              //         const rect = e.target.getBoundingClientRect();
-              //         console.log("entering");
-              //         setHoverCardPosition({
-              //           x: rect.left,
-              //           y: rect.top,
-              //           height: rect.height,
-              //           width: rect.width,
-              //           index: e.target.dataset.index,
-              //         });
-              //         setHoverCardActive(true);
-              //       }, 300);
-              //     }
-              //   } else {
-              //     setHoverCardActive(false);
-              //   }
-              // }
-
               className={
                 styles.item +
                 " " +
@@ -144,40 +96,37 @@ function Slider({ title, data, setIsScrolling }) {
               }
             >
               {Array.from({ length: itemsLength }).map((e, imgIndex) => (
-                <>
-                  <FadeImageOnLoad
-                    key={imgIndex + index + (itemsLength - 1) * index}
-                    imageSrc={
-                      index == nextIndex ||
-                      index === prevIndex ||
-                      index === currentIndex ||
-                      index === prevIndex - 1 ||
-                      index === nextIndex + 1 ||
-                      index === 0 ||
-                      index === length - 1
-                        ? data[imgIndex + index + (itemsLength - 1) * index]
-                            ?.backdrop_path || ""
-                        : ""
-                    }
-                    //   ambientMode
-                    //   positionAbsolute
-                    //   ambientOptions={{ blur: 128, scale: 1 }}
-                    attr={{
-                      imageContainer: {
-                        className: styles.imageContainer,
-                        id: "imageContainer",
-                        "data-index":
-                          imgIndex + index + (itemsLength - 1) * index,
-                        "data-isMiddle": currentIndex === index,
-                      },
-                      image: {
-                        objectFit: "cover",
-                        height: 1300 / 2,
-                        width: 1300,
-                      },
-                    }}
-                  />
-                </>
+                <FadeImageOnLoad
+                  key={imgIndex + index + (itemsLength - 1) * index}
+                  imageSrc={
+                    index == nextIndex ||
+                    index === prevIndex ||
+                    index === currentIndex ||
+                    index === prevIndex - 1 ||
+                    index === nextIndex + 1 ||
+                    index === 0 ||
+                    index === length - 1
+                      ? data[imgIndex + index + (itemsLength - 1) * index]
+                          ?.backdrop_path || ""
+                      : ""
+                  }
+                  //   ambientMode
+                  //   positionAbsolute
+                  //   ambientOptions={{ blur: 128, scale: 1 }}
+                  attr={{
+                    imageContainer: {
+                      className: styles.imageContainer,
+                      id: "imageContainer",
+                      "data-index":
+                        imgIndex + index + (itemsLength - 1) * index,
+                      "data-isMiddle": currentIndex === index,
+                    },
+                    image: {
+                      height: 1300 / 2,
+                      width: 1300,
+                    },
+                  }}
+                />
               ))}
             </motion.div>
           );

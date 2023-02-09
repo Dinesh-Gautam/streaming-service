@@ -106,7 +106,6 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                       className: styles.bannerImageContainer,
                     },
                     image: {
-                      objectFit: "cover",
                       height: 1300 / 2,
                       width: 1300,
                     },

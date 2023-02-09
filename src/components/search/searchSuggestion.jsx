@@ -1,8 +1,8 @@
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
-import Separator from "../elements/separator";
+import Separator from "../elements/Separator";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useViewRedirect } from "../../utils";
+import { useViewRedirect } from "../../Utils";
 import styles from "./search.module.scss";
 
 function Suggestions({ searchSuggestions }) {
@@ -67,7 +67,7 @@ function Suggestions({ searchSuggestions }) {
                   imageContainer: {
                     className: styles.suggestionImageContainer,
                   },
-                  image: { objectFit: "cover", height: 80, width: 60 },
+                  image: { height: 80, width: 60 },
                 }}
               />
               {/* <FadeImageOnLoad
