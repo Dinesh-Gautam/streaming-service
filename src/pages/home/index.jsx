@@ -20,7 +20,7 @@ function MainHome({ session, popularMovies, movies }) {
             <div>
               {movies.map((movie) => (
                 <Link key={movie.uid} href={"/movie" + "?id=" + movie.uid}>
-                  {movie.title}--
+                  {movie.title}
                 </Link>
               ))}
             </div>

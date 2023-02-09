@@ -75,7 +75,7 @@ function Slider({ title, data, setIsScrolling }) {
     <>
       {title && <h2 style={{ marginLeft: "2rem" }}>{title}</h2>}
       <div className={styles.container}>
-        {Array.from({ length }).map((movie, index) => {
+        {Array.from({ length }).map((_, index) => {
           return (
             <motion.div
               key={index}
@@ -119,7 +119,7 @@ function Slider({ title, data, setIsScrolling }) {
                       id: "imageContainer",
                       "data-index":
                         imgIndex + index + (itemsLength - 1) * index,
-                      "data-isMiddle": currentIndex === index,
+                      "data-ismiddle": currentIndex === index,
                     },
                     image: {
                       height: 1300 / 2,
