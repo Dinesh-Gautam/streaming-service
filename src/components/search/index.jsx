@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useData } from "../../context/stateContext";
 
 import { searchSuggest } from "../../tmdbapi/tmdbApi";
-import { useViewRedirect } from "../../Utils";
+// import { useViewRedirect } from "../../Utils";
 import Suggestions from "./searchSuggestion";
 
 function Search({ manual, initialValue = "" }) {

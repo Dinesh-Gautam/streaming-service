@@ -1,8 +1,8 @@
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
-import Separator from "../elements/Separator";
+import Separator from "../elements/separator";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useViewRedirect } from "../../Utils";
+import { useViewRedirect } from "../../utils";
 import styles from "./search.module.scss";
 
 function Suggestions({ searchSuggestions }) {

@@ -1,14 +1,9 @@
 import HomePageSliders from "@/components/home/slider/HomePageSlider";
-import Slider from "@/components/home/slider/Index";
 import { getPublishedMovies } from "@/helpers/api/data/movie";
-import { signOut, useSession } from "next-auth/react";
-import { getSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import Banner from "../../components/home/banner";
 import Nav from "../../components/nav";
-import Search from "../../components/Search";
 import { ContextProvider } from "../../context/stateContext";
 import { getPopularMovies } from "../../helpers/api/search/tmdb";
 import { redirectIfUserIsNotAuthenticated } from "../../helpers/redirect";
