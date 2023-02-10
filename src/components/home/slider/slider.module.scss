@@ -2,7 +2,7 @@
   // width: 100%;
   position: relative;
   height: 10vw;
-  background-color: red;
+  // background-color: red;
   padding: 0 4%;
   // overflow: hidden;
 }
@@ -61,6 +61,8 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
+  max-height: 100%;
+  aspect-ratio: 16/9;
   img {
     object-fit: cover;
     height: 100%;
@@ -100,6 +102,7 @@
   z-index: 999;
   overflow: hidden;
   border-radius: 12px;
+
   // transition: all 0.2s ease-out;
   // transform: perspective(1000px) translate3d(0, 0%, 0px);
   // opacity: 0;
@@ -114,17 +117,17 @@
     // border-radius: 0 0 12px 12px;
     position: relative;
     top: -2px;
+    // backface-visibility: hidden;
   }
   .imageContainer {
     border-radius: 12px 12px 0 0;
+    z-index: 10;
   }
 
   .hoverCardWrapper {
     // height: fit-content;
     // background-color: red;
     background-color: black;
-    // overflow: hidden;
-    // border-radius: 12px;
   }
   .backgroundImage {
     position: absolute;
@@ -134,6 +137,7 @@
     width: 100%;
     filter: blur(64px);
     opacity: 0.5;
+    z-index: 1;
   }
   span {
     display: block;

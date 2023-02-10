@@ -12,16 +12,21 @@ function HomePageSliders({ popularMovies }) {
   const clearingInterval = useRef(false);
 
   const [isScrolling, setIsScrolling] = useState(false);
+  function clearHover() {
+    setHoverCardActive(false);
+    setHoverCardPosition({});
+    console.log(timeOutRef.current);
+    clearTimeout(timeOutRef.current);
+    setInContainer(false);
+    timeOutRef.current = null;
+  }
   return (
     <>
       <div
         onMouseLeave={() => {
           if (!timeOutRef.current) return;
           if (!inContainer) {
-            setHoverCardActive(false);
-            setHoverCardPosition({});
-            console.log("hover end");
-            clearTimeout(timeOutRef.current);
+            clearHover();
           }
         }}
         onMouseMove={(e) => {
@@ -55,11 +60,7 @@ function HomePageSliders({ popularMovies }) {
             }
           } else {
             if (timeOutRef.current && !clearingInterval.current) {
-              setHoverCardActive(false);
-              setHoverCardPosition({});
-              console.log(timeOutRef.current);
-              clearTimeout(timeOutRef.current);
-              timeOutRef.current = null;
+              clearHover();
             }
           }
         }}
@@ -100,10 +101,7 @@ function HomePageSliders({ popularMovies }) {
               if (!timeOutRef.current) return;
 
               console.log(timeOutRef.current);
-              setHoverCardActive(false);
-              setHoverCardPosition({});
-              setInContainer(false);
-              clearTimeout(timeOutRef.current);
+              clearHover();
             }}
             onHoverStart={(e) => {
               console.log("mouse entered");

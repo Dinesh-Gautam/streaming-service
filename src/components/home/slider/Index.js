@@ -1,6 +1,6 @@
 import FadeImageOnLoad from "@/components/elements/FadeImageOnLoad";
 import { style } from "@mui/system";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./slider.module.scss";
 import Image from "next/image";
@@ -22,11 +22,15 @@ function Slider({ title, data, setIsScrolling }) {
 
   const [transitionState, setTransitionState] = useState({
     transition: "",
-    transform: "translateX(-100%)",
+    transform: "translateX(-120%)",
   });
 
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    updateDataArr("before");
+  }, []);
   function buttonClick(type) {
     setDisable(true);
     clearTimeout(disableTimeoutRef.current);
@@ -36,12 +40,12 @@ function Slider({ title, data, setIsScrolling }) {
       // setHoverCardActive(false);
       // setAnimating(true);
       setIsScrolling(true);
+      const transition = "transform 1s ease-in-out";
       if (type === "next") {
-        const transition = "transform 1s ease-in-out";
-        setTransitionState({ transition, transform: "translateX(-200%)" });
+        setTransitionState({ transition, transform: "translateX(-220%)" });
       } else {
-        const transition = "transform 1s ease-in-out";
-        setTransitionState({ transition, transform: "translateX(0%)" });
+        setTransitionState({ transition, transform: "translateX(-20%)" });
+        // updateDataArr(type);
       }
       disableTimeoutRef.current = setTimeout(() => {
         setDisable(false);
@@ -50,15 +54,16 @@ function Slider({ title, data, setIsScrolling }) {
         if (type === "next") {
           setTransitionState({
             transition: "",
-            transform: "translateX(-100%)",
+            transform: "translateX(-120%)",
           });
         } else {
           setTransitionState({
             transition: "",
-            transform: "translateX(-100%)",
+            transform: "translateX(-120%)",
           });
         }
         updateDataArr(type);
+
         console.log("removing", disableTimeoutRef.current);
         disableTimeoutRef.current = null;
       }, 1000);
@@ -98,21 +103,18 @@ function Slider({ title, data, setIsScrolling }) {
   };
 
   function updateDataArr(type) {
-    console.log(type);
+    const slicedArr0 = dataArr.slice(0, 5);
+    const slicedArr1 = dataArr.slice(5, 10);
+    const slicedArr2 = dataArr.slice(10, 15);
+    const slicedArr3 = dataArr.slice(15, 20);
     if (type === "next") {
-      const slicedArr0 = dataArr.slice(0, 5);
-      const slicedArr1 = dataArr.slice(5, 10);
-      const slicedArr2 = dataArr.slice(10, 15);
-      const slicedArr3 = dataArr.slice(data.length - 5, 5);
-      console.log(dataArr);
-      setDataArr([...slicedArr3, ...slicedArr1, ...slicedArr2, ...slicedArr0]);
+      setDataArr([...slicedArr1, ...slicedArr2, ...slicedArr3, ...slicedArr0]);
+    } else if (type === "before") {
+      // setDataArr([...slicedArr3, ...slicedArr2, ...slicedArr3, ...slicedArr0]);
+      // setDataArr([...slicedArr3, ...slicedArr0, ...slicedArr1, ...slicedArr2]);
+      setDataArr([...slicedArr3, ...slicedArr0, ...slicedArr1, ...slicedArr2]);
     } else {
-      const slicedArr0 = dataArr.slice(0, 5);
-      const slicedArr1 = dataArr.slice(5, 10);
-      const slicedArr2 = dataArr.slice(10, 15);
-      const slicedArr3 = dataArr.slice(data.length - 5, 5);
-
-      setDataArr([...slicedArr2, ...slicedArr3, ...slicedArr0, ...slicedArr1]);
+      setDataArr([...slicedArr3, ...slicedArr0, ...slicedArr1, ...slicedArr2]);
     }
     // if (type === "next") {
     //   const slicedArr0 = dataArr.slice(0, 5);
@@ -197,8 +199,8 @@ function Slider({ title, data, setIsScrolling }) {
             </motion.div>
           );
         })} */}
-            {dataArr.map((e, imgIndex) => (
-              <div className={styles.item} key={imgIndex}>
+            {dataArr.map((e, index) => (
+              <div className={styles.item} key={index}>
                 <FadeImageOnLoad
                   imageSrc={e.backdrop_path || ""}
                   //   ambientMode
@@ -207,9 +209,9 @@ function Slider({ title, data, setIsScrolling }) {
                   attr={{
                     imageContainer: {
                       className: styles.imageContainer,
-                      // id: "imageContainer",
-                      // "data-index": imgIndex + index + (itemsLength - 1) * index,
-                      // "data-ismiddle": currentIndex === index,
+                      id: "imageContainer",
+                      "data-index": data.indexOf(e),
+                      "data-ismiddle": index > 5 && index < 11,
                     },
                     image: {
                       height: 1300 / 2,
