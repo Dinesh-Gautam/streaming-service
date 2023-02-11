@@ -12,13 +12,15 @@ function HomePageSliders({ popularMovies, originalMovies }) {
   const clearingInterval = useRef(false);
 
   const [isScrolling, setIsScrolling] = useState(false);
-  function clearHover() {
-    setHoverCardActive(false);
-    setHoverCardPosition({});
-    console.log(timeOutRef.current);
-    clearTimeout(timeOutRef.current);
-    setInContainer(false);
-    timeOutRef.current = null;
+  async function clearHover() {
+    if (timeOutRef.current) {
+      setHoverCardActive(false);
+      setHoverCardPosition({});
+      console.log(timeOutRef.current);
+      clearTimeout(timeOutRef.current);
+      timeOutRef.current = null;
+      setInContainer(false);
+    }
   }
   return (
     <>
