@@ -14,7 +14,7 @@ function MainHome({ session, popularMovies, movies }) {
       <div>
         <Nav />
         {popularMovies && <Banner popularMovies={popularMovies.results} />}
-        {movies && (
+        {/* {movies && (
           <div>
             <h2>Original Movies</h2>
             <div>
@@ -25,8 +25,11 @@ function MainHome({ session, popularMovies, movies }) {
               ))}
             </div>
           </div>
-        )}
-        <HomePageSliders popularMovies={popularMovies} />
+        )} */}
+        <HomePageSliders
+          popularMovies={popularMovies}
+          originalMovies={movies}
+        />
       </div>
     </ContextProvider>
   );
@@ -35,7 +38,6 @@ function MainHome({ session, popularMovies, movies }) {
 export async function getServerSideProps(context) {
   const popularMovies = await getPopularMovies();
   const movies = getPublishedMovies();
-
   return redirectIfUserIsNotAuthenticated({
     context,
     path: "/",

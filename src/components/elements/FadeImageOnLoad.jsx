@@ -62,9 +62,13 @@ function FadeImageOnLoad(props) {
               {...props.attr.image}
             />
           )}
-          {props.imageSrc && (
+          {(props.imageSrc || props.rawImageSrc) && (
             <Image
-              src={getImageUrl(props.imageSrc)}
+              src={
+                !props.imageSrc
+                  ? props.rawImageSrc
+                  : getImageUrl(props.imageSrc)
+              }
               onLoadingComplete={() => setImageLoaded(true)}
               alt={props.imageSrc}
               //   objectFit="cover"

@@ -11,7 +11,16 @@ export function getPublishedMovies() {
       ) || [];
 
     if (fileData.length) {
-      return fileData;
+      const data = fileData.map(
+        ({ title, genres, description, poster_path, backdrop_path }) => ({
+          title,
+          genres,
+          description,
+          poster_path,
+          backdrop_path,
+        })
+      );
+      return data;
     }
     return null;
   } catch (e) {
@@ -183,8 +192,7 @@ export function getMovieData(id) {
       console.log("can't find movie data");
       return null;
     }
-    const { title, description, genres } = data;
-    return { title, description, genres };
+    return data;
   } catch (e) {
     console.log(config.dir + config.movieData, "does not exists");
   }

@@ -9,6 +9,7 @@ import { getImageUrl } from "@/tmdbapi/tmdbApi";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 function Slider({ title, data, setIsScrolling }) {
+  const isMiniSlider = data.length < 6;
   const [dataArr, setDataArr] = useState(null);
   const [transitionState, setTransitionState] = useState({
     transition: "",
@@ -89,25 +90,22 @@ function Slider({ title, data, setIsScrolling }) {
   return (
     <>
       {title && <h2 style={{ marginLeft: "2rem" }}>{title}</h2>}
-      {dataArr && (
+      {isMiniSlider ? (
         <div className={styles.container}>
-          <div
-            style={{
-              transition: transitionState.transition,
-              transform: transitionState.transform,
-            }}
-            className={styles.wrapper}
-          >
-            {dataArr.map((e, index) => (
+          <div style={{}} className={styles.wrapper}>
+            {data.map((e, index) => (
               <div className={styles.item} key={index}>
                 <FadeImageOnLoad
-                  imageSrc={e.backdrop_path || ""}
+                  rawImageSrc={
+                    "/api/static/" + e.backdrop_path.replace("uploads\\", "")
+                  }
                   attr={{
                     imageContainer: {
                       className: styles.imageContainer,
                       id: "imageContainer",
                       "data-index": data.indexOf(e),
-                      "data-middle": index > 6 && index < 12,
+                      "data-original": "true",
+                      "data-middle": true,
                     },
                     image: {
                       height: 1300 / 2,
@@ -118,21 +116,53 @@ function Slider({ title, data, setIsScrolling }) {
               </div>
             ))}
           </div>
-          <button
-            disabled={disable}
-            className={styles.leftButton + " " + styles.btn}
-            onClick={handlePrev}
-          >
-            <ArrowForwardIosIcon style={{ transform: "rotate(-180deg)" }} />
-          </button>
-          <button
-            disabled={disable}
-            className={styles.rightButton + " " + styles.btn}
-            onClick={handleNext}
-          >
-            <ArrowForwardIosIcon />
-          </button>
         </div>
+      ) : (
+        dataArr && (
+          <div className={styles.container}>
+            <div
+              style={{
+                transition: transitionState.transition,
+                transform: transitionState.transform,
+              }}
+              className={styles.wrapper}
+            >
+              {dataArr.map((e, index) => (
+                <div className={styles.item} key={index}>
+                  <FadeImageOnLoad
+                    imageSrc={e.backdrop_path || ""}
+                    attr={{
+                      imageContainer: {
+                        className: styles.imageContainer,
+                        id: "imageContainer",
+                        "data-index": data.indexOf(e),
+                        "data-middle": index > 6 && index < 12,
+                      },
+                      image: {
+                        height: 1300 / 2,
+                        width: 1300,
+                      },
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <button
+              disabled={disable}
+              className={styles.leftButton + " " + styles.btn}
+              onClick={handlePrev}
+            >
+              <ArrowForwardIosIcon style={{ transform: "rotate(-180deg)" }} />
+            </button>
+            <button
+              disabled={disable}
+              className={styles.rightButton + " " + styles.btn}
+              onClick={handleNext}
+            >
+              <ArrowForwardIosIcon />
+            </button>
+          </div>
+        )
       )}
     </>
   );

@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import Slider from "./Index";
 import styles from "./slider.module.scss";
-function HomePageSliders({ popularMovies }) {
+function HomePageSliders({ popularMovies, originalMovies }) {
   const [hoverCardPosition, setHoverCardPosition] = useState({ x: 0, y: 0 });
   const [hoverCardActive, setHoverCardActive] = useState(false);
   const [inContainer, setInContainer] = useState(false);
@@ -50,6 +50,7 @@ function HomePageSliders({ popularMovies }) {
                   y: rect.top + window.scrollY,
                   height: rect.height,
                   width: rect.width,
+                  original: e.target.dataset.original,
                   index: e.target.dataset.index,
                 });
                 setHoverCardActive(true);
@@ -65,6 +66,11 @@ function HomePageSliders({ popularMovies }) {
           }
         }}
       >
+        <Slider
+          setIsScrolling={setIsScrolling}
+          title="Original Movies"
+          data={originalMovies}
+        />
         <Slider
           setIsScrolling={setIsScrolling}
           title="Trending Movies"
@@ -141,10 +147,17 @@ function HomePageSliders({ popularMovies }) {
             <div className={styles.hoverCardWrapper}>
               <div className={styles.imageContainer}>
                 <Image
-                  src={getImageUrl(
-                    popularMovies.results[hoverCardPosition.index]
-                      ?.backdrop_path || ""
-                  )}
+                  src={
+                    hoverCardPosition.original
+                      ? "/api/static/" +
+                          originalMovies[
+                            hoverCardPosition.index
+                          ]?.backdrop_path.replace("uploads\\", "") || ""
+                      : getImageUrl(
+                          popularMovies.results[hoverCardPosition.index]
+                            ?.backdrop_path || ""
+                        )
+                  }
                   //   ambientMode
                   //   positionAbsolute
                   //   ambientOptions={{ blur: 128, scale: 1 }}
@@ -166,7 +179,9 @@ function HomePageSliders({ popularMovies }) {
                     opacity: 0,
                   }}
                 >
-                  {popularMovies.results[hoverCardPosition.index]?.title}
+                  {hoverCardPosition.original
+                    ? originalMovies[hoverCardPosition.index]?.title || ""
+                    : popularMovies.results[hoverCardPosition.index]?.title}
                 </motion.span>
               </div>
               <motion.div
@@ -177,10 +192,17 @@ function HomePageSliders({ popularMovies }) {
                 }}
               >
                 <Image
-                  src={getImageUrl(
-                    popularMovies.results[hoverCardPosition.index]
-                      ?.backdrop_path || ""
-                  )}
+                  src={
+                    hoverCardPosition.original
+                      ? "/api/static/" +
+                          originalMovies[
+                            hoverCardPosition.index
+                          ]?.backdrop_path.replace("uploads\\", "") || ""
+                      : getImageUrl(
+                          popularMovies.results[hoverCardPosition.index]
+                            ?.backdrop_path || ""
+                        )
+                  }
                   className={styles.backgroundImage}
                   alt={"img"}
                   height={1300 / 2}
