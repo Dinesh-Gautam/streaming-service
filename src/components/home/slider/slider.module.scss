@@ -1,51 +1,13 @@
 .container {
-  // width: 100%;
   position: relative;
   height: 10vw;
-  // background-color: red;
   padding: 0 4%;
-  // overflow: hidden;
 }
 .wrapper {
   display: flex;
   width: 100%;
   height: 100%;
 }
-// .item {
-//   position: absolute;
-//   top: 0;
-//   left: 50%;
-//   height: 100%;
-//   width: 92%;
-//   transition: all 1s ease-in-out;
-//   z-index: 100;
-//   display: flex;
-//   flex: 0 0 25%;
-//   gap: 1%;
-//   &.middle {
-//     transform: translateX(-50%);
-//   }
-//   &.left {
-//     transform: translateX(-151%);
-//     pointer-events: none;
-//   }
-//   &.right {
-//     transform: translateX(51%);
-//     pointer-events: none;
-//   }
-//   &.extremeLeft {
-//     transform: translateX(-201%);
-//     opacity: 0;
-//     pointer-events: none;
-//     z-index: 90;
-//   }
-//   &.extremeRight {
-//     transform: translateX(101%);
-//     opacity: 0;
-//     pointer-events: none;
-//     z-index: 90;
-//   }
-// }
 
 .item {
   padding: 0 2px;
@@ -55,7 +17,6 @@
 }
 .imageContainer {
   background: rgba(255, 255, 255, 0.1);
-  //   flex: 1;
   transition: transform 0.5s ease-in-out;
   height: 100%;
   border-radius: 12px;
@@ -77,21 +38,28 @@
   height: 100%;
   width: 4%;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  // background-color: pink;
+
   z-index: 100;
   border-radius: 0;
   display: flex;
   align-items: center;
-
-  // transform: translateX(-100%);
   &.leftButton {
     left: 0;
-    // transform: translateX(-100%);
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
   }
   &.rightButton {
     right: 0;
-    // transform: translateX(100%);
+    border-radius: 12px 0 0 12px;
+    background: linear-gradient(
+      to left,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
   }
 }
 
@@ -103,21 +71,10 @@
   overflow: hidden;
   border-radius: 12px;
 
-  // transition: all 0.2s ease-out;
-  // transform: perspective(1000px) translate3d(0, 0%, 0px);
-  // opacity: 0;
-
-  // transform: perspective(1000px) translate3d(0, -20%, 200px);
-  // opacity: 1;
-
   .hoverCardInfo {
-    // background-color: black;
-
     padding: 0.5rem 1rem;
-    // border-radius: 0 0 12px 12px;
     position: relative;
     top: -2px;
-    // backface-visibility: hidden;
   }
   .imageContainer {
     border-radius: 12px 12px 0 0;
@@ -125,8 +82,6 @@
   }
 
   .hoverCardWrapper {
-    // height: fit-content;
-    // background-color: red;
     background-color: black;
   }
   .backgroundImage {
@@ -142,7 +97,6 @@
   span {
     display: block;
     padding-bottom: 1rem;
-    // background-color: black;
     width: 100%;
   }
 }

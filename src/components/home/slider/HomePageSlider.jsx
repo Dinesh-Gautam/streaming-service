@@ -33,7 +33,7 @@ function HomePageSliders({ popularMovies }) {
           if (e.target.id === "imageContainer") {
             if (
               e.target.dataset.index !== hoverCardPosition.index &&
-              e.target.dataset.ismiddle === "true" &&
+              e.target.dataset.middle === "true" &&
               !isScrolling
             ) {
               // setAnimating(false);
