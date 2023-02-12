@@ -10,7 +10,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 function Slider({ title, data, setIsScrolling }) {
   const isMiniSlider = data.length < 6;
-  const [dataArr, setDataArr] = useState(null);
+  const [dataArr, setDataArr] = useState(updateDataArr("before"));
   const [transitionState, setTransitionState] = useState({
     transition: "",
     transform: "translateX(-140%)",
@@ -18,9 +18,6 @@ function Slider({ title, data, setIsScrolling }) {
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
 
-  useEffect(() => {
-    updateDataArr("before");
-  }, []);
   function buttonClick(type) {
     setDisable(true);
     clearTimeout(disableTimeoutRef.current);
@@ -78,7 +75,7 @@ function Slider({ title, data, setIsScrolling }) {
       slicedArr0 = data.slice(0, 5);
       slicedArr1 = data.slice(5, data.length - 7);
       slicedArr3 = data.slice(data.length - 7, data.length);
-      setDataArr([...slicedArr3, ...slicedArr0, ...slicedArr1]);
+      return [...slicedArr3, ...slicedArr0, ...slicedArr1];
     } else {
       slicedArr0 = dataArr.slice(0, 5);
       slicedArr1 = dataArr.slice(5, data.length - 5);

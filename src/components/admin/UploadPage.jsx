@@ -40,9 +40,9 @@ function UploadPage({ pending }) {
   const router = useRouter();
   const inputFileRef = useRef({});
   const [videoFileInfo, setVideoFileInfo] = useState({
-    video: JSON.parse(pending?.video),
-    poster: JSON.parse(pending?.poster),
-    backdrop: JSON.parse(pending?.backdrop),
+    video: pending?.video && JSON.parse(pending?.video),
+    poster: pending?.poster && JSON.parse(pending?.poster),
+    backdrop: pending?.backdrop && JSON.parse(pending?.backdrop),
   });
 
   useEffect(() => {
