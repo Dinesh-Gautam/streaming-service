@@ -1,6 +1,7 @@
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useRef, useState } from "react";
 import Slider from "./Index";
 import styles from "./slider.module.scss";
@@ -12,6 +13,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
   const clearingInterval = useRef(false);
 
   const [isScrolling, setIsScrolling] = useState(false);
+
   async function clearHover() {
     if (timeOutRef.current) {
       setHoverCardActive(false);
@@ -146,72 +148,78 @@ function HomePageSliders({ popularMovies, originalMovies }) {
             }}
             className={styles.hoverCard}
           >
-            <div className={styles.hoverCardWrapper}>
-              <div className={styles.imageContainer}>
-                <Image
-                  src={
-                    hoverCardPosition.original
-                      ? "/api/static/" +
-                          originalMovies[
-                            hoverCardPosition.index
-                          ]?.backdrop_path.replace("uploads\\", "") || ""
-                      : getImageUrl(
-                          popularMovies.results[hoverCardPosition.index]
-                            ?.backdrop_path || ""
-                        )
-                  }
-                  //   ambientMode
-                  //   positionAbsolute
-                  //   ambientOptions={{ blur: 128, scale: 1 }}
-                  style={{
-                    position: "relative",
-                    zIndex: 100,
-                  }}
-                  alt={"img"}
-                  objectFit={"cover"}
-                  height={1300 / 2}
-                  width={1300}
-                />
-              </div>
-              <div className={styles.hoverCardInfo}>
-                <motion.span
+            <Link
+              href={
+                "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
+              }
+            >
+              <div className={styles.hoverCardWrapper}>
+                <div className={styles.imageContainer}>
+                  <Image
+                    src={
+                      hoverCardPosition.original
+                        ? "/api/static/" +
+                            originalMovies[
+                              hoverCardPosition.index
+                            ]?.backdrop_path.replace("uploads\\", "") || ""
+                        : getImageUrl(
+                            popularMovies.results[hoverCardPosition.index]
+                              ?.backdrop_path || ""
+                          )
+                    }
+                    //   ambientMode
+                    //   positionAbsolute
+                    //   ambientOptions={{ blur: 128, scale: 1 }}
+                    style={{
+                      position: "relative",
+                      zIndex: 100,
+                    }}
+                    alt={"img"}
+                    objectFit={"cover"}
+                    height={1300 / 2}
+                    width={1300}
+                  />
+                </div>
+                <div className={styles.hoverCardInfo}>
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                  >
+                    {hoverCardPosition.original
+                      ? originalMovies[hoverCardPosition.index]?.title || ""
+                      : popularMovies.results[hoverCardPosition.index]?.title}
+                  </motion.span>
+                </div>
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{
                     opacity: 0,
                   }}
                 >
-                  {hoverCardPosition.original
-                    ? originalMovies[hoverCardPosition.index]?.title || ""
-                    : popularMovies.results[hoverCardPosition.index]?.title}
-                </motion.span>
+                  <Image
+                    src={
+                      hoverCardPosition.original
+                        ? "/api/static/" +
+                            originalMovies[
+                              hoverCardPosition.index
+                            ]?.backdrop_path.replace("uploads\\", "") || ""
+                        : getImageUrl(
+                            popularMovies.results[hoverCardPosition.index]
+                              ?.backdrop_path || ""
+                          )
+                    }
+                    className={styles.backgroundImage}
+                    alt={"img"}
+                    height={1300 / 2}
+                    width={1300}
+                  />
+                </motion.div>
               </div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{
-                  opacity: 0,
-                }}
-              >
-                <Image
-                  src={
-                    hoverCardPosition.original
-                      ? "/api/static/" +
-                          originalMovies[
-                            hoverCardPosition.index
-                          ]?.backdrop_path.replace("uploads\\", "") || ""
-                      : getImageUrl(
-                          popularMovies.results[hoverCardPosition.index]
-                            ?.backdrop_path || ""
-                        )
-                  }
-                  className={styles.backgroundImage}
-                  alt={"img"}
-                  height={1300 / 2}
-                  width={1300}
-                />
-              </motion.div>
-            </div>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

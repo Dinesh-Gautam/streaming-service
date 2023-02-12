@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import "../components/videoPlayer/customStyle.scss";
 import { SessionProvider } from "next-auth/react";
 import { AnimateSharedLayout } from "framer-motion";
 import { CssVarsProvider } from "@mui/joy";
