@@ -70,11 +70,13 @@ function HomePageSliders({ popularMovies, originalMovies }) {
           }
         }}
       >
-        <Slider
-          setIsScrolling={setIsScrolling}
-          title="Original Movies"
-          data={originalMovies}
-        />
+        {originalMovies && originalMovies.length && (
+          <Slider
+            setIsScrolling={setIsScrolling}
+            title="Original Movies"
+            data={originalMovies}
+          />
+        )}
         <Slider
           setIsScrolling={setIsScrolling}
           title="Trending Movies"
@@ -150,11 +152,19 @@ function HomePageSliders({ popularMovies, originalMovies }) {
           >
             <Link
               href={
-                "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
+                // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
+                "/title?id=" +
+                popularMovies.results[hoverCardPosition.index].id +
+                "&type=" +
+                "movie" +
+                "&t=hover"
               }
             >
               <div className={styles.hoverCardWrapper}>
-                <div className={styles.imageContainer}>
+                <motion.div
+                  layoutId={"hover"}
+                  className={styles.imageContainer}
+                >
                   <Image
                     src={
                       hoverCardPosition.original
@@ -179,7 +189,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                     height={1300 / 2}
                     width={1300}
                   />
-                </div>
+                </motion.div>
                 <div className={styles.hoverCardInfo}>
                   <motion.span
                     initial={{ opacity: 0 }}

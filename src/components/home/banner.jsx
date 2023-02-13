@@ -84,7 +84,11 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   : "")
               }
             >
-              <Link href={"/title?id=" + movie.id + "&type=" + "movie"}>
+              <Link
+                href={
+                  "/title?id=" + movie.id + "&type=" + "movie" + "&t=banner"
+                }
+              >
                 <FadeImageOnLoad
                   imageSrc={
                     index == nextIndex ||

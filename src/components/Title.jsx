@@ -1,5 +1,5 @@
 import { formatParagraph } from "@/Utils";
-import React from "react";
+import React, { useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/Separator";
 import { motion } from "framer-motion";
@@ -7,9 +7,17 @@ import styles from "./View.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
 
-function TitleView({ result }) {
+function TitleView({ result, type }) {
+  const [animating, setAnimating] = useState(true);
   return (
-    <motion.div layoutId={"banner" + result.id} className={styles.container}>
+    <motion.div
+      layout
+      onAnimationEnd={() => {
+        setAnimating(false);
+      }}
+      layoutId={type === "hover" ? type : type + result.id}
+      className={styles.container}
+    >
       <div className={styles.leftContainer}>
         <div>
           <h1>
@@ -48,17 +56,20 @@ function TitleView({ result }) {
           </button>
         </div>
       </div>
-      <FadeImageOnLoad
-        imageSrc={result.poster_path || result.backdrop_path}
-        // imageSrc={result.backdrop_path || result.poster_path}
-        duration={2}
-        attr={{
-          imageContainer: { className: styles.backdropImage },
-          image: {
-            layout: "fill",
-          },
-        }}
-      />
+      {!animating && (
+        <FadeImageOnLoad
+          imageSrc={result.poster_path || result.backdrop_path}
+          // imageSrc={result.backdrop_path || result.poster_path}
+          duration={2}
+          attr={{
+            imageContainer: { className: styles.backdropImage },
+            image: {
+              layout: "fill",
+            },
+          }}
+        />
+      )}
+
       <div className={styles.backdropImage + " " + styles.backdropImageBlurred}>
         <Image
           src={getImageUrl(result.backdrop_path || result.poster_path)}
