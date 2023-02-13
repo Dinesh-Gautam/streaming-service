@@ -13,7 +13,7 @@ import {
   Textarea,
   Typography,
 } from "@mui/joy";
-import { Add, Check, Upload } from "@mui/icons-material";
+import { Add, Check, Delete, Upload } from "@mui/icons-material";
 import { CardContent } from "@mui/material";
 
 function UploadPage({ pending }) {
@@ -238,6 +238,17 @@ function UploadPage({ pending }) {
     );
   }
 
+ async function deletePendingVideo() {
+    const id = pending.uid;
+
+    const res = await fetch('/api/admin/movie/delete?id=' + id)
+
+    if(res.ok) {
+      console.log('Pending video deleted')
+      router.replace("/admin");
+    }
+  }
+
   return (
     <Box p={2} sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
       <Card sx={{ flex: 1, gap: 2 }}>
@@ -346,6 +357,15 @@ function UploadPage({ pending }) {
               >
                 Upload
               </Button>}
+              {pending &&  <Button
+              color="danger"
+              variant="outlined"
+                onClick={() => deletePendingVideo()}
+                size="lg"
+                startDecorator={<Delete />}
+              >
+                Delete
+              </Button>}
               <Button
                 disabled={disablePublishButton()}
                 variant={disablePublishButton() ? "outlined" : "solid"}
@@ -377,7 +397,7 @@ function UploadPage({ pending }) {
                       variant="outlined"
                       sx={{ m: 2, bgcolor: "background.body" }}
                     >
-                      {videoFileInfo[item].thumbnailUrl && (
+                      {videoFileInfo[item].thumbnailUrl  && (
                         <CardOverflow>
                           <AspectRatio ratio="1" sx={{ width: 150 }}>
                             {
@@ -390,6 +410,7 @@ function UploadPage({ pending }) {
                           </AspectRatio>
                         </CardOverflow>
                       )}
+                      
                       <CardContent sx={{ px: 2 }}>
                         <Typography fontWeight="md" mb={0.5}>
                           {[videoFileInfo[item].name]}

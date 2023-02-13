@@ -200,3 +200,32 @@ export function getMovieData(id) {
 
   return null;
 }
+
+export function deletePendingMovie(id) {
+  if (!id) {
+    console.log("id is required when getting movie data");
+    return null;
+  }
+
+  try {
+    let pendingMovieData =
+      JSON.parse(
+        fs.readFileSync(config.dir + config.pendingMovies).toString()
+      ) || [];
+    const data = pendingMovieData.find((e) => e.uid == id);
+    if (!data) {
+      console.log("can't find movie data when deleting from pending movies");
+      return null;
+    }
+    pendingMovieData = pendingMovieData.filter((e) => e.uid !== id);
+    fs.writeFileSync(
+      config.dir + config.pendingMovies,
+      JSON.stringify(pendingMovieData)
+    );
+    return data;
+  } catch (e) {
+    console.log(config.dir + config.movieData, "does not exists");
+  }
+
+  return null;
+}

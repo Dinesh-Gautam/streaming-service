@@ -7,8 +7,8 @@
     "description": "sample description",
     "genres": "d , a ,b ",
     "uid": "d43f2ae8-3ba0-4953-a551-4491ee940c73",
-    "poster_path": "uploads\\1676262092483-sample picture.jpeg",
-    "backdrop_path": "uploads\\1676262092483-sample picture.jpeg",
+    "poster_path": "/1676262092483-sample picture.jpeg",
+    "backdrop_path": "/1676262092483-sample picture.jpeg",
     "progress": { "completed": true }
   }
 ]
