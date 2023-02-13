@@ -339,13 +339,13 @@ function UploadPage({ pending }) {
                 gap: 2,
               }}
             >
-              <Button
+              {!pending &&  <Button
                 onClick={() => uploadDataAndFiles()}
                 size="lg"
                 startDecorator={<Upload />}
               >
                 Upload
-              </Button>
+              </Button>}
               <Button
                 disabled={disablePublishButton()}
                 variant={disablePublishButton() ? "outlined" : "solid"}

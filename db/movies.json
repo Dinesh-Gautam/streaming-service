@@ -1,14 +1,14 @@
 [
   {
-    "video": "{\"name\":\"prototype v0.1 (2).mp4\",\"duration\":\"15s\",\"size\":\"3.18 MB\",\"type\":\"video\"}",
-    "poster": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
-    "backdrop": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
-    "title": "Title",
-    "description": "description",
-    "genres": "drama , thriller , mystery",
-    "uid": "b6f02750-7bf9-4f30-b64e-7e665f5ac50f",
-    "poster_path": "uploads\\1675870641006-wedding card.jpg",
-    "backdrop_path": "uploads\\1675870641022-wedding card.jpg",
+    "video": "{\"name\":\"file_example_MP4_1920_18MG.mp4\",\"duration\":\"31s\",\"size\":\"17.84 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"sample picture.jpeg\",\"size\":\"12.06 KB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"sample picture.jpeg\",\"size\":\"12.06 KB\",\"type\":\"image\"}",
+    "title": "Sample Earth video",
+    "description": "sample description",
+    "genres": "d , a ,b ",
+    "uid": "d43f2ae8-3ba0-4953-a551-4491ee940c73",
+    "poster_path": "uploads\\1676262092483-sample picture.jpeg",
+    "backdrop_path": "uploads\\1676262092483-sample picture.jpeg",
     "progress": { "completed": true }
   }
 ]
