@@ -6,6 +6,7 @@
 .pnp.js
 /converted
 /uploads
+/db
 # testing
 /coverage
 
