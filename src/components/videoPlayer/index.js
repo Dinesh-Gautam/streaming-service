@@ -30,7 +30,7 @@ function ShakaVideoPlayer({ manifestUrl }) {
       // Log the error.
       console.error("Error code", error.code, "object", error);
     };
-
+    console.log(controls);
     player
       .load(manifestUri)
       .then(function () {
@@ -49,6 +49,7 @@ function ShakaVideoPlayer({ manifestUrl }) {
       <video
         id="video"
         ref={videoRef}
+        autoPlay={true}
         className={styles.video}
         // className="w-full h-full"
         // poster={this.props.posterUrl}

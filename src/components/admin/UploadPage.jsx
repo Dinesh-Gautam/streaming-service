@@ -330,6 +330,7 @@ function UploadPage({ pending }) {
                       sx={{
                         height: 3,
                         bgcolor: "primary.600",
+                        transition : "width 1s ease-in-out",
                         width: (progressData ? progressData : 0) + "%",
                         position: "absolute",
                         bottom: 0,
@@ -350,7 +351,7 @@ function UploadPage({ pending }) {
                 gap: 2,
               }}
             >
-              {!pending &&  <Button
+              {(!pending || isNaN(progressData)) &&  <Button
                 onClick={() => uploadDataAndFiles()}
                 size="lg"
                 startDecorator={<Upload />}

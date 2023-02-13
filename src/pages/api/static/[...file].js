@@ -16,4 +16,6 @@ export default async function handler(req, res) {
     res.status(500).send({ success: false, error: "can't find path" });
     console.log("error occurred while send static file");
   }
+
+  return;
 }

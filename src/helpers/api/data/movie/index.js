@@ -50,7 +50,7 @@ export function saveMovieToPublishedMovie(data) {
         fs.readFileSync(config.dir + config.publishedMovies).toString()
       ) || [];
 
-    const movie = fileData.find((e) => e.uid === uid);
+    const movie = fileData.find((e) => e.uid === data.uid);
     if (movie) {
       console.log("movie already exists");
       fileData.map((e) => {
@@ -68,6 +68,8 @@ export function saveMovieToPublishedMovie(data) {
       JSON.stringify(fileData)
     );
   } catch (error) {
+    console.error(error);
+    console.log("creating new movies.json file");
     const fileData = [data];
     // fs.writeFileSync("data.json", JSON.stringify([data]));
     fs.writeFileSync(

@@ -158,7 +158,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   <Image
                     src={
                       hoverCardPosition.original
-                        ? "/api/static/" +
+                        ? "/api/static" +
                             originalMovies[
                               hoverCardPosition.index
                             ]?.backdrop_path.replace("uploads\\", "") || ""
@@ -203,7 +203,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   <Image
                     src={
                       hoverCardPosition.original
-                        ? "/api/static/" +
+                        ? "/api/static" +
                             originalMovies[
                               hoverCardPosition.index
                             ]?.backdrop_path.replace("uploads\\", "") || ""
