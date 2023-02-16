@@ -213,10 +213,22 @@ function UploadPage({ pending }) {
     });
 
     Object.keys(inputValue).forEach((key) => {
+      // if (key === "genres") {
+      //   const value = inputValue[key]
+      //     .split(",")
+      //     .map((e) => ({ name: e.trim() }));
+      //   formData.append(key, value);
+      //   return;
+      // }
       const value = inputValue[key];
       formData.append(key, value);
     });
+    formData.append(
+      "first_air_date",
+      new Date().toLocaleDateString().replaceAll("/", "-")
+    );
 
+    formData.append("media_type", "movie");
     // Send the file to the server
     const response = await fetch("/api/admin/convert", {
       method: "POST",
@@ -238,13 +250,13 @@ function UploadPage({ pending }) {
     );
   }
 
- async function deletePendingVideo() {
+  async function deletePendingVideo() {
     const id = pending.uid;
 
-    const res = await fetch('/api/admin/movie/delete?id=' + id)
+    const res = await fetch("/api/admin/movie/delete?id=" + id);
 
-    if(res.ok) {
-      console.log('Pending video deleted')
+    if (res.ok) {
+      console.log("Pending video deleted");
       router.replace("/admin");
     }
   }
@@ -330,7 +342,7 @@ function UploadPage({ pending }) {
                       sx={{
                         height: 3,
                         bgcolor: "primary.600",
-                        transition : "width 1s ease-in-out",
+                        transition: "width 1s ease-in-out",
                         width: (progressData ? progressData : 0) + "%",
                         position: "absolute",
                         bottom: 0,
@@ -351,22 +363,26 @@ function UploadPage({ pending }) {
                 gap: 2,
               }}
             >
-              {(!pending || isNaN(progressData)) &&  <Button
-                onClick={() => uploadDataAndFiles()}
-                size="lg"
-                startDecorator={<Upload />}
-              >
-                Upload
-              </Button>}
-              {pending &&  <Button
-              color="danger"
-              variant="outlined"
-                onClick={() => deletePendingVideo()}
-                size="lg"
-                startDecorator={<Delete />}
-              >
-                Delete
-              </Button>}
+              {(!pending || isNaN(progressData)) && (
+                <Button
+                  onClick={() => uploadDataAndFiles()}
+                  size="lg"
+                  startDecorator={<Upload />}
+                >
+                  Upload
+                </Button>
+              )}
+              {pending && (
+                <Button
+                  color="danger"
+                  variant="outlined"
+                  onClick={() => deletePendingVideo()}
+                  size="lg"
+                  startDecorator={<Delete />}
+                >
+                  Delete
+                </Button>
+              )}
               <Button
                 disabled={disablePublishButton()}
                 variant={disablePublishButton() ? "outlined" : "solid"}
@@ -398,7 +414,7 @@ function UploadPage({ pending }) {
                       variant="outlined"
                       sx={{ m: 2, bgcolor: "background.body" }}
                     >
-                      {videoFileInfo[item].thumbnailUrl  && (
+                      {videoFileInfo[item].thumbnailUrl && (
                         <CardOverflow>
                           <AspectRatio ratio="1" sx={{ width: 150 }}>
                             {
@@ -411,7 +427,7 @@ function UploadPage({ pending }) {
                           </AspectRatio>
                         </CardOverflow>
                       )}
-                      
+
                       <CardContent sx={{ px: 2 }}>
                         <Typography fontWeight="md" mb={0.5}>
                           {[videoFileInfo[item].name]}

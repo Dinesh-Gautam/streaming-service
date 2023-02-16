@@ -128,8 +128,14 @@ export async function getDetails(mediaId, mediaType, options = {}) {
   return null;
 }
 
-export function getImageUrl(path, size) {
-  return `https://image.tmdb.org/t/p/${size ? "w" + size : "original"}/${path}`;
+export function getImageUrl(path, options) {
+  if (options?.original) {
+    return `/api/static${path}`;
+  } else {
+    return `https://image.tmdb.org/t/p/${
+      options?.size ? "w" + options?.size : "original"
+    }${path}`;
+  }
 }
 
 export async function getGenre() {

@@ -15,3 +15,6 @@ admin-
 main page
 users edit page
 movie upload page
+
+todo :
+add media_type, first_air_date, and change genres to [{"name" : "kfakdfja"} , {....} , ...] to original movies

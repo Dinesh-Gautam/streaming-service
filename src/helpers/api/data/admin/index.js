@@ -1,6 +1,7 @@
 import { config } from "../config";
 import fs from "fs";
 import { saveMovieToPublishedMovie } from "../movie";
+
 export function publishMovie(id) {
   if (!id) {
     console.log("id is not provided");

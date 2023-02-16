@@ -154,10 +154,14 @@ function HomePageSliders({ popularMovies, originalMovies }) {
               href={
                 // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
                 "/title?id=" +
-                popularMovies.results[hoverCardPosition.index].id +
+                (hoverCardPosition.original
+                  ? originalMovies[hoverCardPosition.index].uid
+                  : popularMovies.results[hoverCardPosition.index].id) +
                 "&type=" +
                 "movie" +
-                "&t=hover"
+                "&t=hover" +
+                "&original=" +
+                (hoverCardPosition.original === "true" ? "true" : "false")
               }
             >
               <div className={styles.hoverCardWrapper}>

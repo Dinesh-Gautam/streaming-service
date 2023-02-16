@@ -231,3 +231,26 @@ export function deletePendingMovie(id) {
 
   return null;
 }
+
+export function getOriginalMovieDetails(id) {
+  if (!id) {
+    console.log("id is required when getting movie data");
+    return null;
+  }
+  try {
+    const movieData =
+      JSON.parse(
+        fs.readFileSync(config.dir + config.publishedMovies).toString()
+      ) || [];
+    const data = movieData.find((e) => e.uid == id);
+    if (!data) {
+      console.log("can't find movie data");
+      return null;
+    }
+    return data;
+  } catch (e) {
+    console.log(config.dir + config.movieData, "does not exists");
+  }
+
+  return null;
+}

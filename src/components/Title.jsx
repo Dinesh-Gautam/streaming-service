@@ -2,12 +2,14 @@ import { formatParagraph } from "@/Utils";
 import React, { useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/Separator";
-import { motion } from "framer-motion";
+import { LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
+import { PlayArrowRounded } from "@mui/icons-material";
+import Link from "next/link";
 
-function TitleView({ result, type }) {
+function TitleView({ result, layout_type, original }) {
   const [animating, setAnimating] = useState(true);
   return (
     <motion.div
@@ -15,7 +17,13 @@ function TitleView({ result, type }) {
       onAnimationEnd={() => {
         setAnimating(false);
       }}
-      layoutId={type === "hover" ? type : type + result.id}
+      layoutId={
+        !layout_type
+          ? ""
+          : layout_type === "hover"
+          ? layout_type
+          : layout_type + result.id
+      }
       className={styles.container}
     >
       <div className={styles.leftContainer}>
@@ -31,34 +39,50 @@ function TitleView({ result, type }) {
           gap={8}
           values={[
             result.media_type,
-            result.genres
-              .map((gen, index, { length }) =>
-                index + 1 == length ? gen.name + " " : gen.name + ", "
-              )
-              .join(" "),
-            new Date(result?.first_air_date).getFullYear(),
+            original
+              ? result.genres
+                  .split(",")
+                  .map((gen, index, { length }) =>
+                    index + 1 == length ? gen + " " : gen + ", "
+                  )
+                  .join(" ")
+              : result.genres
+                  .map((gen, index, { length }) =>
+                    index + 1 == length ? gen.name + " " : gen.name + ", "
+                  )
+                  .join(" "),
+            isNaN(new Date(result?.first_air_date).getFullYear())
+              ? ""
+              : new Date(result?.first_air_date).getFullYear(),
           ]}
         />
         <div>
-          <p>{formatParagraph(result.overview)}</p>
+          <p>{formatParagraph(result.overview || result.description)}</p>
         </div>
         <div>
-          <button
-          // onClick={
-          // () =>
-          // router.push(
-          //   `api/videoStream?ih=${videoFileInfo.infoHash}&i=${videoFileInfo.videoFileIndex}`
-          // )
-          // }
-          >
-            Watch Now
-            {/* <PlayArrowIcon fontSize="large" /> */}
-          </button>
+          {original && (
+            <Link href={"/movie" + "?id=" + result?.uid}>
+              <button
+              // onClick={
+              // () =>
+              // router.push(
+              //   `api/videoStream?ih=${videoFileInfo.infoHash}&i=${videoFileInfo.videoFileIndex}`
+              // )
+              // }
+              >
+                Watch Now
+                <span>
+                  <PlayArrowRounded fontSize="large" />
+                </span>
+              </button>
+            </Link>
+          )}
         </div>
       </div>
       {!animating && (
         <FadeImageOnLoad
-          imageSrc={result.poster_path || result.backdrop_path}
+          imageSrc={result.poster_path}
+          original={original}
           // imageSrc={result.backdrop_path || result.poster_path}
           duration={2}
           attr={{
@@ -71,11 +95,26 @@ function TitleView({ result, type }) {
       )}
 
       <div className={styles.backdropImage + " " + styles.backdropImageBlurred}>
-        <Image
-          src={getImageUrl(result.backdrop_path || result.poster_path)}
-          alt="image"
-          fill
-        />
+        {!layout_type ? (
+          <FadeImageOnLoad
+            imageSrc={result.backdrop_path}
+            original={original}
+            // imageSrc={result.backdrop_path || result.poster_path}
+            duration={2}
+            attr={{
+              imageContainer: { className: styles.backdropImage },
+              image: {
+                layout: "fill",
+              },
+            }}
+          />
+        ) : (
+          <Image
+            src={getImageUrl(result.backdrop_path, { original })}
+            alt="image"
+            fill
+          />
+        )}
       </div>
       {/* <FadeImageOnLoad
         imageSrc={result.backdrop_path || result.poster_path}

@@ -1,15 +1,19 @@
 import TitleView from "@/components/Title";
+import { getOriginalMovieDetails } from "@/helpers/api/data/movie";
 import { getDetails } from "@/tmdbapi/tmdbApi";
 import React from "react";
 
-function Title({ result, type }) {
-  return <TitleView result={result} type={type} />;
+function Title({ result, layout_type, original }) {
+  return (
+    <TitleView result={result} layout_type={layout_type} original={original} />
+  );
 }
 export async function getServerSideProps(context) {
   const id = context.query.id;
 
   const media_type = context.query.type;
-  const layout_type = context.query.t;
+  const layout_type = context.query.t || null;
+  const original = context.query.original === "true";
   if (!id) {
     context.res.statusCode = 403;
     context.res.write("<h1>No id provided</h1>");
@@ -23,11 +27,17 @@ export async function getServerSideProps(context) {
   }
 
   if (media_type && id) {
-    const searchResult = await getDetails(id, media_type);
+    let searchResult;
+    if (!original) {
+      searchResult = (await getDetails(id, media_type)) || null;
+    } else {
+      searchResult = getOriginalMovieDetails(id);
+    }
     return {
       props: {
         result: searchResult,
-        type: layout_type,
+        layout_type,
+        original: Boolean(original),
       },
     };
   }
