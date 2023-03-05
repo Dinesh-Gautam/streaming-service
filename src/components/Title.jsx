@@ -1,7 +1,7 @@
-import { formatParagraph } from "@/Utils";
+import { formatParagraph } from "@/utils";
 import React, { useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
-import Separator from "./elements/Separator";
+import Separator from "./elements/separator";
 import { LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
