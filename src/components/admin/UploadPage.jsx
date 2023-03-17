@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CardOverflow,
+  CircularProgress,
   FormControl,
   FormLabel,
   Input,
@@ -36,6 +37,7 @@ function UploadPage({ pending }) {
   );
 
   const [publishedStatus, setPublishStatus] = useState({ published: false });
+  const [uploadingState, setUploadingState] = useState(false);
   const progressInterval = useRef(null);
   const router = useRouter();
   const inputFileRef = useRef({});
@@ -192,6 +194,7 @@ function UploadPage({ pending }) {
   async function uploadDataAndFiles(event) {
     // const file = event.target.files[0];
     // Create a new FormData object to send the file
+    setUploadingState(true);
     const formData = new FormData();
     console.log(videoFileInfo);
     Object.keys(videoFileInfo).forEach((key) => {
@@ -240,6 +243,7 @@ function UploadPage({ pending }) {
       console.log(data);
       router.replace(location.href + "?id=" + data.uid);
     }
+    setUploadingState(false);
   }
 
   async function editMovieData(event) {
@@ -335,6 +339,16 @@ function UploadPage({ pending }) {
               borderColor: "neutral.800",
             }}
           >
+            {" "}
+            {uploadingState && (
+              <Typography
+                // endDecorator={<Check color="success" />}
+                level="h5"
+                endDecorator={<CircularProgress />}
+              >
+                uploading
+              </Typography>
+            )}
             {pending && (
               <Box>
                 {progressData && progressData === 100 ? (
@@ -373,7 +387,6 @@ function UploadPage({ pending }) {
                 )}
               </Box>
             )}
-
             <Box
               sx={{
                 alignSelf: "flex-start",
@@ -385,6 +398,7 @@ function UploadPage({ pending }) {
             >
               {!pending || isNaN(progressData) ? (
                 <Button
+                  disabled={uploadingState}
                   onClick={() => uploadDataAndFiles()}
                   size="lg"
                   startDecorator={<Upload />}
