@@ -1,30 +1,16 @@
 [
   {
-    "video": "{\"name\":\"file_example_MP4_1920_18MG.mp4\",\"duration\":\"31s\",\"size\":\"17.84 MB\",\"type\":\"video\"}",
-    "poster": "{\"name\":\"sample picture.jpeg\",\"size\":\"12.06 KB\",\"type\":\"image\"}",
-    "backdrop": "{\"name\":\"sample picture.jpeg\",\"size\":\"12.06 KB\",\"type\":\"image\"}",
-    "title": "Earth",
-    "description": "In this video the earth is revolving",
-    "genres": [{ "name": 1 }, { "name": 2 }, { "name": 3 }],
-    "uid": "37db758e-e236-4262-bcb0-91cda024c9d6",
-    "poster_path": "/1676294276524-sample picture.jpeg",
-    "backdrop_path": "/1676294276526-sample picture.jpeg",
-    "progress": { "completed": true },
-    "media_type": "movie",
-    "first_air_date": "2023-02-07"
-  },
-  {
-    "video": "{\"name\":\"BigBuckBunny.mp4\",\"duration\":\"9min \",\"size\":\"158.01 MB\",\"type\":\"video\"}",
-    "poster": "{\"name\":\"424px-Big_buck_bunny_poster_big.jpg\",\"size\":\"52.91 KB\",\"type\":\"image\"}",
-    "backdrop": "{\"name\":\"bbb-splash.png\",\"size\":\"1.53 MB\",\"type\":\"image\"}",
-    "title": "Big buck bunny",
+    "video": "{\"name\":\"Big Buck Bunny.mp4\",\"duration\":\"9min \",\"size\":\"50.2 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"bbb-splash.png\",\"size\":\"1.53 MB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"424px-Big_buck_bunny_poster_big.jpg\",\"size\":\"52.91 KB\",\"type\":\"image\"}",
+    "title": "Big Buck Bunny",
     "description": "Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him, something snaps... and the rabbit ain't no bunny anymore! In the typical cartoon tradition he prepares the nasty rodents a comical revenge.\\n\\nLicensed under the Creative Commons Attribution license\\nhttp://www.bigbuckbunny.org",
-    "genres": "tes, demo, animation",
-    "first_air_date": "2-16-2023",
+    "genres": "Drama, Animation, Demo",
+    "first_air_date": "3-17-2023",
     "media_type": "movie",
-    "uid": "cebfa479-1c3c-4ac5-8eda-98a23175fd81",
-    "poster_path": "/1676545351413-424px-Big_buck_bunny_poster_big.jpg",
-    "backdrop_path": "/1676545351673-bbb-splash.png",
+    "uid": "40f90022-8b20-4b93-aafa-6e0251b701b2",
+    "poster_path": "/1679036403548-bbb-splash.png",
+    "backdrop_path": "/1679036409013-424px-Big_buck_bunny_poster_big.jpg",
     "progress": { "completed": true }
   }
 ]

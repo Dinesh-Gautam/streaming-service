@@ -25,7 +25,8 @@ const upload = multer({ storage }).array("data", 3);
 
 export default async function handler(req, res) {
   return await upload(req, res, (err) => {
-    console.log(req.files);
+    console.log(req.body);
+
     const movieData = {
       ...req.body,
       uid: req.body?.uuid || uuidv4(),

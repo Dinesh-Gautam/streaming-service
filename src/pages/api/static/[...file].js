@@ -18,8 +18,4 @@ export default async function handler(req, res) {
     console.log("error occurred while send static file");
     return;
   }
-  res.status(500);
-  res.send("Internal Server error");
-  res.end();
-  return;
 }

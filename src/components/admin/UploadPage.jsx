@@ -242,6 +242,26 @@ function UploadPage({ pending }) {
     }
   }
 
+  async function editMovieData(event) {
+    const body = { ...inputValue };
+
+    // Send the file to the server
+    const response = await fetch(
+      "/api/admin/movie/editMovieData?id=" + pending.uid,
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (response.ok) {
+      const { data } = await response.json();
+      console.log(data);
+      alert("changes Saved");
+      // router.replace(location.href + "?id=" + data.uid);
+    }
+  }
+
   function disablePublishButton() {
     return (
       publishedStatus.published ||
@@ -363,13 +383,21 @@ function UploadPage({ pending }) {
                 gap: 2,
               }}
             >
-              {(!pending || isNaN(progressData)) && (
+              {!pending || isNaN(progressData) ? (
                 <Button
                   onClick={() => uploadDataAndFiles()}
                   size="lg"
                   startDecorator={<Upload />}
                 >
                   Upload
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => editMovieData()}
+                  size="lg"
+                  startDecorator={<Upload />}
+                >
+                  Save
                 </Button>
               )}
               {pending && (
