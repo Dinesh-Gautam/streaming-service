@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  input {
+    border-radius: 12px;
+    outline: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+    width: 100%;
+    &:focus {
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: inherit;
+    div {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+  a {
+    text-decoration: underline;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 12px;
+    border-radius: 6px;
+  }
+}
+
+.box {
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  min-width: 200px;
+  max-width: 20vw;
+  width: 100%;
+  text-align: center;
+}
+
+.submitButton {
+  box-shadow: 0px 6px 24px rgba(255, 255, 255, 0.15);
+  background: transparent;
+  cursor: pointer;
+  margin-top: 2rem;
+  &:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+  }
+}

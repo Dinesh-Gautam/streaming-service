@@ -1,1 +1,58 @@
-[{"video":"{\"name\":\"prototype v0.1 (2).mp4\",\"duration\":\"15s\",\"size\":\"3.18 MB\",\"type\":\"video\"}","poster":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","backdrop":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","title":"test","description":"fasdf","genres":"asdfa","first_air_date":"3-17-2023","media_type":"movie","uid":"4e6e527b-01c3-4b49-901b-8a8786b754ab","poster_path":"/1679041435040-wedding card.jpg","backdrop_path":"/1679041435056-wedding card.jpg","progress":{"completed":true}},{"video":"{\"name\":\"Project Name.mp4\",\"duration\":\"3min \",\"size\":\"261.86 MB\",\"type\":\"video\"}","poster":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","backdrop":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","title":"adsfasdf","description":"dfasdf","genres":"sdfas","first_air_date":"3-17-2023","media_type":"movie","uid":"9377ac66-3cb3-4814-8a7b-20f515cfa3ca","poster_path":"/1679041953907-wedding card.jpg","backdrop_path":"/1679041953916-wedding card.jpg","progress":{"frames":4182,"currentFps":32,"currentKbps":null,"targetSize":null,"timemark":"00:02:19.62","percent":64.93017346271164}},{"video":"{\"name\":\"2022-09-21 19-56-53.mp4\",\"duration\":\"23s\",\"size\":\"17.29 MB\",\"type\":\"video\"}","poster":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","backdrop":"{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}","title":"asdfa","description":"fasdf","genres":"dfasd","first_air_date":"3-17-2023","media_type":"movie","uid":"6804b0ef-0b3e-4a8e-8242-0cce064a2584","poster_path":"/1679042039191-wedding card.jpg","backdrop_path":"/1679042039200-wedding card.jpg","progress":{"frames":2348,"currentFps":54,"currentKbps":null,"targetSize":null,"timemark":"00:00:39.10","percent":47.17474380524732}}]
+[
+  {
+    "video": "{\"name\":\"prototype v0.1 (2).mp4\",\"duration\":\"15s\",\"size\":\"3.18 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "title": "test",
+    "description": "fasdf",
+    "genres": "asdfa",
+    "first_air_date": "3-17-2023",
+    "media_type": "movie",
+    "uid": "4e6e527b-01c3-4b49-901b-8a8786b754ab",
+    "poster_path": "/1679041435040-wedding card.jpg",
+    "backdrop_path": "/1679041435056-wedding card.jpg",
+    "progress": { "completed": true }
+  },
+  {
+    "video": "{\"name\":\"Project Name.mp4\",\"duration\":\"3min \",\"size\":\"261.86 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "title": "adsfasdf",
+    "description": "dfasdf",
+    "genres": "sdfas",
+    "first_air_date": "3-17-2023",
+    "media_type": "movie",
+    "uid": "9377ac66-3cb3-4814-8a7b-20f515cfa3ca",
+    "poster_path": "/1679041953907-wedding card.jpg",
+    "backdrop_path": "/1679041953916-wedding card.jpg",
+    "progress": {
+      "frames": 4182,
+      "currentFps": 32,
+      "currentKbps": null,
+      "targetSize": null,
+      "timemark": "00:02:19.62",
+      "percent": 64.93017346271164
+    }
+  },
+  {
+    "video": "{\"name\":\"2022-09-21 19-56-53.mp4\",\"duration\":\"23s\",\"size\":\"17.29 MB\",\"type\":\"video\"}",
+    "poster": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "backdrop": "{\"name\":\"wedding card.jpg\",\"size\":\"2.31 MB\",\"type\":\"image\"}",
+    "title": "asdfa",
+    "description": "fasdf",
+    "genres": "dfasd",
+    "first_air_date": "3-17-2023",
+    "media_type": "movie",
+    "uid": "6804b0ef-0b3e-4a8e-8242-0cce064a2584",
+    "poster_path": "/1679042039191-wedding card.jpg",
+    "backdrop_path": "/1679042039200-wedding card.jpg",
+    "progress": {
+      "frames": 2348,
+      "currentFps": 54,
+      "currentKbps": null,
+      "targetSize": null,
+      "timemark": "00:00:39.10",
+      "percent": 47.17474380524732
+    }
+  }
+]

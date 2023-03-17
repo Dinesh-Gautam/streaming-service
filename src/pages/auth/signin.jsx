@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEventHandler, useState } from "react";
 import { redirectIfUserIsAuthenticated } from "../../helpers/redirect";
-
+import styles from "./auth.module.scss";
 const SignIn = (props) => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
 
@@ -22,29 +22,42 @@ const SignIn = (props) => {
     console.log(res);
   };
   return (
-    <div className="sign-in-form">
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <form className={styles.box} onSubmit={handleSubmit}>
         <h1>Login</h1>
-        <input
-          value={userInfo.email}
-          onChange={({ target }) =>
-            setUserInfo({ ...userInfo, email: target.value })
-          }
-          type="text"
-          placeholder="john@email.com"
-        />
-        <input
-          value={userInfo.password}
-          onChange={({ target }) =>
-            setUserInfo({ ...userInfo, password: target.value })
-          }
-          type="password"
-          placeholder="********"
-        />
-        <input type="submit" value="Login" />
+        <div>
+          <div>
+            <label htmlFor="email">Email</label>
+          </div>
+          <input
+            value={userInfo.email}
+            id="email"
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, email: target.value })
+            }
+            type="email"
+            placeholder="john@email.com"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="pass">Password</label>
+          <input
+            id="pass"
+            value={userInfo.password}
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, password: target.value })
+            }
+            type="password"
+            placeholder="********"
+            required
+          />
+        </div>
+
+        <input className={styles.submitButton} type="submit" value="Login" />
       </form>
 
-      <div>
+      <div className={styles.box}>
         Don&apos;t have an account <Link href="/auth/signup">Sign Up.</Link>
       </div>
     </div>
