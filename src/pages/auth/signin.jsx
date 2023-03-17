@@ -35,7 +35,8 @@ const SignIn = (props) => {
             onChange={({ target }) =>
               setUserInfo({ ...userInfo, email: target.value })
             }
-            type="email"
+            // type="email"
+            type="text"
             placeholder="john@email.com"
             required
           />

@@ -6,6 +6,7 @@ import styles from "./banner.module.scss";
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
 import Link from "next/link";
 import { red } from "@mui/material/colors";
+import { PlayArrow } from "@mui/icons-material";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -116,6 +117,18 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }}
                 />
               </Link>
+              <div
+                className={
+                  styles.bottom +
+                  " " +
+                  (currentIndex === index ? styles.visible : "")
+                }
+              >
+                <h1>{movie.title || ""}</h1>
+                <button disabled={currentIndex !== index}>
+                  <PlayArrow />
+                </button>
+              </div>
             </div>
           );
         })}
