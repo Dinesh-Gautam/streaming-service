@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { getImageUrl } from "../../tmdbapi/tmdbApi";
@@ -6,7 +6,8 @@ import styles from "./banner.module.scss";
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
 import Link from "next/link";
 import { red } from "@mui/material/colors";
-import { PlayArrow } from "@mui/icons-material";
+import { Pause, PauseCircleFilled, PlayArrow } from "@mui/icons-material";
+import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -17,6 +18,35 @@ const PopularMoviesBanner = ({ popularMovies }) => {
 
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
+
+  const [videosData, setVideosData] = useState([]);
+  const playerRef = useRef(null);
+  const [playerState, setPlayerState] = useState({ playing: false });
+  useEffect(() => {
+    const id = popularMovies[currentIndex].id;
+    if (videosData.find((e) => e.id === id)) return;
+
+    fetch("/api/tmdb/videos?id=" + id)
+      .then((e) => e.json())
+      .then(({ data }) => {
+        setVideosData((prev) => [
+          ...prev,
+          {
+            id,
+            videos: data
+              .filter((video) => video.official && video.type === "Trailer")
+              .sort((a, b) => {
+                return new Date(a.published_at) - new Date(b.published_at);
+              }),
+          },
+        ]);
+      })
+      .catch((e) => console.error(e));
+  }, [currentIndex]);
+
+  useEffect(() => {
+    console.log(videosData);
+  }, [videosData]);
 
   function buttonClick() {
     setDisable(true);
@@ -62,6 +92,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
     setPrevIndex(setIndexPrev);
   };
 
+  console.log(popularMovies);
   return (
     <>
       <div className={styles.bannerContainer}>
@@ -115,20 +146,59 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                       width: 1300,
                     },
                   }}
-                />
+                ></FadeImageOnLoad>
               </Link>
-              <div
-                className={
-                  styles.bottom +
-                  " " +
-                  (currentIndex === index ? styles.visible : "")
-                }
-              >
-                <h1>{movie.title || ""}</h1>
-                <button disabled={currentIndex !== index}>
-                  <PlayArrow />
-                </button>
-              </div>
+              <>
+                <div
+                  className={
+                    styles.bottom +
+                    " " +
+                    (currentIndex === index ? styles.visible : "")
+                  }
+                >
+                  <h1>{movie.title || ""}</h1>
+                  {!!videosData.find((e) => e.id === movie.id)?.videos
+                    .length && (
+                    <button
+                      onClick={() => {
+                        if (!playerRef.current) return;
+                        console.log(playerRef.current);
+                        if (!playerState.playing) {
+                          playerRef.current.playVideo();
+                          setPlayerState((prev) => ({
+                            ...prev,
+                            playing: true,
+                          }));
+                        }
+                        if (playerState.playing) {
+                          playerRef.current.pauseVideo();
+                          setPlayerState((prev) => ({
+                            ...prev,
+                            playing: false,
+                          }));
+                        }
+                      }}
+                      disabled={currentIndex !== index}
+                    >
+                      {playerState.playing ? <Pause /> : <PlayArrow />}
+                    </button>
+                  )}
+                </div>
+
+                {index === currentIndex &&
+                  videosData.length > 0 &&
+                  videosData.find((e) => e.id === movie.id) && (
+                    <YoutubeVideoPlayer
+                      playerRef={playerRef}
+                      playerState={playerState}
+                      setPlayerState={setPlayerState}
+                      videoId={
+                        videosData.find((e) => e.id === movie.id)?.videos[0]
+                          ?.key
+                      }
+                    />
+                  )}
+              </>
             </div>
           );
         })}

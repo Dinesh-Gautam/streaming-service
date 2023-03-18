@@ -79,6 +79,7 @@ function FadeImageOnLoad(props) {
           )}
         </>
       }
+      {props.children}
     </motion.div>
   );
 }

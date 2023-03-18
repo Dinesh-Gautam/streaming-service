@@ -70,3 +70,14 @@ export async function getPopularMovies() {
     });
   return data;
 }
+
+export async function getVideosOfMovie(id) {
+  if (!id) return;
+  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${tmdbApiKey}&language=en-US`;
+  const data = await fetch(url)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err);
+    });
+  return data.results;
+}
