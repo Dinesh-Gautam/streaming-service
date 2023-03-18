@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { getImageUrl } from "../../tmdbapi/tmdbApi";
+import Suspense from "./Suspense";
 
 function FadeImageOnLoad(props) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -28,59 +29,62 @@ function FadeImageOnLoad(props) {
     },
   };
   return (
-    <motion.div
-      // style={{
-      //   position: "relative",
-      // }}
-      initial="initial"
-      animate="animate"
-      variants={!imageLoaded ? initialVariant : imageLoadedVariant}
-      {...props.attr.imageContainer}
-    >
-      {
-        <>
-          {props.ambientMode && props.imageSrc && (
-            <Image
-              src={getImageUrl(props.imageSrc, { original: props.original })}
-              // onLoadingComplete={() => setImageLoaded(true)}
-              alt={props.imageSrc}
-              style={{
-                filter: `blur(${props.ambientOptions?.blur || 24}px)`,
-                opacity: 0.7,
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: `translate(-50%,-50%) scale(${
-                  props.ambientOptions?.scale || 2
-                })`,
-                ...props.ambientOptions,
-                zIndex: -100,
-              }}
-              //   objectFit="cover"
-              //   height={208}
-              //   width={148}
-              {...props.attr.image}
-            />
-          )}
-          {(props.imageSrc || props.rawImageSrc) && (
-            <Image
-              src={
-                !props.imageSrc
-                  ? props.rawImageSrc
-                  : getImageUrl(props.imageSrc, { original: props.original })
-              }
-              onLoadingComplete={() => setImageLoaded(true)}
-              alt={props.imageSrc}
-              //   objectFit="cover"
-              //   height={208}
-              //   width={148}
-              {...props.attr.image}
-            />
-          )}
-        </>
-      }
-      {props.children}
-    </motion.div>
+    <>
+      {!imageLoaded && <Suspense />}
+      <motion.div
+        // style={{
+        //   position: "relative",
+        // }}
+        initial="initial"
+        animate="animate"
+        variants={!imageLoaded ? initialVariant : imageLoadedVariant}
+        {...props.attr.imageContainer}
+      >
+        {
+          <>
+            {props.ambientMode && props.imageSrc && (
+              <Image
+                src={getImageUrl(props.imageSrc, { original: props.original })}
+                // onLoadingComplete={() => setImageLoaded(true)}
+                alt={props.imageSrc}
+                style={{
+                  filter: `blur(${props.ambientOptions?.blur || 24}px)`,
+                  opacity: 0.7,
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: `translate(-50%,-50%) scale(${
+                    props.ambientOptions?.scale || 2
+                  })`,
+                  ...props.ambientOptions,
+                  zIndex: -100,
+                }}
+                //   objectFit="cover"
+                //   height={208}
+                //   width={148}
+                {...props.attr.image}
+              />
+            )}
+            {(props.imageSrc || props.rawImageSrc) && (
+              <Image
+                src={
+                  !props.imageSrc
+                    ? props.rawImageSrc
+                    : getImageUrl(props.imageSrc, { original: props.original })
+                }
+                onLoadingComplete={() => setImageLoaded(true)}
+                alt={props.imageSrc}
+                //   objectFit="cover"
+                //   height={208}
+                //   width={148}
+                {...props.attr.image}
+              />
+            )}
+          </>
+        }
+        {props.children}
+      </motion.div>
+    </>
   );
 }
 
