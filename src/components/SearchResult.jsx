@@ -5,9 +5,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
-import Separator from "./elements/Separator";
+import Separator from "./elements/separator";
 // import { arrowVariant } from "./MotionVariants";
-import { useViewRedirect } from "../Utils";
+import { useViewRedirect } from "../utils";
 
 const arrowVariant = {
   rest: {
