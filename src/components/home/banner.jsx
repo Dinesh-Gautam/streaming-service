@@ -30,6 +30,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });
   useEffect(() => {
+    setPlayerState((prev) => ({ ...prev, playing: false }));
     const id = popularMovies[currentIndex].id;
     if (videosData.find((e) => e.id === id)) return;
 
@@ -50,7 +51,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
       })
       .catch((e) => console.error(e));
 
-    setPlayerState((prev) => ({ ...prev, playing: false }));
+    console.log(currentIndex);
   }, [currentIndex]);
 
   useEffect(() => {

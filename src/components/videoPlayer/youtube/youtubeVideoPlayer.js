@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import YouTube from "react-youtube";
 import styles from "./youtubePlayer.module.scss";
 function YoutubeVideoPlayer({
@@ -7,7 +7,7 @@ function YoutubeVideoPlayer({
   playerState,
   setPlayerState,
 }) {
-  const opts = {
+  const opts = useRef({
     host: "http://www.youtube.com",
     height: "1080",
     width: "1920",
@@ -20,7 +20,8 @@ function YoutubeVideoPlayer({
       enablejsapi: 1,
       mute: playerState.muted,
     },
-  };
+  });
+
   return (
     <div className={styles.container}>
       <YouTube
@@ -28,7 +29,7 @@ function YoutubeVideoPlayer({
           opacity: playerState.playing ? 1 : 0,
         }}
         videoId={videoId}
-        opts={opts}
+        opts={opts.current}
         onReady={(event) => (playerRef.current = event.target)}
         onStateChange={(event) => {
           console.log(event);
