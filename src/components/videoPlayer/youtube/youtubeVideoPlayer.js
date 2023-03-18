@@ -18,6 +18,7 @@ function YoutubeVideoPlayer({
       modestbranding: 1,
       disablekb: 1,
       enablejsapi: 1,
+      mute: playerState.muted,
     },
   };
   return (

@@ -6,7 +6,14 @@ import styles from "./banner.module.scss";
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
 import Link from "next/link";
 import { red } from "@mui/material/colors";
-import { Pause, PauseCircleFilled, PlayArrow } from "@mui/icons-material";
+import {
+  Pause,
+  PauseCircleFilled,
+  PlayArrow,
+  VolumeMuteRounded,
+  VolumeOff,
+  VolumeUpRounded,
+} from "@mui/icons-material";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
@@ -42,6 +49,8 @@ const PopularMoviesBanner = ({ popularMovies }) => {
         ]);
       })
       .catch((e) => console.error(e));
+
+    setPlayerState((prev) => ({ ...prev, playing: false }));
   }, [currentIndex]);
 
   useEffect(() => {
@@ -157,32 +166,54 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }
                 >
                   <h1>{movie.title || ""}</h1>
-                  {!!videosData.find((e) => e.id === movie.id)?.videos
-                    .length && (
-                    <button
-                      onClick={() => {
-                        if (!playerRef.current) return;
-                        console.log(playerRef.current);
-                        if (!playerState.playing) {
-                          playerRef.current.playVideo();
+                  <div className={styles.videoControls}>
+                    {playerState.playing && (
+                      <button
+                        onClick={() => {
+                          const muteState = playerRef.current.isMuted();
+                          muteState
+                            ? playerRef.current.unMute()
+                            : playerRef.current.mute();
                           setPlayerState((prev) => ({
                             ...prev,
-                            playing: true,
+                            muted: !muteState,
                           }));
-                        }
-                        if (playerState.playing) {
-                          playerRef.current.pauseVideo();
-                          setPlayerState((prev) => ({
-                            ...prev,
-                            playing: false,
-                          }));
-                        }
-                      }}
-                      disabled={currentIndex !== index}
-                    >
-                      {playerState.playing ? <Pause /> : <PlayArrow />}
-                    </button>
-                  )}
+                        }}
+                      >
+                        {playerState.muted ? (
+                          <VolumeOff />
+                        ) : (
+                          <VolumeUpRounded />
+                        )}
+                      </button>
+                    )}
+                    {!!videosData.find((e) => e.id === movie.id)?.videos
+                      .length && (
+                      <button
+                        onClick={() => {
+                          if (!playerRef.current) return;
+                          console.log(playerRef.current);
+                          if (!playerState.playing) {
+                            playerRef.current.playVideo();
+                            setPlayerState((prev) => ({
+                              ...prev,
+                              playing: true,
+                            }));
+                          }
+                          if (playerState.playing) {
+                            playerRef.current.pauseVideo();
+                            setPlayerState((prev) => ({
+                              ...prev,
+                              playing: false,
+                            }));
+                          }
+                        }}
+                        disabled={currentIndex !== index}
+                      >
+                        {playerState.playing ? <Pause /> : <PlayArrow />}
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {index === currentIndex &&
