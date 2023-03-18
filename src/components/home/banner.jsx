@@ -102,7 +102,6 @@ const PopularMoviesBanner = ({ popularMovies }) => {
     setPrevIndex(setIndexPrev);
   };
 
-  console.log(popularMovies);
   return (
     <>
       <div className={styles.bannerContainer}>
