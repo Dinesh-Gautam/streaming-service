@@ -30,7 +30,9 @@ function FadeImageOnLoad(props) {
   };
   return (
     <>
-      <AnimatePresence>{!imageLoaded && <Suspense />}</AnimatePresence>
+      <AnimatePresence>
+        {props.loadingBackground && !imageLoaded && <Suspense />}
+      </AnimatePresence>
       <motion.div
         // style={{
         //   position: "relative",

@@ -131,6 +131,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                 }
               >
                 <FadeImageOnLoad
+                  loadingBackground
                   imageSrc={
                     index == nextIndex ||
                     index === prevIndex ||
