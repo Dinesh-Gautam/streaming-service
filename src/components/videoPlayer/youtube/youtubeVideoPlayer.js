@@ -22,22 +22,53 @@ function YoutubeVideoPlayer({
     },
   });
 
+  useEffect(() => {
+    // console.log("loading youtube");
+    // return () => {
+    //   if (!playerRef.current) return;
+    //   try {
+    //     playerRef.current.unloadModule();
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    //   playerRef.current = null;
+    //   console.log("unloading youtube");
+    // };
+    return () => {
+      if (!playerRef.current) return;
+      try {
+        playerRef.current.unloadModule();
+      } catch (e) {
+        console.log(e);
+      }
+      playerRef.current.destroy();
+      console.log("destroying youtube player");
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
-      <YouTube
-        style={{
-          opacity: playerState.playing ? 1 : 0,
-        }}
-        videoId={videoId}
-        opts={opts.current}
-        onReady={(event) => (playerRef.current = event.target)}
-        onStateChange={(event) => {
-          console.log(event);
-          if (event.data === 0) {
-            setPlayerState((prev) => ({ ...prev, playing: false }));
-          }
-        }}
-      />
+      {((!playerRef.current ||
+        playerRef.current?.playerInfo?.videoData?.video_id !== videoId) &&
+        videoId &&
+        console.log("rendering", videoId)) || (
+        <YouTube
+          style={{
+            opacity: playerState.playing ? 1 : 0,
+          }}
+          videoId={videoId}
+          opts={opts.current}
+          onReady={(event) => {
+            playerRef.current = event.target;
+          }}
+          onStateChange={(event) => {
+            console.log(event);
+            if (event.data === 0) {
+              setPlayerState((prev) => ({ ...prev, playing: false }));
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

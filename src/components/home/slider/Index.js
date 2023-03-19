@@ -94,6 +94,7 @@ function Slider({ title, data, setIsScrolling }) {
               {data.map((e, index) => (
                 <div className={styles.item} key={index}>
                   <FadeImageOnLoad
+                    loadingBackground
                     rawImageSrc={
                       "/api/static" + e.backdrop_path.replace("uploads\\", "")
                     }

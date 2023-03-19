@@ -19,11 +19,6 @@ function useYoutubePlayer({
   //   const playerRef = useRef(null);
 
   useEffect(() => {
-    console.log(playerRef.current);
-    videosData.find((e) => e.id === id);
-  }, [playerRef.current]);
-
-  useEffect(() => {
     setPlayerState((prev) => ({ ...prev, playing: false }));
     if (!id) return;
     if (videosData.find((e) => e.id === id)) return;
@@ -70,7 +65,6 @@ function useYoutubePlayer({
         {!!videosData.find((e) => e.id === id)?.videos.length && (
           <button
             onClick={() => {
-              if (!playerRef.current) return;
               if (!playerState.playing) {
                 playerRef.current.playVideo();
                 setPlayerState((prev) => ({

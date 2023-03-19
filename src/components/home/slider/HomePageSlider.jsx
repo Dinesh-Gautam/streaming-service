@@ -193,7 +193,8 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   layoutId={"hover"}
                   className={styles.imageContainer}
                 >
-                  {!animating &&
+                  {!hoverCardPosition.original &&
+                    !animating &&
                     videosData.length > 0 &&
                     videosData.find((e) => e.id === id) && (
                       <YoutubeVideoPlayer
@@ -231,15 +232,14 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   />
                 </motion.div>
               </Link>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{
-                  opacity: 0,
-                }}
-                className={styles.hoverCardInfo}
-              >
-                <motion.div>
+              <motion.div className={styles.hoverCardInfo}>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                >
                   <div
                     style={{
                       display: "flex",
@@ -257,7 +257,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                         : popularMovies.results[hoverCardPosition.index]?.title}
                     </h1>
                     <div>
-                      <ButtonsComponent />
+                      {!hoverCardPosition.original && <ButtonsComponent />}
                     </div>
                   </div>
                   <div>
