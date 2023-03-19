@@ -221,6 +221,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   videosData.length > 0 &&
                   videosData.find((e) => e.id === movie.id) && (
                     <YoutubeVideoPlayer
+                      roundedBorder
                       playerRef={playerRef}
                       playerState={playerState}
                       setPlayerState={setPlayerState}

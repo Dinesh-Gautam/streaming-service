@@ -6,6 +6,7 @@ function YoutubeVideoPlayer({
   playerRef,
   playerState,
   setPlayerState,
+  roundedBorder,
 }) {
   const opts = useRef({
     host: "http://www.youtube.com",
@@ -55,6 +56,8 @@ function YoutubeVideoPlayer({
         <YouTube
           style={{
             opacity: playerState.playing ? 1 : 0,
+            borderRadius: roundedBorder ? 12 : 0,
+            overflow: "hidden",
           }}
           videoId={videoId}
           opts={opts.current}
