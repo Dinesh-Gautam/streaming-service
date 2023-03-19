@@ -1,0 +1,17 @@
+.videoControls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  button {
+    position: relative;
+    z-index: 10000;
+    height: 42px;
+    width: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+  }
+}

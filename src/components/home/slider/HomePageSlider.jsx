@@ -1,8 +1,12 @@
+import Separator from "@/components/elements/separator";
+import useYoutubePlayer from "@/components/videoPlayer/youtube/hook/useYoutubePlayer";
+import YoutubeVideoPlayer from "@/components/videoPlayer/youtube/youtubeVideoPlayer";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
+import { PlayArrow, VolumeOff } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Slider from "./Index";
 import styles from "./slider.module.scss";
 function HomePageSliders({ popularMovies, originalMovies }) {
@@ -11,8 +15,23 @@ function HomePageSliders({ popularMovies, originalMovies }) {
   const [inContainer, setInContainer] = useState(false);
   const timeOutRef = useRef(null);
   const clearingInterval = useRef(false);
-
   const [isScrolling, setIsScrolling] = useState(false);
+
+  const playerRef = useRef(null);
+  const [playerState, setPlayerState] = useState({ playing: false });
+  const [animating, setAnimating] = useState(true);
+  const [id, setId] = useState(null);
+  const { ButtonsComponent, videosData } = useYoutubePlayer({
+    playerRef,
+    playerState,
+    setPlayerState,
+    setId,
+    id,
+  });
+  useEffect(() => {
+    const id = popularMovies.results[hoverCardPosition.index]?.id;
+    setId(id);
+  }, [hoverCardPosition]);
 
   async function clearHover() {
     if (timeOutRef.current) {
@@ -22,8 +41,11 @@ function HomePageSliders({ popularMovies, originalMovies }) {
       clearTimeout(timeOutRef.current);
       timeOutRef.current = null;
       setInContainer(false);
+      setAnimating(false);
     }
   }
+  // console.log(popularMovies);
+
   return (
     <>
       <div
@@ -42,7 +64,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
             ) {
               // setAnimating(false);
               setHoverCardActive(false);
-
+              setAnimating(true);
               clearTimeout(timeOutRef.current);
               timeOutRef.current = setTimeout(() => {
                 // if (!animating) {
@@ -119,7 +141,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
               console.log("mouse entered");
               // if()
               // clearTimeout(hoverEndTimeOutRef.current);
-              setInContainer(true);
+              // setInContainer(true);
             }}
             initial={{
               transform: "perspective(200px) translate3d(0%, 0%, 0px)",
@@ -144,31 +166,45 @@ function HomePageSliders({ popularMovies, originalMovies }) {
             }}
             onAnimationComplete={() => {
               // setAnimating(false);
+              setAnimating(false);
             }}
-            onAnimationStart={() => {
-              // setAnimating(true);
-            }}
+            onAnimationStart={() => {}}
             className={styles.hoverCard}
           >
-            <Link
-              href={
-                // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
-                "/title?id=" +
-                (hoverCardPosition.original
-                  ? originalMovies[hoverCardPosition.index].uid
-                  : popularMovies.results[hoverCardPosition.index].id) +
-                "&type=" +
-                "movie" +
-                "&t=hover" +
-                "&original=" +
-                (hoverCardPosition.original === "true" ? "true" : "false")
-              }
+            <motion.div
+
+            // className={styles.hoverCardWrapper}
             >
-              <div className={styles.hoverCardWrapper}>
+              <Link
+                href={
+                  // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
+                  "/title?id=" +
+                  (hoverCardPosition.original
+                    ? originalMovies[hoverCardPosition.index].uid
+                    : popularMovies.results[hoverCardPosition.index].id) +
+                  "&type=" +
+                  "movie" +
+                  "&t=hover" +
+                  "&original=" +
+                  (hoverCardPosition.original === "true" ? "true" : "false")
+                }
+              >
                 <motion.div
                   layoutId={"hover"}
                   className={styles.imageContainer}
                 >
+                  {!animating &&
+                    videosData.length > 0 &&
+                    videosData.find((e) => e.id === id) && (
+                      <YoutubeVideoPlayer
+                        playerRef={playerRef}
+                        playerState={playerState}
+                        setPlayerState={setPlayerState}
+                        videoId={
+                          videosData.find((e) => e.id === id)?.videos[0]?.key
+                        }
+                      />
+                    )}
                   <Image
                     src={
                       hoverCardPosition.original
@@ -194,46 +230,94 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                     width={1300}
                   />
                 </motion.div>
-                <div className={styles.hoverCardInfo}>
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{
-                      opacity: 0,
+              </Link>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                }}
+                className={styles.hoverCardInfo}
+              >
+                <motion.div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    {hoverCardPosition.original
-                      ? originalMovies[hoverCardPosition.index]?.title || ""
-                      : popularMovies.results[hoverCardPosition.index]?.title}
-                  </motion.span>
-                </div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                >
-                  <Image
-                    src={
-                      hoverCardPosition.original
-                        ? "/api/static" +
-                            originalMovies[
-                              hoverCardPosition.index
-                            ]?.backdrop_path.replace("uploads\\", "") || ""
-                        : getImageUrl(
+                    <h1
+                      style={{
+                        width: "60%",
+                      }}
+                    >
+                      {hoverCardPosition.original
+                        ? originalMovies[hoverCardPosition.index]?.title || ""
+                        : popularMovies.results[hoverCardPosition.index]?.title}
+                    </h1>
+                    <div>
+                      <ButtonsComponent />
+                    </div>
+                  </div>
+                  <div>
+                    {/* {hoverCardPosition.original
+                        ? originalMovies[hoverCardPosition.indx]?.description ||
+                          ""
+                        : popularMovies.results[
+                            hoverCardPosition.index
+                          ]?.overview
+                            ?.split(" ")
+                            .splice(0, 10)
+                            .join(" ") || ""} */}
+                    {!hoverCardPosition.original && (
+                      <Separator
+                        values={[
+                          `${
                             popularMovies.results[hoverCardPosition.index]
-                              ?.backdrop_path || ""
-                          )
-                    }
-                    className={styles.backgroundImage}
-                    alt={"img"}
-                    height={1300 / 2}
-                    width={1300}
-                  />
+                              ?.vote_average || null
+                          }(${
+                            popularMovies.results[
+                              hoverCardPosition.index
+                            ]?.vote_count.toLocaleString() || null
+                          })`,
+                          new Date(
+                            popularMovies.results[
+                              hoverCardPosition.index
+                            ]?.release_date
+                          ).getFullYear(),
+                        ]}
+                      />
+                    )}
+                  </div>
                 </motion.div>
-              </div>
-            </Link>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                }}
+              >
+                <Image
+                  src={
+                    hoverCardPosition.original
+                      ? "/api/static" +
+                          originalMovies[
+                            hoverCardPosition.index
+                          ]?.backdrop_path.replace("uploads\\", "") || ""
+                      : getImageUrl(
+                          popularMovies.results[hoverCardPosition.index]
+                            ?.backdrop_path || ""
+                        )
+                  }
+                  className={styles.backgroundImage}
+                  alt={"img"}
+                  height={1300 / 2}
+                  width={1300}
+                />
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
