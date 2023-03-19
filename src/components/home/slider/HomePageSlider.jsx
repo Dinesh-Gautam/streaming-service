@@ -2,7 +2,7 @@ import Separator from "@/components/elements/separator";
 import useYoutubePlayer from "@/components/videoPlayer/youtube/hook/useYoutubePlayer";
 import YoutubeVideoPlayer from "@/components/videoPlayer/youtube/youtubeVideoPlayer";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
-import { PlayArrow, VolumeOff } from "@mui/icons-material";
+import { PlayArrow, Star, VolumeOff } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -154,7 +154,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                     innerWidth - hoverCardPosition.width - 100
                   ? -10
                   : "0"
-              }% , -25%, 50px)`,
+              }% , -20%, 50px)`,
 
               duration: 1,
               type: "ease",
@@ -171,10 +171,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
             onAnimationStart={() => {}}
             className={styles.hoverCard}
           >
-            <motion.div
-
-            // className={styles.hoverCardWrapper}
-            >
+            <motion.div className={styles.hoverCardWrapper}>
               <Link
                 href={
                   // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
@@ -233,13 +230,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                 </motion.div>
               </Link>
               <motion.div className={styles.hoverCardInfo}>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                >
+                <motion.div>
                   <div
                     style={{
                       display: "flex",
@@ -256,11 +247,23 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                         ? originalMovies[hoverCardPosition.index]?.title || ""
                         : popularMovies.results[hoverCardPosition.index]?.title}
                     </h1>
-                    <div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                    >
                       {!hoverCardPosition.original && <ButtonsComponent />}
-                    </div>
+                    </motion.div>
                   </div>
-                  <div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                  >
                     {/* {hoverCardPosition.original
                         ? originalMovies[hoverCardPosition.indx]?.description ||
                           ""
@@ -271,25 +274,34 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                             .splice(0, 10)
                             .join(" ") || ""} */}
                     {!hoverCardPosition.original && (
-                      <Separator
-                        values={[
-                          `${
-                            popularMovies.results[hoverCardPosition.index]
-                              ?.vote_average || null
-                          }(${
-                            popularMovies.results[
-                              hoverCardPosition.index
-                            ]?.vote_count.toLocaleString() || null
-                          })`,
-                          new Date(
-                            popularMovies.results[
-                              hoverCardPosition.index
-                            ]?.release_date
-                          ).getFullYear(),
-                        ]}
-                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                        }}
+                      >
+                        <Star color="warning" fontSize="small" />
+                        <Separator
+                          values={[
+                            `${
+                              popularMovies.results[hoverCardPosition.index]
+                                ?.vote_average || null
+                            }(${
+                              popularMovies.results[
+                                hoverCardPosition.index
+                              ]?.vote_count.toLocaleString() || null
+                            })`,
+                            new Date(
+                              popularMovies.results[
+                                hoverCardPosition.index
+                              ]?.release_date
+                            ).getFullYear(),
+                          ]}
+                        />
+                      </div>
                     )}
-                  </div>
+                  </motion.div>
                 </motion.div>
               </motion.div>
               <motion.div

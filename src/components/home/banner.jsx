@@ -15,6 +15,7 @@ import {
   VolumeUpRounded,
 } from "@mui/icons-material";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
+import { useData } from "@/context/stateContext";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -26,7 +27,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
 
-  const [videosData, setVideosData] = useState([]);
+  const { videosData, setVideosData } = useData();
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });
   useEffect(() => {

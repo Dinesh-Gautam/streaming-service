@@ -112,6 +112,17 @@ function Slider({ title, data, setIsScrolling }) {
                       },
                     }}
                   />
+                  <h1
+                    style={{
+                      width: "60%",
+                      lineHeight: "100%",
+                      fontSize: 18,
+                      padding: "0.5rem 1rem",
+                      position: "relative",
+                    }}
+                  >
+                    {e.title}
+                  </h1>
                 </div>
               ))}
             </div>
@@ -144,6 +155,17 @@ function Slider({ title, data, setIsScrolling }) {
                         },
                       }}
                     />
+                    <h1
+                      style={{
+                        width: "60%",
+                        lineHeight: "100%",
+                        fontSize: 18,
+                        padding: "0.5rem 1rem",
+                        position: "relative",
+                      }}
+                    >
+                      {e.title}
+                    </h1>
                   </div>
                 ))}
               </div>
