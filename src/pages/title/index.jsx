@@ -1,11 +1,18 @@
 import TitleView from "@/components/Title";
+import { ContextProvider } from "@/context/stateContext";
 import { getOriginalMovieDetails } from "@/helpers/api/data/movie";
 import { getDetails } from "@/tmdbapi/tmdbApi";
 import React from "react";
 
 function Title({ result, layout_type, original }) {
   return (
-    <TitleView result={result} layout_type={layout_type} original={original} />
+    <ContextProvider>
+      <TitleView
+        result={result}
+        layout_type={layout_type}
+        original={original}
+      />
+    </ContextProvider>
   );
 }
 export async function getServerSideProps(context) {

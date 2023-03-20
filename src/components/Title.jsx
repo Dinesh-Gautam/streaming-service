@@ -1,5 +1,5 @@
 import { formatParagraph } from "@/utils";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
 import { LayoutGroup, motion } from "framer-motion";
@@ -8,10 +8,31 @@ import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
 import { PlayArrowRounded, Star } from "@mui/icons-material";
 import Link from "next/link";
+import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
+import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
+
+const otherElementsAnimation = {
+  initial: {
+    opacity: 1,
+  },
+  animate: {
+    opacity: 0,
+  },
+};
 
 function TitleView({ result, layout_type, original }) {
   const [animating, setAnimating] = useState(true);
-  console.log(result);
+  const playerRef = useRef(null);
+  const [playerState, setPlayerState] = useState({ playing: false });
+  const [id, setId] = useState(result.id);
+  const { ButtonsComponent, videosData } = useYoutubePlayer({
+    playerRef,
+    playerState,
+    setPlayerState,
+    setId,
+    id,
+  });
+
   return (
     <motion.div
       layout
@@ -94,6 +115,7 @@ function TitleView({ result, layout_type, original }) {
               </button>
             </Link>
           )}
+          <ButtonsComponent />
         </div>
       </div>
       {!animating && (
@@ -112,6 +134,16 @@ function TitleView({ result, layout_type, original }) {
       )}
 
       <div className={styles.backdropImage + " " + styles.backdropImageBlurred}>
+        {videosData &&
+          videosData.length > 0 &&
+          videosData.find((e) => e.id === id) && (
+            <YoutubeVideoPlayer
+              playerRef={playerRef}
+              playerState={playerState}
+              setPlayerState={setPlayerState}
+              videoId={videosData.find((e) => e.id === id)?.videos[0]?.key}
+            />
+          )}
         {!layout_type ? (
           <FadeImageOnLoad
             imageSrc={result.backdrop_path}
