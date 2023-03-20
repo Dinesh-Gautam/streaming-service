@@ -26,6 +26,8 @@ export async function tmdbSearch(options) {
       genre_ids,
       overview,
       backdrop_path,
+      vote_average,
+      vote_count,
     }) => {
       switch (options.type) {
         case "detailed":
@@ -41,6 +43,8 @@ export async function tmdbSearch(options) {
             genre_ids,
             overview,
             backdrop_path,
+            vote_average,
+            vote_count,
           };
 
         default:
@@ -53,6 +57,8 @@ export async function tmdbSearch(options) {
             original_title,
             name,
             id,
+            vote_average,
+            vote_count,
           };
       }
     }

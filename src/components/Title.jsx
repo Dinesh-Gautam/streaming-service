@@ -6,11 +6,12 @@ import { LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
-import { PlayArrowRounded } from "@mui/icons-material";
+import { PlayArrowRounded, Star } from "@mui/icons-material";
 import Link from "next/link";
 
 function TitleView({ result, layout_type, original }) {
   const [animating, setAnimating] = useState(true);
+  console.log(result);
   return (
     <motion.div
       layout
@@ -56,6 +57,22 @@ function TitleView({ result, layout_type, original }) {
               : new Date(result?.first_air_date).getFullYear(),
           ]}
         />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Star color="warning" />
+          <Separator
+            values={[
+              `${result?.vote_average || null} (${
+                result?.vote_count?.toLocaleString() || null
+              })`,
+            ]}
+          />
+        </div>
         <div>
           <p>{formatParagraph(result.overview || result.description)}</p>
         </div>
