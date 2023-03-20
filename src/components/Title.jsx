@@ -14,9 +14,24 @@ import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
 const otherElementsAnimation = {
   initial: {
     opacity: 1,
+    // pointerEvents: "all",
   },
   animate: {
     opacity: 0,
+    pointerEvents: "none",
+  },
+};
+
+const HeadingAnimation = {
+  initial: {
+    position: "relative",
+    top: 0,
+    left: 0,
+  },
+  animate: {
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
 };
 
@@ -48,56 +63,118 @@ function TitleView({ result, layout_type, original }) {
       }
       className={styles.container}
     >
-      <div className={styles.leftContainer}>
-        <div>
-          <h1>
+      <motion.div className={styles.leftContainer}>
+        <motion.div
+          style={
+            {
+              // height: "10rem",
+            }
+          }
+        >
+          <motion.h1
+            transition={{
+              ease: "easeInOut",
+              layout: { duration: 0.3, ease: "easeInOut" },
+            }}
+            animate={{
+              scale: playerState.playing ? 0.5 : 1,
+              // x: playerState.playing ? -50 : 0,
+              // y: playerState.playing ? -50 : 0,
+            }}
+            style={{
+              transformOrigin: "top left",
+            }}
+            // style={
+            //   playerState.playing
+            //     ? {
+            //         position: "absolute",
+            //         top: 0,
+            //         left: 0,
+            //         width: "46%",
+            //         padding: "1rem",
+            //         transformOrigin: "top left",
+            //       }
+            //     : {
+            //         transformOrigin: "top left",
+            //         position: "relative",
+            //         width: "100%",
+            //       }
+            // }
+          >
             {result.title ||
               result.name ||
               result.original_title ||
               result.original_name}
-          </h1>
-        </div>
-        <Separator
-          gap={8}
-          values={[
-            result.media_type,
-            original
-              ? result.genres
-                  .split(",")
-                  .map((gen, index, { length }) =>
-                    index + 1 == length ? gen + " " : gen + ", "
-                  )
-                  .join(" ")
-              : result.genres
-                  .map((gen, index, { length }) =>
-                    index + 1 == length ? gen.name + " " : gen.name + ", "
-                  )
-                  .join(" "),
-            isNaN(new Date(result?.first_air_date).getFullYear())
-              ? ""
-              : new Date(result?.first_air_date).getFullYear(),
-          ]}
-        />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
+          </motion.h1>
+        </motion.div>
+        <motion.div
+          animate={
+            playerState.playing
+              ? otherElementsAnimation.animate
+              : otherElementsAnimation.initial
+          }
         >
-          <Star color="warning" />
           <Separator
+            gap={8}
             values={[
-              `${result?.vote_average || null} (${
-                result?.vote_count?.toLocaleString() || null
-              })`,
+              result.media_type,
+              original
+                ? result.genres
+                    .split(",")
+                    .map((gen, index, { length }) =>
+                      index + 1 == length ? gen + " " : gen + ", "
+                    )
+                    .join(" ")
+                : result.genres
+                    .map((gen, index, { length }) =>
+                      index + 1 == length ? gen.name + " " : gen.name + ", "
+                    )
+                    .join(" "),
+              isNaN(new Date(result?.first_air_date).getFullYear())
+                ? ""
+                : new Date(result?.first_air_date).getFullYear(),
             ]}
           />
-        </div>
-        <div>
-          <p>{formatParagraph(result.overview || result.description)}</p>
-        </div>
-        <div>
+          {!original && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                marginTop: "1rem",
+              }}
+            >
+              <Star color="warning" />
+              <Separator
+                values={[
+                  `${result?.vote_average || null} (${
+                    result?.vote_count?.toLocaleString() || null
+                  })`,
+                ]}
+              />
+            </div>
+          )}
+          <div>
+            <p>{formatParagraph(result.overview || result.description)}</p>
+          </div>
+        </motion.div>
+        <motion.div
+          layout
+          style={
+            playerState.playing
+              ? {
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  padding: "4rem",
+                  width: "50%",
+                }
+              : {
+                  position: "relative",
+                  width: "50%",
+                }
+          }
+        >
           {original && (
             <Link href={"/movie" + "?id=" + result?.uid}>
               <button
@@ -115,22 +192,36 @@ function TitleView({ result, layout_type, original }) {
               </button>
             </Link>
           )}
+
           <ButtonsComponent />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       {!animating && (
-        <FadeImageOnLoad
-          imageSrc={result.poster_path}
-          original={original}
-          // imageSrc={result.backdrop_path || result.poster_path}
-          duration={2}
-          attr={{
-            imageContainer: { className: styles.backdropImage },
-            image: {
-              layout: "fill",
-            },
+        <motion.div
+          style={{
+            pointerEvents: "none",
           }}
-        />
+          animate={
+            playerState.playing
+              ? otherElementsAnimation.animate
+              : otherElementsAnimation.initial
+          }
+        >
+          <FadeImageOnLoad
+            imageSrc={result.poster_path}
+            original={original}
+            // imageSrc={result.backdrop_path || result.poster_path}
+            duration={2}
+            attr={{
+              imageContainer: {
+                className: styles.backdropImage,
+              },
+              image: {
+                layout: "fill",
+              },
+            }}
+          />
+        </motion.div>
       )}
 
       <div className={styles.backdropImage + " " + styles.backdropImageBlurred}>

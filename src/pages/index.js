@@ -1,13 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 // import styles from "../styles/Home.module.css";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { redirectIfUserIsAuthenticated } from "../helpers/redirect";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (

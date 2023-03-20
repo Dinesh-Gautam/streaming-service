@@ -51,6 +51,7 @@ function useYoutubePlayer({
         {playerState.playing && (
           <button
             onClick={() => {
+              if (!playerRef.current) return;
               const muteState = playerRef.current.isMuted();
               muteState ? playerRef.current.unMute() : playerRef.current.mute();
               setPlayerState((prev) => ({
@@ -65,6 +66,8 @@ function useYoutubePlayer({
         {!!videosData.find((e) => e.id === id)?.videos.length && (
           <button
             onClick={() => {
+              if (!playerRef.current) return;
+
               if (!playerState.playing) {
                 playerRef.current.playVideo();
                 setPlayerState((prev) => ({
