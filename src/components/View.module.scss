@@ -96,7 +96,7 @@
     // backdrop-filter: blur(64px);
     // padding: 16px 16px * 3;
     padding: 6px;
-    padding-left: 2em;
+    // padding-left: 2em;
     // border: 1px solid rgba(255, 255, 255, 0.2);
     // box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
     color: rgba(0, 0, 0, 1);
@@ -105,14 +105,20 @@
       opacity: 0.2;
     }
     span {
+      padding-left: 2rem;
+    }
+    span {
       padding: 0.5rem;
       opacity: 0.9;
-      font-size: 34px;
+      font-size: 48px;
       background-color: rgba(255, 255, 255, 1);
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
+    }
+    svg {
+      font-size: 34px;
     }
   }
 }

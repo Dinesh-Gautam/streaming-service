@@ -74,12 +74,15 @@ export async function getPopularMovies() {
     .catch((err) => {
       console.log(err);
     });
-  return data;
+  return {
+    ...data,
+    results: data.results.map((e) => ({ ...e, media_type: "movie" })),
+  };
 }
 
-export async function getVideosOfMovie(id) {
-  if (!id) return;
-  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${tmdbApiKey}&language=en-US`;
+export async function getVideosOfMovie(id, media_type) {
+  if (!id || !media_type) return;
+  const url = `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=${tmdbApiKey}&language=en-US`;
   const data = await fetch(url)
     .then((res) => res.json())
     .catch((err) => {

@@ -46,6 +46,7 @@ function TitleView({ result, layout_type, original }) {
     setPlayerState,
     setId,
     id,
+    media_type: result.media_type,
   });
 
   console.log(result);
@@ -61,7 +62,7 @@ function TitleView({ result, layout_type, original }) {
 
       console.log("clearing timeout ref in useEffect");
       setHideAll(true);
-    }, 5000);
+    }, 3000);
   }, [playerState]);
 
   return (
@@ -193,7 +194,7 @@ function TitleView({ result, layout_type, original }) {
           </div>
         </motion.div>
         <motion.div
-          layout
+          layout="position"
           style={
             playerState.playing
               ? {
@@ -202,11 +203,11 @@ function TitleView({ result, layout_type, original }) {
                   left: 0,
                   // padding: "4rem",
                   margin: "4rem",
-                  width: "10rem",
+                  // width: "10rem",
                 }
               : {
                   position: "relative",
-                  width: "10rem",
+                  // width: "10rem",
                 }
           }
         >
@@ -220,7 +221,13 @@ function TitleView({ result, layout_type, original }) {
               // )
               // }
               >
-                Watch Now
+                <div
+                  style={{
+                    paddingLeft: "2rem",
+                  }}
+                >
+                  Watch Now
+                </div>
                 <span>
                   <PlayArrowRounded fontSize="large" />
                 </span>
@@ -228,7 +235,7 @@ function TitleView({ result, layout_type, original }) {
             </Link>
           )}
 
-          <ButtonsComponent />
+          <ButtonsComponent size="large" />
         </motion.div>
       </motion.div>
       {!animating && (
@@ -278,7 +285,7 @@ function TitleView({ result, layout_type, original }) {
 
             console.log("clearing timeout ref in hover");
             setHideAll(true);
-          }, 5000);
+          }, 3000);
         }}
       >
         <motion.div

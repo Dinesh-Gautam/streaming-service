@@ -30,13 +30,18 @@ const PopularMoviesBanner = ({ popularMovies }) => {
   const { videosData, setVideosData } = useData();
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });
-
+  console.log(popularMovies);
   useEffect(() => {
     setPlayerState((prev) => ({ ...prev, playing: false }));
     const id = popularMovies[currentIndex].id;
     if (videosData.find((e) => e.id === id)) return;
 
-    fetch("/api/tmdb/videos?id=" + id)
+    fetch(
+      "/api/tmdb/videos?id=" +
+        id +
+        "&type=" +
+        popularMovies[currentIndex].media_type
+    )
       .then((e) => e.json())
       .then(({ data }) => {
         setVideosData((prev) => [

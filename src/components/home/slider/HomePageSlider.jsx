@@ -27,6 +27,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
     setPlayerState,
     setId,
     id,
+    media_type: popularMovies.results[hoverCardPosition.index]?.media_type,
   });
   useEffect(() => {
     const id = popularMovies.results[hoverCardPosition.index]?.id;

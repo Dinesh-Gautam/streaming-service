@@ -14,6 +14,7 @@ function useYoutubePlayer({
   setPlayerState,
   setId,
   id,
+  media_type,
 }) {
   const { videosData, setVideosData } = useData([]);
   //   const playerRef = useRef(null);
@@ -23,7 +24,7 @@ function useYoutubePlayer({
     if (!id) return;
     if (videosData.find((e) => e.id === id)) return;
 
-    fetch("/api/tmdb/videos?id=" + id)
+    fetch("/api/tmdb/videos?id=" + id + "&type=" + media_type)
       .then((e) => e.json())
       .then(({ data }) => {
         setVideosData((prev) => [
@@ -45,11 +46,17 @@ function useYoutubePlayer({
     console.log(videosData);
   }, [videosData]);
 
-  const ButtonsComponent = () => {
+  const ButtonsComponent = ({ size }) => {
+    const height = size === "large" ? 68 : 42;
+    const width = height;
     return (
       <div className={styles.videoControls}>
         {playerState.playing && (
           <button
+            style={{
+              height,
+              width,
+            }}
             onClick={() => {
               if (!playerRef.current) return;
               const muteState = playerRef.current.isMuted();
@@ -60,11 +67,19 @@ function useYoutubePlayer({
               }));
             }}
           >
-            {playerState.muted ? <VolumeOff /> : <VolumeUpRounded />}
+            {playerState.muted ? (
+              <VolumeOff fontSize={size || "small"} />
+            ) : (
+              <VolumeUpRounded fontSize={size || "small"} />
+            )}
           </button>
         )}
         {!!videosData.find((e) => e.id === id)?.videos.length && (
           <button
+            style={{
+              height,
+              width,
+            }}
             onClick={() => {
               if (!playerRef.current) return;
 
@@ -85,7 +100,11 @@ function useYoutubePlayer({
             }}
             // disabled={currentIndex !== index}
           >
-            {playerState.playing ? <Pause /> : <PlayArrow />}
+            {playerState.playing ? (
+              <Pause fontSize={size || "small"} />
+            ) : (
+              <PlayArrow fontSize={size || "small"} />
+            )}
           </button>
         )}
       </div>
