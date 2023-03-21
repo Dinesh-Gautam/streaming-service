@@ -52,10 +52,12 @@ function TitleView({ result, layout_type, original }) {
 
   const hideTimeOutRef = useRef(null);
   useEffect(() => {
+    clearTimeout(hideTimeOutRef.current);
     if (!playerState.playing) return;
     console.log(playerState);
-    clearTimeout(hideTimeOutRef.current);
     hideTimeOutRef.current = setTimeout(() => {
+      if (!playerState.playing) return;
+
       console.log("clearing timeout ref in useEffect");
       setHideAll(true);
     }, 5000);
@@ -82,6 +84,10 @@ function TitleView({ result, layout_type, original }) {
             ? otherElementsAnimation.animate
             : otherElementsAnimation.initial
         }
+        style={{
+          position: "relative",
+          zIndex: 100000,
+        }}
         className={styles.leftContainer}
       >
         <motion.div
@@ -253,12 +259,15 @@ function TitleView({ result, layout_type, original }) {
         }}
         onMouseMove={() => {
           // if (!hideAll) return;
+          clearTimeout(hideTimeOutRef.current);
+
           if (!playerState.playing) return;
           console.log("hovering");
           setHideAll(false);
-          clearTimeout(hideTimeOutRef.current);
           hideTimeOutRef.current = setTimeout(() => {
-            console.log("clearing timeout ref in useEffect");
+            if (!playerState.playing) return;
+
+            console.log("clearing timeout ref in hover");
             setHideAll(true);
           }, 5000);
         }}
