@@ -1,5 +1,5 @@
 import { formatParagraph } from "@/utils";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
 import { LayoutGroup, motion } from "framer-motion";
@@ -48,6 +48,19 @@ function TitleView({ result, layout_type, original }) {
     id,
   });
 
+  const [hideAll, setHideAll] = useState(false);
+
+  const hideTimeOutRef = useRef(null);
+  useEffect(() => {
+    if (!playerState.playing) return;
+    console.log(playerState);
+    clearTimeout(hideTimeOutRef.current);
+    hideTimeOutRef.current = setTimeout(() => {
+      console.log("clearing timeout ref in useEffect");
+      setHideAll(true);
+    }, 5000);
+  }, [playerState]);
+
   return (
     <motion.div
       layout
@@ -63,7 +76,14 @@ function TitleView({ result, layout_type, original }) {
       }
       className={styles.container}
     >
-      <motion.div className={styles.leftContainer}>
+      <motion.div
+        animate={
+          hideAll
+            ? otherElementsAnimation.animate
+            : otherElementsAnimation.initial
+        }
+        className={styles.leftContainer}
+      >
         <motion.div
           style={
             {
@@ -147,7 +167,7 @@ function TitleView({ result, layout_type, original }) {
               <Star color="warning" />
               <Separator
                 values={[
-                  `${result?.vote_average || null} (${
+                  `${result?.vote_average.toFixed(1) || null} (${
                     result?.vote_count?.toLocaleString() || null
                   })`,
                 ]}
@@ -223,39 +243,61 @@ function TitleView({ result, layout_type, original }) {
           />
         </motion.div>
       )}
-
-      <div className={styles.backdropImage + " " + styles.backdropImageBlurred}>
-        {videosData &&
-          videosData.length > 0 &&
-          videosData.find((e) => e.id === id) && (
-            <YoutubeVideoPlayer
-              playerRef={playerRef}
-              playerState={playerState}
-              setPlayerState={setPlayerState}
-              videoId={videosData.find((e) => e.id === id)?.videos[0]?.key}
+      <motion.div
+        style={{
+          position: "absolute",
+          height: "100vh",
+          width: "100vw",
+          left: 0,
+          top: 0,
+        }}
+        onMouseMove={() => {
+          // if (!hideAll) return;
+          if (!playerState.playing) return;
+          console.log("hovering");
+          setHideAll(false);
+          clearTimeout(hideTimeOutRef.current);
+          hideTimeOutRef.current = setTimeout(() => {
+            console.log("clearing timeout ref in useEffect");
+            setHideAll(true);
+          }, 5000);
+        }}
+      >
+        <motion.div
+          className={styles.backdropImage + " " + styles.backdropImageBlurred}
+        >
+          {videosData &&
+            videosData.length > 0 &&
+            videosData.find((e) => e.id === id) && (
+              <YoutubeVideoPlayer
+                playerRef={playerRef}
+                playerState={playerState}
+                setPlayerState={setPlayerState}
+                videoId={videosData.find((e) => e.id === id)?.videos[0]?.key}
+              />
+            )}
+          {!layout_type ? (
+            <FadeImageOnLoad
+              imageSrc={result.backdrop_path}
+              original={original}
+              // imageSrc={result.backdrop_path || result.poster_path}
+              duration={2}
+              attr={{
+                imageContainer: { className: styles.backdropImage },
+                image: {
+                  layout: "fill",
+                },
+              }}
+            />
+          ) : (
+            <Image
+              src={getImageUrl(result.backdrop_path, { original })}
+              alt="image"
+              fill
             />
           )}
-        {!layout_type ? (
-          <FadeImageOnLoad
-            imageSrc={result.backdrop_path}
-            original={original}
-            // imageSrc={result.backdrop_path || result.poster_path}
-            duration={2}
-            attr={{
-              imageContainer: { className: styles.backdropImage },
-              image: {
-                layout: "fill",
-              },
-            }}
-          />
-        ) : (
-          <Image
-            src={getImageUrl(result.backdrop_path, { original })}
-            alt="image"
-            fill
-          />
-        )}
-      </div>
+        </motion.div>
+      </motion.div>
       {/* <FadeImageOnLoad
         imageSrc={result.backdrop_path || result.poster_path}
         duration={2}
