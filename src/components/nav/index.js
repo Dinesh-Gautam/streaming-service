@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import Search from "../search/index";
 import styles from "./nav.module.scss";
 function Nav({ searchInitialValue }) {
