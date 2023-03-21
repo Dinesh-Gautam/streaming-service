@@ -59,6 +59,8 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       season_number = null,
       vote_average = null,
       vote_count = null,
+      languages = null,
+      runtime = null,
     } = results;
     switch (options.type) {
       case "tv":
@@ -79,6 +81,10 @@ export async function getDetails(mediaId, mediaType, options = {}) {
           number_of_episodes,
           episode_run_time,
           number_of_seasons,
+          vote_average,
+          vote_count,
+          languages,
+          runtime,
         };
       case "season":
         return {
@@ -123,6 +129,8 @@ export async function getDetails(mediaId, mediaType, options = {}) {
           backdrop_path,
           vote_average,
           vote_count,
+          languages,
+          runtime,
         };
     }
   } catch (e) {

@@ -36,7 +36,8 @@ export async function getServerSideProps(context) {
   if (media_type && id) {
     let searchResult;
     if (!original) {
-      searchResult = (await getDetails(id, media_type)) || null;
+      searchResult =
+        (await getDetails(id, media_type, { type: media_type })) || null;
     } else {
       searchResult = getOriginalMovieDetails(id);
     }

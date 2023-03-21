@@ -4,16 +4,18 @@ import styles from "./Separator.module.scss";
 function Separator({ values, gap }) {
   return (
     <div style={{ gap: gap || 0 }} className={styles.separatorContainer}>
-      {values.map((value, index) => {
-        return (
-          <React.Fragment key={index}>
-            <span>{value}</span>
-            {index + 1 < values.length && (
-              <span className={styles.separator}></span>
-            )}
-          </React.Fragment>
-        );
-      })}
+      {values
+        .filter((e) => e && e !== 0 && e.toString().trim())
+        .map((value, index, arr) => {
+          return (
+            <React.Fragment key={index}>
+              <span>{value}</span>
+              {index + 1 < arr.length && (
+                <span className={styles.separator}></span>
+              )}
+            </React.Fragment>
+          );
+        })}
     </div>
   );
 }

@@ -48,6 +48,7 @@ function TitleView({ result, layout_type, original }) {
     id,
   });
 
+  console.log(result);
   const [hideAll, setHideAll] = useState(false);
 
   const hideTimeOutRef = useRef(null);
@@ -176,6 +177,13 @@ function TitleView({ result, layout_type, original }) {
                   `${result?.vote_average.toFixed(1) || null} (${
                     result?.vote_count?.toLocaleString() || null
                   })`,
+                  (result.number_of_episodes &&
+                    result.number_of_episodes + "eps") ||
+                    null,
+                  result.episode_run_time &&
+                    result.episode_run_time.join(" - ") + "min",
+                  result.languages && result.languages.join(", "),
+                  result.runtime && result.runtime + " mins",
                 ]}
               />
             </div>
@@ -192,12 +200,13 @@ function TitleView({ result, layout_type, original }) {
                   position: "absolute",
                   bottom: 0,
                   left: 0,
-                  padding: "4rem",
-                  width: "50%",
+                  // padding: "4rem",
+                  margin: "4rem",
+                  width: "10rem",
                 }
               : {
                   position: "relative",
-                  width: "50%",
+                  width: "10rem",
                 }
           }
         >
