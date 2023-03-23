@@ -1,3 +1,4 @@
+import { Info } from "@mui/icons-material";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,7 +7,7 @@ import { redirectIfUserIsAuthenticated } from "../../helpers/redirect";
 import styles from "./auth.module.scss";
 const SignIn = (props) => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
-
+  const [error, setError] = useState(null);
   const router = useRouter();
   const handleSubmit = async (e) => {
     // validate your userinfo
@@ -18,13 +19,29 @@ const SignIn = (props) => {
       redirect: false,
     });
 
-    router.push("/home");
-    console.log(res);
+    if (res.ok) {
+      router.push("/home");
+    } else {
+      setError(res.error || "some error occurred");
+    }
   };
   return (
     <div className={styles.container}>
       <form className={styles.box} onSubmit={handleSubmit}>
         <h1>Login</h1>
+        {error && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <Info color="danger" />
+            <span>{error}</span>
+          </div>
+        )}
         <div>
           <div>
             <label htmlFor="email">Email</label>
