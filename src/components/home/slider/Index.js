@@ -8,7 +8,7 @@ import { getImageUrl } from "@/tmdbapi/tmdbApi";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-function Slider({ title, data, setIsScrolling }) {
+function Slider({ title, data, setIsScrolling, type }) {
   const isMiniSlider = data?.length < 6;
   const [dataArr, setDataArr] = useState(updateDataArr("before"));
   const [transitionState, setTransitionState] = useState({
@@ -101,12 +101,15 @@ function Slider({ title, data, setIsScrolling }) {
                     attr={{
                       imageContainer: {
                         className: styles.imageContainer,
+
                         id: "imageContainer",
                         "data-index": data.indexOf(e),
                         "data-original": "true",
+                        "data-type": type,
                         "data-middle": true,
                       },
                       image: {
+                        priority: true,
                         height: 1300 / 2,
                         width: 1300,
                       },
@@ -148,8 +151,10 @@ function Slider({ title, data, setIsScrolling }) {
                           id: "imageContainer",
                           "data-index": data.indexOf(e),
                           "data-middle": index > 6 && index < 12,
+                          "data-type": type,
                         },
                         image: {
+                          priority: index > 6 && index < 12,
                           height: 1300 / 2,
                           width: 1300,
                         },
@@ -164,7 +169,7 @@ function Slider({ title, data, setIsScrolling }) {
                         position: "relative",
                       }}
                     >
-                      {e.title}
+                      {e.title || e.name}
                     </h1>
                   </div>
                 ))}

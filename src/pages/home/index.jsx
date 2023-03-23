@@ -8,7 +8,14 @@ import { ContextProvider } from "../../context/stateContext";
 import { getPopularMovies } from "../../helpers/api/search/tmdb";
 import { redirectIfUserIsNotAuthenticated } from "../../helpers/redirect";
 
-function MainHome({ session, popularMovies, movies }) {
+function MainHome({
+  session,
+  popularMovies,
+  movies,
+  nowPlaying,
+  trendingMovies,
+  trendingTv,
+}) {
   return (
     <ContextProvider>
       <div>
@@ -29,6 +36,9 @@ function MainHome({ session, popularMovies, movies }) {
         <HomePageSliders
           popularMovies={popularMovies}
           originalMovies={movies}
+          nowPlaying={nowPlaying}
+          trendingMovies={trendingMovies}
+          trendingTv={trendingTv}
         />
       </div>
     </ContextProvider>
@@ -36,7 +46,14 @@ function MainHome({ session, popularMovies, movies }) {
 }
 
 export async function getServerSideProps(context) {
-  const popularMovies = await getPopularMovies();
+  const [popularMovies, nowPlaying, trendingMovies, trendingTv] =
+    await Promise.all([
+      getPopularMovies(),
+      getPopularMovies("movie", "now_playing"),
+      getPopularMovies("trending", "movie", "week"),
+      getPopularMovies("trending", "tv", "week"),
+    ]);
+
   const movies = getPublishedMovies();
   return redirectIfUserIsNotAuthenticated({
     context,
@@ -44,6 +61,9 @@ export async function getServerSideProps(context) {
     props: {
       popularMovies,
       movies,
+      nowPlaying,
+      trendingMovies,
+      trendingTv,
     },
   });
 }

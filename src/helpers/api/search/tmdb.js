@@ -66,17 +66,27 @@ export async function tmdbSearch(options) {
   return filteredSuggestions;
 }
 
-export async function getPopularMovies() {
+export async function getPopularMovies(
+  mediaType = "movie",
+  type = "popular",
+  optional
+) {
   const data = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}`
+    `https://api.themoviedb.org/3/${mediaType}/${type}${
+      optional ? "/" + optional : ""
+    }?api_key=${tmdbApiKey}`
   )
     .then((res) => res.json())
     .catch((err) => {
       console.log(err);
     });
+  console.log();
   return {
     ...data,
-    results: data.results.map((e) => ({ ...e, media_type: "movie" })),
+    results: data.results.map((e) => ({
+      ...e,
+      media_type: mediaType === "tv" || type === "tv" ? "tv" : "movie",
+    })),
   };
 }
 

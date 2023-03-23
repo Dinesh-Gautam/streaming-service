@@ -9,8 +9,12 @@ import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Slider from "./Index";
 import styles from "./slider.module.scss";
-function HomePageSliders({ popularMovies, originalMovies }) {
-  const [hoverCardPosition, setHoverCardPosition] = useState({ x: 0, y: 0 });
+function HomePageSliders(props) {
+  const [hoverCardPosition, setHoverCardPosition] = useState({
+    type: "popularMovies",
+    x: 0,
+    y: 0,
+  });
   const [hoverCardActive, setHoverCardActive] = useState(false);
   const [inContainer, setInContainer] = useState(false);
   const timeOutRef = useRef(null);
@@ -27,13 +31,20 @@ function HomePageSliders({ popularMovies, originalMovies }) {
     setPlayerState,
     setId,
     id,
-    media_type: popularMovies.results[hoverCardPosition.index]?.media_type,
+    media_type: hoverCardPosition.type
+      ? props[hoverCardPosition.type].results[hoverCardPosition.index]
+          ?.media_type
+      : props.popularMovies.results[hoverCardPosition.index]?.media_type,
   });
   useEffect(() => {
-    const id = popularMovies.results[hoverCardPosition.index]?.id;
+    const id = hoverCardPosition.type
+      ? props[hoverCardPosition.type].results[hoverCardPosition.index]?.id
+      : props.popularMovies.results[hoverCardPosition.index]?.id;
     setId(id);
-  }, [hoverCardPosition]);
 
+    console.log(hoverCardPosition);
+  }, [hoverCardPosition]);
+  console.log(props);
   async function clearHover() {
     if (timeOutRef.current) {
       setHoverCardActive(false);
@@ -45,7 +56,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
       setAnimating(false);
     }
   }
-  // console.log(popularMovies);
+  // console.log(props.popularMovies);
 
   return (
     <>
@@ -79,6 +90,7 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   width: rect.width,
                   original: e.target.dataset.original,
                   index: e.target.dataset.index,
+                  type: e.target.dataset.type,
                 });
                 setHoverCardActive(true);
                 setInContainer(true);
@@ -93,32 +105,37 @@ function HomePageSliders({ popularMovies, originalMovies }) {
           }
         }}
       >
-        {originalMovies && originalMovies.length && (
+        {props.originalMovies && props.originalMovies.length && (
           <Slider
             setIsScrolling={setIsScrolling}
             title="Original Movies"
-            data={originalMovies}
+            data={props.originalMovies}
           />
         )}
         <Slider
           setIsScrolling={setIsScrolling}
           title="Trending Movies"
-          data={popularMovies.results}
+          data={props.trendingMovies.results}
+          type={"trendingMovies"}
         />
         <Slider
           setIsScrolling={setIsScrolling}
-          title="Popular Movies"
-          data={popularMovies.results}
+          title="Now Playing"
+          data={props.nowPlaying.results}
+          type={"nowPlaying"}
         />
+
         <Slider
           setIsScrolling={setIsScrolling}
-          title="Playing Now"
-          data={popularMovies.results}
+          title="Trending Tv Shows"
+          data={props.trendingTv.results}
+          type={"trendingTv"}
         />
         <Slider
           setIsScrolling={setIsScrolling}
           title="Top 10"
-          data={popularMovies.results}
+          data={props.popularMovies.results}
+          type={"popularMovies"}
         />
       </div>
       <AnimatePresence>
@@ -175,13 +192,17 @@ function HomePageSliders({ popularMovies, originalMovies }) {
             <motion.div className={styles.hoverCardWrapper}>
               <Link
                 href={
-                  // "/movie" + "?id=" + originalMovies[hoverCardPosition.index]?.uid
+                  // "/movie" + "?id=" + props.originalMovies[hoverCardPosition.index]?.uid
                   "/title?id=" +
                   (hoverCardPosition.original
-                    ? originalMovies[hoverCardPosition.index].uid
-                    : popularMovies.results[hoverCardPosition.index].id) +
+                    ? props.originalMovies[hoverCardPosition.index].uid
+                    : props[hoverCardPosition.type].results[
+                        hoverCardPosition.index
+                      ].id) +
                   "&type=" +
-                  "movie" +
+                  (props[hoverCardPosition.type].results[
+                    hoverCardPosition.index
+                  ].media_type || "movie") +
                   "&t=hover" +
                   "&original=" +
                   (hoverCardPosition.original === "true" ? "true" : "false")
@@ -208,12 +229,13 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                     src={
                       hoverCardPosition.original
                         ? "/api/static" +
-                            originalMovies[
+                            props.originalMovies[
                               hoverCardPosition.index
                             ]?.backdrop_path.replace("uploads\\", "") || ""
                         : getImageUrl(
-                            popularMovies.results[hoverCardPosition.index]
-                              ?.backdrop_path || ""
+                            props[hoverCardPosition.type].results[
+                              hoverCardPosition.index
+                            ]?.backdrop_path || ""
                           )
                     }
                     //   ambientMode
@@ -245,8 +267,14 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                       }}
                     >
                       {hoverCardPosition.original
-                        ? originalMovies[hoverCardPosition.index]?.title || ""
-                        : popularMovies.results[hoverCardPosition.index]?.title}
+                        ? props.originalMovies[hoverCardPosition.index]
+                            ?.title || ""
+                        : props[hoverCardPosition.type].results[
+                            hoverCardPosition.index
+                          ]?.title ||
+                          props[hoverCardPosition.type].results[
+                            hoverCardPosition.index
+                          ]?.name}
                     </h1>
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -266,9 +294,9 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                     }}
                   >
                     {/* {hoverCardPosition.original
-                        ? originalMovies[hoverCardPosition.indx]?.description ||
+                        ? props.originalMovies[hoverCardPosition.indx]?.description ||
                           ""
-                        : popularMovies.results[
+                        : props.popularMovies.results[
                             hoverCardPosition.index
                           ]?.overview
                             ?.split(" ")
@@ -286,18 +314,27 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                         <Separator
                           values={[
                             `${
-                              popularMovies.results[hoverCardPosition.index]
-                                ?.vote_average || null
+                              props[hoverCardPosition.type].results[
+                                hoverCardPosition.index
+                              ]?.vote_average.toFixed(1) || null
                             }(${
-                              popularMovies.results[
+                              props[hoverCardPosition.type].results[
                                 hoverCardPosition.index
                               ]?.vote_count.toLocaleString() || null
                             })`,
                             new Date(
-                              popularMovies.results[
+                              props[hoverCardPosition.type].results[
                                 hoverCardPosition.index
                               ]?.release_date
                             ).getFullYear(),
+                            new Date(
+                              props[hoverCardPosition.type].results[
+                                hoverCardPosition.index
+                              ]?.first_air_date
+                            ).getFullYear(),
+                            props[hoverCardPosition.type].results[
+                              hoverCardPosition.index
+                            ]?.original_language,
                           ]}
                         />
                       </div>
@@ -316,12 +353,13 @@ function HomePageSliders({ popularMovies, originalMovies }) {
                   src={
                     hoverCardPosition.original
                       ? "/api/static" +
-                          originalMovies[
+                          props.originalMovies[
                             hoverCardPosition.index
                           ]?.backdrop_path.replace("uploads\\", "") || ""
                       : getImageUrl(
-                          popularMovies.results[hoverCardPosition.index]
-                            ?.backdrop_path || ""
+                          props[hoverCardPosition.type].results[
+                            hoverCardPosition.index
+                          ]?.backdrop_path || ""
                         )
                   }
                   className={styles.backgroundImage}
