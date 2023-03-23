@@ -10,6 +10,7 @@ import { PlayArrowRounded, Star } from "@mui/icons-material";
 import Link from "next/link";
 import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
+import Select from "./elements/customSelect/CustomSelect";
 
 const otherElementsAnimation = {
   initial: {
@@ -234,7 +235,13 @@ function TitleView({ result, layout_type, original }) {
               </button>
             </Link>
           )}
-
+          <Select
+            options={[
+              { label: "value1", value: "value1" },
+              { label: "value2", value: "value2" },
+              { label: "value3", value: "value3" },
+            ]}
+          />
           <ButtonsComponent size="large" />
         </motion.div>
       </motion.div>
