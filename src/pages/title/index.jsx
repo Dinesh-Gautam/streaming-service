@@ -38,6 +38,9 @@ export async function getServerSideProps(context) {
     if (!original) {
       searchResult =
         (await getDetails(id, media_type, { type: media_type })) || null;
+      searchResult.seasonInfo = await getDetails(id, media_type, {
+        type: "season",
+      });
     } else {
       searchResult = getOriginalMovieDetails(id);
     }

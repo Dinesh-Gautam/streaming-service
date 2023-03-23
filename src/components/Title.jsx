@@ -6,7 +6,12 @@ import { LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
-import { PlayArrowRounded, Star } from "@mui/icons-material";
+import {
+  ArrowLeft,
+  ArrowRight,
+  PlayArrowRounded,
+  Star,
+} from "@mui/icons-material";
 import Link from "next/link";
 import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
@@ -52,6 +57,10 @@ function TitleView({ result, layout_type, original }) {
 
   console.log(result);
   const [hideAll, setHideAll] = useState(false);
+  const [seasonSelect, setSeasonSelect] = useState(null);
+  const [seasonInfo, setSeasonInfo] = useState(
+    result.media_type === "tv" ? result.seasonInfo : null
+  );
 
   const hideTimeOutRef = useRef(null);
   useEffect(() => {
@@ -65,6 +74,77 @@ function TitleView({ result, layout_type, original }) {
       setHideAll(true);
     }, 3000);
   }, [playerState]);
+
+  // useEffect(() => {
+  //   console.log(result);
+  //   if (!seasonInfo) {
+  //     console.log(result.seasonInfo);
+  //     setSeasonInfo(result.seasonInfo);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (result.media_type !== "tv") return;
+    console.log("getting season info");
+    if (seasonSelect) {
+      (async () => {
+        const si = await getDetails(result.id, result.media_type, {
+          type: "season",
+          season: seasonSelect.season_number,
+        });
+        setSeasonInfo(si);
+      })();
+    }
+  }, [seasonSelect]);
+
+  const episodeWrapperRef = useRef(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [rightButtonDisplay, setRightButtonDisplay] = useState(false);
+
+  useEffect(() => {
+    setRightButtonDisplay(
+      episodeWrapperRef.current &&
+        (scrollLeft <
+          Math.floor(
+            episodeWrapperRef.current?.scrollWidth -
+              episodeWrapperRef.current?.clientWidth
+          ) ||
+          scrollLeft < 1) &&
+        episodeWrapperRef.current.clientWidth !==
+          episodeWrapperRef.current.scrollWidth
+    );
+  }, [episodeWrapperRef, scrollLeft, seasonInfo]);
+
+  function rightButtonClick() {
+    episodeWrapperRef.current.scrollLeft +=
+      episodeWrapperRef.current.clientWidth / 1.2;
+    setScrollLeft(
+      Math.min(
+        episodeWrapperRef.current.scrollLeft +
+          episodeWrapperRef.current.clientWidth / 1.2,
+        episodeWrapperRef.current.scrollWidth -
+          episodeWrapperRef.current.clientWidth
+      )
+    );
+  }
+
+  function leftButtonClick() {
+    episodeWrapperRef.current.scroll({
+      left: Math.max(
+        episodeWrapperRef.current.scrollLeft -
+          episodeWrapperRef.current.clientWidth / 1.2,
+        0
+      ),
+      behavior: "smooth",
+    });
+    setScrollLeft(
+      Math.max(
+        episodeWrapperRef.current.scrollLeft -
+          episodeWrapperRef.current.clientWidth / 1.2,
+        0
+      )
+    );
+  }
 
   return (
     <motion.div
@@ -90,6 +170,7 @@ function TitleView({ result, layout_type, original }) {
         style={{
           position: "relative",
           zIndex: 100000,
+          backdropFilter: playerState.playing ? "blur(0px)" : "blur(64px)",
         }}
         className={styles.leftContainer}
       >
@@ -235,14 +316,116 @@ function TitleView({ result, layout_type, original }) {
               </button>
             </Link>
           )}
-          <Select
-            options={[
-              { label: "value1", value: "value1" },
-              { label: "value2", value: "value2" },
-              { label: "value3", value: "value3" },
-            ]}
-          />
           <ButtonsComponent size="large" />
+
+          {result.media_type === "tv" && seasonInfo && (
+            <div className={styles.seasonContainer}>
+              <div className={styles.seasonSelectorContainer}>
+                {/* <Select
+                  onChange={setSeasonSelect}
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 6,
+                    backdropFilter: "blur(12px)",
+                    colors: {
+                      ...theme.colors,
+                      primary25: " rgba(255, 255, 255, 0.2)",
+                      primary: "rgba(255,255,255,0.8)",
+                      primary50: "rgba(255,255,255,0.2)",
+                    },
+                  })}
+                  styles={customStyles}
+                  defaultValue={seasonArray[0]}
+                  options={seasonArray}
+                /> */}
+                <Select
+                  options={[
+                    { label: "value1", value: "value1" },
+                    { label: "value2", value: "value2" },
+                    { label: "value3", value: "value3" },
+                  ]}
+                />
+                {/* <select name="season_select" id="">
+                {Array.from(
+                  { length: result.number_of_seasons },
+                  (_, index) => (
+                    <option key={index} value={index + 1}>
+                      {"Season " + (index + 1)}
+                    </option>
+                  )
+                )}
+              </select> */}
+              </div>
+              <div className={styles.tvContainer}>
+                <button
+                  style={{
+                    display: scrollLeft > 1 ? "flex" : "none",
+                  }}
+                  onClick={leftButtonClick}
+                  className={styles.leftButton}
+                >
+                  <ArrowLeft fontSize="large" />
+                </button>
+                <button
+                  style={{
+                    display: rightButtonDisplay ? "flex" : "none",
+                  }}
+                  onClick={rightButtonClick}
+                  className={styles.rightButton}
+                >
+                  <ArrowRight fontSize="large" />
+                </button>
+                <div
+                  ref={(el) => (episodeWrapperRef.current = el)}
+                  className={styles.episodesContainer}
+                >
+                  <div className={styles.episodeWrapper}>
+                    {seasonInfo.episodes.map(
+                      (epi, index) =>
+                        epi.still_path !== null && (
+                          <div
+                            onClick={() =>
+                              findSeriesOnClick(
+                                result.title ||
+                                  result.name ||
+                                  result.original_title ||
+                                  result.original_name,
+                                epi.season_number,
+                                epi.episode_number
+                              )
+                            }
+                            className={styles.episode}
+                            key={epi.id}
+                          >
+                            <span className={styles.episodeNumber}>
+                              {(index + 1 < 10 ? "0" : "") + (index + 1)}
+                            </span>
+                            <span className={styles.episodeName}>
+                              {epi.name}
+                            </span>
+                            <FadeImageOnLoad
+                              loadingBackground
+                              imageSrc={epi.still_path}
+                              duration={0.5}
+                              attr={{
+                                imageContainer: {
+                                  className: styles.episodeImageContainer,
+                                },
+                                image: {
+                                  objectFit: "cover",
+                                  width: 228,
+                                  height: 148,
+                                },
+                              }}
+                            />
+                          </div>
+                        )
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </motion.div>
       </motion.div>
       {!animating && (

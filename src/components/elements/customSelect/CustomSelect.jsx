@@ -38,6 +38,8 @@ const Select = ({ options }) => {
 
   return (
     <motion.div
+      onBlur={() => setIsOpen(false)}
+      onBlurCapture={() => setIsOpen(false)}
       className={styles.container}
       variants={variants.container}
       initial="closed"
