@@ -2,6 +2,7 @@ import { getSession } from "next-auth/react";
 
 export async function redirectIfUserIsNotAuthenticated({
   context,
+  path,
   props = {},
 }) {
   const session = await getSession(context);
@@ -9,7 +10,7 @@ export async function redirectIfUserIsNotAuthenticated({
   if (!session) {
     return {
       redirect: {
-        destination: "/",
+        destination: path || "/auth/signin",
         permanent: false,
       },
     };

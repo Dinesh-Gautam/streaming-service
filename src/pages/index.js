@@ -22,5 +22,11 @@ export default function Home() {
 }
 
 export async function getServerSideProps(context) {
-  return redirectIfUserIsAuthenticated({ context, path: "/home" });
+  // return redirectIfUserIsAuthenticated({ context, path: "/home" });
+  return {
+    redirect: {
+      destination: "/home",
+      permanent: false,
+    },
+  };
 }

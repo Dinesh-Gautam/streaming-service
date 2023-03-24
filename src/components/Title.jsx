@@ -41,7 +41,7 @@ const HeadingAnimation = {
   },
 };
 
-function TitleView({ result, layout_type, original }) {
+function TitleView({ result, layout_type, original, signedIn }) {
   const [animating, setAnimating] = useState(true);
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });

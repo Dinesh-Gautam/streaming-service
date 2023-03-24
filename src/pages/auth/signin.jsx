@@ -16,11 +16,12 @@ const SignIn = (props) => {
     const res = await signIn("credentials", {
       email: userInfo.email,
       password: userInfo.password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: router.query.callbackUrl,
     });
 
     if (res.ok) {
-      router.push("/home");
+      // router.push("/home");
     } else {
       setError(res.error || "some error occurred");
     }

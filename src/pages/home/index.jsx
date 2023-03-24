@@ -1,5 +1,6 @@
 import HomePageSliders from "@/components/home/slider/HomePageSlider";
 import { getPublishedMovies } from "@/helpers/api/data/movie";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import Banner from "../../components/home/banner";
@@ -15,11 +16,12 @@ function MainHome({
   nowPlaying,
   trendingMovies,
   trendingTv,
+  signedIn,
 }) {
   return (
     <ContextProvider>
       <div>
-        <Nav />
+        <Nav signedIn={signedIn} />
         {popularMovies && <Banner popularMovies={popularMovies.results} />}
         {/* {movies && (
           <div>
@@ -55,17 +57,29 @@ export async function getServerSideProps(context) {
     ]);
 
   const movies = getPublishedMovies();
-  return redirectIfUserIsNotAuthenticated({
-    context,
-    path: "/",
+  // return redirectIfUserIsNotAuthenticated({
+  //   context,
+  //   path: "/",
+  //   props: {
+  //     popularMovies,
+  //     movies,
+  //     nowPlaying,
+  //     trendingMovies,
+  //     trendingTv,
+  //   },
+  // });
+  const session = await getSession(context);
+  console.log(session);
+  return {
     props: {
+      signedIn: !!session,
       popularMovies,
       movies,
       nowPlaying,
       trendingMovies,
       trendingTv,
     },
-  });
+  };
 }
 
 export default MainHome;
