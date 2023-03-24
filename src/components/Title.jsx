@@ -286,24 +286,7 @@ function TitleView({ result, layout_type, original }) {
             <p>{formatParagraph(result.overview || result.description)}</p>
           </div>
         </motion.div>
-        <motion.div
-          layout="position"
-          style={
-            playerState.playing
-              ? {
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  // padding: "4rem",
-                  margin: "4rem",
-                  // width: "10rem",
-                }
-              : {
-                  position: "relative",
-                  // width: "10rem",
-                }
-          }
-        >
+        <motion.div>
           {original && (
             <Link href={"/movie" + "?id=" + result?.uid}>
               <button
@@ -327,10 +310,16 @@ function TitleView({ result, layout_type, original }) {
               </button>
             </Link>
           )}
-          <ButtonsComponent size="large" />
 
           {result.media_type === "tv" && seasonInfo && (
-            <div className={styles.seasonContainer}>
+            <motion.div
+              animate={
+                playerState.playing
+                  ? otherElementsAnimation.animate
+                  : otherElementsAnimation.initial
+              }
+              className={styles.seasonContainer}
+            >
               <div className={styles.seasonSelectorContainer}>
                 {/* <Select
                   onChange={setSeasonSelect}
@@ -438,8 +427,29 @@ function TitleView({ result, layout_type, original }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
+
+          <motion.div
+            layout="position"
+            style={
+              playerState.playing
+                ? {
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    // padding: "4rem",
+                    margin: "4rem",
+                    // width: "10rem",
+                  }
+                : {
+                    position: "relative",
+                    // width: "10rem",
+                  }
+            }
+          >
+            <ButtonsComponent size="large" />
+          </motion.div>
         </motion.div>
       </motion.div>
       {!animating && (
