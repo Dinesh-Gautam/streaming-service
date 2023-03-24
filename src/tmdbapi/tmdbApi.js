@@ -26,6 +26,7 @@ export async function getDetails(mediaId, mediaType, options = {}) {
     let results;
 
     if (options.type === "season") {
+      console.log("searching for season");
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${
         options.season || 1
       }?api_key=${api_key}`;

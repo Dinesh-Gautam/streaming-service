@@ -148,10 +148,11 @@ function TitleView({ result, layout_type, original }) {
 
   return (
     <motion.div
-      layout
       onAnimationEnd={() => {
+        console.log("animation complete");
         setAnimating(false);
       }}
+      layout
       layoutId={
         !layout_type
           ? ""

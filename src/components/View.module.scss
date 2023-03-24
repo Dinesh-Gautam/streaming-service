@@ -63,10 +63,10 @@
   color: white;
   gap: 1rem;
   max-width: 60%;
-  // animation: opacityAnimate forwards;
-  // animation-duration: 1s;
-  // animation-delay: 1s;
-  // opacity: 0;
+  animation: opacityAnimate forwards;
+  animation-duration: 1s;
+  animation-delay: 1s;
+  opacity: 0;
   mask-image: linear-gradient(
     to left,
     transparent 0%,

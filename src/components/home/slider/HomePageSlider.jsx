@@ -200,9 +200,9 @@ function HomePageSliders(props) {
                         hoverCardPosition.index
                       ].id) +
                   "&type=" +
-                  (props[hoverCardPosition.type].results[
+                  (props[hoverCardPosition.type]?.results[
                     hoverCardPosition.index
-                  ].media_type || "movie") +
+                  ]?.media_type || "movie") +
                   "&t=hover" +
                   "&original=" +
                   (hoverCardPosition.original === "true" ? "true" : "false")
