@@ -5,7 +5,7 @@ import Separator from "./elements/separator";
 import { LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
-import { getImageUrl } from "@/tmdbapi/tmdbApi";
+import { getDetails, getImageUrl } from "@/tmdbapi/tmdbApi";
 import {
   ArrowLeft,
   ArrowRight,
@@ -88,10 +88,20 @@ function TitleView({ result, layout_type, original }) {
     console.log("getting season info");
     if (seasonSelect) {
       (async () => {
-        const si = await getDetails(result.id, result.media_type, {
-          type: "season",
-          season: seasonSelect.season_number,
-        });
+        // const si = await getDetails(result.id, result.media_type, {
+        //   type: "season",
+        //   season: seasonSelect.season_number,
+        // });
+        // setSeasonInfo(si);
+
+        const si = await fetch(
+          "/api/tmdb/season?id=" +
+            result.id +
+            "&media_type=" +
+            result.media_type +
+            "&season=" +
+            seasonSelect.season_number
+        ).then((e) => e.json());
         setSeasonInfo(si);
       })();
     }
@@ -340,11 +350,14 @@ function TitleView({ result, layout_type, original }) {
                   options={seasonArray}
                 /> */}
                 <Select
-                  options={[
-                    { label: "value1", value: "value1" },
-                    { label: "value2", value: "value2" },
-                    { label: "value3", value: "value3" },
-                  ]}
+                  onChange={(option) => {
+                    setSeasonSelect({ season_number: option.value });
+                  }}
+                  defaultValue={1}
+                  options={result.seasons.map((e) => ({
+                    label: e.name,
+                    value: e.season_number,
+                  }))}
                 />
                 {/* <select name="season_select" id="">
                 {Array.from(
@@ -482,7 +495,8 @@ function TitleView({ result, layout_type, original }) {
         <motion.div
           className={styles.backdropImage + " " + styles.backdropImageBlurred}
         >
-          {videosData &&
+          {!animating &&
+            videosData &&
             videosData.length > 0 &&
             videosData.find((e) => e.id === id) && (
               <YoutubeVideoPlayer

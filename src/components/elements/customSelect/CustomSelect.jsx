@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./customSelect.module.scss";
 const variants = {
@@ -23,12 +23,20 @@ const variants = {
   option: {},
 };
 
-const Select = ({ options }) => {
+const Select = ({ options, onChange, defaultValue }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(
+    options.find((e) => e.value === defaultValue) || null
+  );
+
+  // useEffect(() => {
+  //   if (!onChange || selectedOption === null) return;
+  //   onChange(selectedOption);
+  // }, [selectedOption]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    onChange(option);
     setIsOpen(false);
   };
 
@@ -59,8 +67,11 @@ const Select = ({ options }) => {
         //     : {}
         // }
       >
-        <div>{selectedOption ? selectedOption.label : "Select an option"}</div>
+        <div>{selectedOption ? selectedOption.label : "Select season"}</div>
         <motion.svg
+          style={{
+            marginLeft: "1rem",
+          }}
           className={styles.arrow}
           variants={variants.arrow}
           animate={isOpen ? "open" : "closed"}

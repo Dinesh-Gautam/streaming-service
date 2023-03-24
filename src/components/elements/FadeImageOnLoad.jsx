@@ -44,7 +44,7 @@ function FadeImageOnLoad(props) {
       >
         {
           <>
-            {props.ambientMode && props.imageSrc && (
+            {props.ambientMode && (
               <Image
                 src={getImageUrl(props.imageSrc, { original: props.original })}
                 // onLoadingComplete={() => setImageLoaded(true)}

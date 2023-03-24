@@ -35,8 +35,8 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${api_key}&language=en-US`;
       results = await fetch(url).then((res) => res.json());
     }
-
-    // console.log(results);
+    console.log(api_key);
+    console.log(results);
     const {
       release_date = null,
       media_type = mediaType,

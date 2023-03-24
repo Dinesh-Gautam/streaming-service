@@ -1,4 +1,5 @@
 .container {
+  min-width: fit-content;
   position: absolute;
 }
 .selectContainer {
@@ -28,7 +29,7 @@
 }
 
 .optionContainer {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
 
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
@@ -37,8 +38,9 @@
   top: calc(100% + 5px);
   width: 100%;
   z-index: 2;
-  overflow: hidden;
+  overflow: auto;
   backdrop-filter: blur(24px);
+  max-height: 20vh;
 }
 
 .option {

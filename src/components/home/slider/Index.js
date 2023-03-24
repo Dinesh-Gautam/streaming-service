@@ -144,7 +144,7 @@ function Slider({ title, data, setIsScrolling, type }) {
                   <div className={styles.item} key={index}>
                     <FadeImageOnLoad
                       loadingBackground
-                      imageSrc={e.backdrop_path || ""}
+                      imageSrc={e.backdrop_path}
                       attr={{
                         imageContainer: {
                           className: styles.imageContainer,
