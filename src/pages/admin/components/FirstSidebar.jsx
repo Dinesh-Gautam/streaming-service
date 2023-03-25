@@ -10,6 +10,12 @@ import MuiLogo from "./MuiLogo";
 import { openSidebar } from "../utils";
 import Link from "next/link";
 
+const firstSidebarItems = [
+  { icon: "home", href: "/admin" },
+  { icon: "film", href: "/admin/movies" },
+  { icon: "users", href: "/admin/users" },
+];
+
 export default function FirstSidebar() {
   return (
     <Sheet
@@ -50,14 +56,20 @@ export default function FirstSidebar() {
         }}
       />
       {/* <MuiLogo /> */}
-      <List sx={{ "--List-item-radius": "8px", "--List-gap": "2px" }}>
-        <ListItem>
-          <Link href="/admin">
-            <ListItemButton>
-              <i data-feather="home" />
-            </ListItemButton>
-          </Link>
-        </ListItem>
+
+      <List sx={{ "--List-item-radius": "8px", "--List-gap": "12px" }}>
+        {firstSidebarItems.map(({ icon, href }, index) => {
+          return (
+            <Link key={index} href={href}>
+              <ListItem>
+                <ListItemButton>
+                  <i data-feather={icon} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          );
+        })}
+
         {/* <ListItem>
           <ListItemButton
             selected
@@ -68,13 +80,13 @@ export default function FirstSidebar() {
             <i data-feather="bar-chart-2" />
           </ListItemButton>
         </ListItem> */}
-        <ListItem>
-          <Link href="/admin/movies">
+        {/* <Link href="/admin/movies">
+          <ListItem>
             <ListItemButton onClick={() => openSidebar()}>
               <i data-feather="layers" />
             </ListItemButton>
-          </Link>
-        </ListItem>
+          </ListItem>
+        </Link> */}
         {/* <ListItem>
           <ListItemButton onClick={() => openSidebar()}>
             <i data-feather="check-square" />
@@ -85,13 +97,13 @@ export default function FirstSidebar() {
             <i data-feather="flag" />
           </ListItemButton>
         </ListItem> */}
-        <ListItem>
-          <Link href="/admin/users">
+        {/* <Link href="/admin/users">
+          <ListItem variant="solid">
             <ListItemButton onClick={() => openSidebar()}>
               <i data-feather="users" />
             </ListItemButton>
-          </Link>
-        </ListItem>
+          </ListItem>
+        </Link> */}
       </List>
       {/* <List
         sx={{

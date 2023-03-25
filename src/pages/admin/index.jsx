@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getPendingMovies } from "@/helpers/api/data/admin";
-import { getPublishedMovies } from "@/helpers/api/data/movie";
+
 import {
   Box,
   Button,
@@ -14,7 +13,10 @@ import { Add } from "@mui/icons-material";
 import SideBar from "./sidebar/SideBar";
 import App from "./AdminApp";
 import Layout from "./components/Layout";
-function adminPage({ pendingUploads, uploadedVideos }) {
+import { getPendingMovies } from "@/helpers/api/data/admin";
+import { getPublishedMovies } from "@/helpers/api/data/movie";
+
+export default function adminPage({ pendingUploads, uploadedVideos }) {
   return <App />;
   return (
     <>
@@ -136,9 +138,15 @@ function adminPage({ pendingUploads, uploadedVideos }) {
     </>
   );
 }
-
+export const adminPageSideBarItems = [
+  { icon: "activity", value: "Overview", href: "/admin" },
+];
 adminPage.getLayout = function getLayout(page) {
-  return <Layout pageTitle="Admin">{page}</Layout>;
+  return (
+    <Layout sideBarItems={adminPageSideBarItems} pageTitle="Admin">
+      {page}
+    </Layout>
+  );
 };
 export async function getServerSideProps() {
   const data = getPendingMovies();
@@ -150,5 +158,3 @@ export async function getServerSideProps() {
     },
   };
 }
-
-export default adminPage;

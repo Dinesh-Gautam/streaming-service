@@ -41,8 +41,7 @@ export default function Header() {
       >
         <i data-feather="menu" />
       </IconButton>
-      <MuiLogo variant="plain" sx={{ boxShadow: 'none', mr: 'auto' }} />
-      <ColorSchemeToggle id={undefined} />
+      {/* <ColorSchemeToggle sx={{ml : 'auto'}} id={undefined} /> */}
     </Sheet>
   );
 }

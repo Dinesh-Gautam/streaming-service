@@ -15,7 +15,7 @@ import {
   VolumeUpRounded,
 } from "@mui/icons-material";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
-import { useData } from "@/context/stateContext";
+import { useData } from "../../context/stateContext";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
