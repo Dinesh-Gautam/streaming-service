@@ -12,8 +12,20 @@ import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import { closeSidebar } from "../utils";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function SecondSidebar({ sideBarItems, title }) {
+  const session = useSession();
+  const [userData, setUserData] = React.useState(null);
+  const url = useRouter();
+  useEffect(() => {
+    if (session.data) {
+      setUserData(session.data);
+    }
+  }, [session.data]);
+
   return (
     <React.Fragment>
       <Box
@@ -73,10 +85,17 @@ export default function SecondSidebar({ sideBarItems, title }) {
 
           {sideBarItems &&
             sideBarItems.map(({ icon, value, href }, index) => {
+              const selected = url.pathname === href;
+
               return (
                 <Link key={index} href={href || "#"}>
                   <ListItem>
-                    <ListItemButton onClick={() => closeSidebar()}>
+                    <ListItemButton
+                      variant={selected ? "solid" : "plain"}
+                      color="neutral"
+                      selected={selected}
+                      onClick={() => closeSidebar()}
+                    >
                       <ListItemDecorator>
                         <i data-feather={icon} />
                       </ListItemDecorator>
@@ -150,11 +169,17 @@ export default function SecondSidebar({ sideBarItems, title }) {
         >
           <div>
             <Typography fontWeight="lg" level="body2">
-              Olivia Ryhe
+              {userData?.user?.name || "Loading"}
             </Typography>
-            <Typography level="body2">olivia@email.com</Typography>
+            <Typography level="body2">
+              {userData?.user?.email || "Loading"}
+            </Typography>
           </div>
-          <IconButton variant="plain" sx={{ ml: "auto" }}>
+          <IconButton
+            onClick={() => signOut()}
+            variant="plain"
+            sx={{ ml: "auto" }}
+          >
             <i data-feather="log-out" />
           </IconButton>
         </Box>

@@ -28,6 +28,7 @@ export function ContextProvider({ children }) {
     searchSuggestions: null,
   });
   const [videosData, setVideosData] = useState([]);
+
   const value = {
     data,
     dataDispatch,

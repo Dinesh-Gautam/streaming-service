@@ -1,4 +1,4 @@
-import { Breadcrumbs, CssVarsProvider, Link } from "@mui/joy";
+import { Breadcrumbs, CssVarsProvider } from "@mui/joy";
 import { CssBaseline, Typography } from "@mui/material";
 import { GlobalStyles, StyledEngineProvider } from "@mui/styled-engine";
 import { Box } from "@mui/system";
@@ -9,6 +9,8 @@ import SecondSidebar from "./SecondSidebar";
 import customTheme from "../theme";
 import useScript from "../useScript";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const useEnhancedEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -91,19 +93,12 @@ function Layout({ children, pageTitle, sideBarItems }) {
                     .map((e, i, arr) => {
                       if (e == "admin") {
                         return (
-                          <Link
-                            key={i}
-                            underline="none"
-                            color="neutral"
-                            fontSize="inherit"
-                            href={"/" + e}
-                            aria-label="Home"
-                          >
+                          <Link key={i} href={"/" + e}>
                             <i data-feather="home" />
                           </Link>
                         );
                       }
-                      if (i == arr.length - 1) {
+                      if (i === arr.length - 1) {
                         return (
                           <Typography
                             key={i}
@@ -111,7 +106,7 @@ function Layout({ children, pageTitle, sideBarItems }) {
                             variant="soft"
                             color="primary"
                           >
-                            {e}
+                            {urlPath.pathname.split("/").at(-1)}
                           </Typography>
                         );
                       }
@@ -121,12 +116,17 @@ function Layout({ children, pageTitle, sideBarItems }) {
                           underline="hover"
                           color="neutral"
                           fontSize="inherit"
-                          href={arr.splice(0, i).join("/")}
+                          href={"/" + arr.splice(0, i + 1).join("/")}
                         >
                           {e}
                         </Link>
                       );
                     })}
+                {urlPath.pathname.split("/").filter((e) => e).length > 2 && (
+                  <Typography fontSize="inherit" variant="soft" color="primary">
+                    {urlPath.pathname.split("/").at(-1)}
+                  </Typography>
+                )}
               </Breadcrumbs>
               {/* <ColorSchemeToggle
           sx={{ ml: "auto", display: { xs: "none", md: "inline-flex" } }}
