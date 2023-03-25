@@ -162,9 +162,9 @@ function Slider({ title, data, setIsScrolling, type }) {
                     />
                     <h1
                       style={{
-                        width: "60%",
+                        width: "65%",
                         lineHeight: "100%",
-                        fontSize: 18,
+                        fontSize: 19,
                         padding: "0.5rem 1rem",
                         position: "relative",
                       }}

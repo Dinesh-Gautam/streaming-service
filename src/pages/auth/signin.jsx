@@ -20,6 +20,7 @@ const SignIn = (props) => {
       callbackUrl: router.query.callbackUrl,
     });
 
+    if (!res) return;
     if (res.ok) {
       // router.push("/home");
     } else {
