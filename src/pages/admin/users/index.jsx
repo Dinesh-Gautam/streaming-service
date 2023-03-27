@@ -1,8 +1,10 @@
 import React from "react";
+import { getAllUsersInfo } from "../../../helpers/api/data/admin";
 import Layout from "../components/Layout";
+import UsersInfo from "../components/UsersInfo";
 
-function Users() {
-  return <div>Users</div>;
+function Users({ userData }) {
+  return <UsersInfo userData={userData} />;
 }
 
 export const usersPageSideBarItems = [
@@ -25,4 +27,14 @@ Users.getLayout = function getLayout(page) {
     </Layout>
   );
 };
+
+export async function getServerSideProps() {
+  const userData = getAllUsersInfo().data;
+
+  return {
+    props: {
+      userData: userData || null,
+    },
+  };
+}
 export default Users;

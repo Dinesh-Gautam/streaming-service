@@ -1,6 +1,7 @@
 import { config } from "../config";
 import fs from "fs";
 import { saveMovieToPublishedMovie } from "../movie";
+import { readFile } from "../../user/user";
 
 export function publishMovie(id) {
   if (!id) {
@@ -55,5 +56,20 @@ export function getPendingMovies(id) {
   } catch (e) {
     console.log(config.pendingMovies, "does not exists");
     return null;
+  }
+}
+
+export function getAllUsersInfo() {
+  let data = readFile(config.dir + config.userData);
+
+  if (data && data.length) {
+    data = data.map(({ id, name, username }) => ({
+      id,
+      name,
+      email: username,
+    }));
+    return { success: true, data };
+  } else {
+    return { success: false, errMessage: "No users exists" };
   }
 }
