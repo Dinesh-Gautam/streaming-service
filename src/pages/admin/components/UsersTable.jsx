@@ -187,7 +187,7 @@ export default function UsersTable({ userData }) {
   );
   return (
     <React.Fragment>
-      <Sheet
+      {/* <Sheet
         className="SearchAndFilters-mobile"
         sx={{
           display: {
@@ -214,7 +214,7 @@ export default function UsersTable({ userData }) {
         </IconButton>
         <Modal open={open} onClose={() => setOpen(false)}>
           <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
-            <ModalClose />
+            <ModalClose />x
             <Typography id="filter-modal" level="h2">
               Filters
             </Typography>
@@ -256,7 +256,7 @@ export default function UsersTable({ userData }) {
         </FormControl>
 
         {renderFilters()}
-      </Box>
+      </Box> */}
       <Sheet
         className="OrderTableContainer"
         variant="outlined"
@@ -285,16 +285,16 @@ export default function UsersTable({ userData }) {
               <th style={{ width: 48, textAlign: "center", padding: 12 }}>
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length !== rows.length
+                    selected.length > 0 && selected.length !== userData.length
                   }
-                  checked={selected.length === rows.length}
+                  checked={selected.length === userData.length}
                   onChange={(event) => {
                     setSelected(
-                      event.target.checked ? rows.map((row) => row.id) : []
+                      event.target.checked ? userData.map((u) => u.id) : []
                     );
                   }}
                   color={
-                    selected.length > 0 || selected.length === rows.length
+                    selected.length > 0 || selected.length === userData.length
                       ? "primary"
                       : undefined
                   }
@@ -324,7 +324,7 @@ export default function UsersTable({ userData }) {
               <th style={{ width: 220, padding: 12 }}>User</th>
               {/* <th style={{ width: 120, padding: 12 }}>Status</th> */}
               <th style={{ width: 120, padding: 12 }}>Role</th>
-              <th style={{ width: 160, padding: 12 }}> </th>
+              <th style={{ width: 160, padding: 12 }}> Subscription </th>
             </tr>
           </thead>
           <tbody>
@@ -348,7 +348,9 @@ export default function UsersTable({ userData }) {
                 {/* <td>
                   <Typography fontWeight="md">{row.id}</Typography>
                 </td> */}
-                <td>{new Date(user.creationDate).toLocaleDateString()}</td>
+                <td>
+                  {new Date(user.creationDate).toLocaleDateString("en-IN")}
+                </td>
                 {/* <td>
                   <Chip
                     variant="soft"
@@ -387,7 +389,9 @@ export default function UsersTable({ userData }) {
                   </Box>
                 </td>
                 <td>{user.role}</td>
-                <td>
+
+                <td>None</td>
+                {/* <td>
                   <Link fontWeight="lg" component="button" color="neutral">
                     Archive
                   </Link>
@@ -399,7 +403,7 @@ export default function UsersTable({ userData }) {
                   >
                     Download
                   </Link>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
