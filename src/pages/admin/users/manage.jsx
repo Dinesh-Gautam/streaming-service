@@ -1,9 +1,9 @@
 import React from "react";
 import { usersPageSideBarItems } from ".";
 import Layout from "../components/Layout";
-
+import UsersTable from "../components/UsersTable";
 function manage() {
-  return <div>manage user</div>;
+  return <UsersTable />;
 }
 
 manage.getLayout = function getLayout(page) {
