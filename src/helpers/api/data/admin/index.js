@@ -73,3 +73,19 @@ export function getAllUsersInfo() {
     return { success: false, errMessage: "No users exists" };
   }
 }
+export function getDetailedUserData() {
+  let data = readFile(config.dir + config.userData);
+
+  if (data && data.length) {
+    data = data.map(({ id, name, username, role, creationDate }) => ({
+      id,
+      name,
+      email: username,
+      role,
+      creationDate: creationDate || "3-26-2023",
+    }));
+    return { success: true, data };
+  } else {
+    return { success: false, errMessage: "No users exists" };
+  }
+}

@@ -151,7 +151,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UsersTable() {
+export default function UsersTable({ userData }) {
   const [order, setOrder] = React.useState("desc");
   const [selected, setSelected] = React.useState([]);
   const [open, setOpen] = React.useState(false);
@@ -323,22 +323,22 @@ export default function UsersTable() {
               <th style={{ width: 120, padding: 12 }}>Date</th>
               <th style={{ width: 220, padding: 12 }}>User</th>
               {/* <th style={{ width: 120, padding: 12 }}>Status</th> */}
-              <th style={{ width: 120, padding: 12 }}>Subscription</th>
+              <th style={{ width: 120, padding: 12 }}>Role</th>
               <th style={{ width: 160, padding: 12 }}> </th>
             </tr>
           </thead>
           <tbody>
-            {stableSort(rows, getComparator(order, "id")).map((row) => (
-              <tr key={row.id}>
+            {stableSort(userData, getComparator(order, "name")).map((user) => (
+              <tr key={user.id}>
                 <td style={{ textAlign: "center" }}>
                   <Checkbox
-                    checked={selected.includes(row.id)}
-                    color={selected.includes(row.id) ? "primary" : undefined}
+                    checked={selected.includes(user.id)}
+                    color={selected.includes(user.id) ? "primary" : undefined}
                     onChange={(event) => {
                       setSelected((ids) =>
                         event.target.checked
-                          ? ids.concat(row.id)
-                          : ids.filter((itemId) => itemId !== row.id)
+                          ? ids.concat(user.id)
+                          : ids.filter((itemId) => itemId !== user.id)
                       );
                     }}
                     slotProps={{ checkbox: { sx: { textAlign: "left" } } }}
@@ -348,7 +348,7 @@ export default function UsersTable() {
                 {/* <td>
                   <Typography fontWeight="md">{row.id}</Typography>
                 </td> */}
-                <td>{row.date}</td>
+                <td>{new Date(user.creationDate).toLocaleDateString()}</td>
                 {/* <td>
                   <Chip
                     variant="soft"
@@ -373,22 +373,20 @@ export default function UsersTable() {
                 </td> */}
                 <td>
                   <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                    <Avatar size="sm">{row.customer.initial}</Avatar>
+                    <Avatar size="sm">{user.name[0].toUpperCase()}</Avatar>
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <Typography
                         fontWeight="lg"
                         level="body3"
                         textColor="text.primary"
                       >
-                        {row.customer.name}
+                        {user.name}
                       </Typography>
-                      <Typography level="body3">
-                        {row.customer.email}
-                      </Typography>
+                      <Typography level="body3">{user.email}</Typography>
                     </Box>
                   </Box>
                 </td>
-                <td>{row.subscription}</td>
+                <td>{user.role}</td>
                 <td>
                   <Link fontWeight="lg" component="button" color="neutral">
                     Archive
