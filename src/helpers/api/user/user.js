@@ -73,7 +73,7 @@ export function deleteUser(id) {
 
 export function changeUserRole(id, newRole) {
   if (!id) {
-    console.log("id is require when delete user data");
+    console.log("id is require when changing user role");
     return { success: false, errMessage: "User id is not provided" };
   }
   const userData = readFile(config.dir + config.userData);
@@ -92,7 +92,29 @@ export function changeUserRole(id, newRole) {
     e.id == id ? { ...e, role: newRole } : e
   );
 
-  writeToFile(config.dir, config.userData, newData);
+  writeToFile(fileName, newData);
 
   return { success: true, message: "User role changed successfully" };
+}
+export function changeUserName(id, newName) {
+  if (!id) {
+    console.log("id is require when changing user name");
+    return { success: false, errMessage: "User id is not provided" };
+  }
+  const userData = readFile(fileName);
+  const user = userData.find((e) => e.id === id);
+  if (!user) {
+    return {
+      success: false,
+      errMessage: "user does not exists",
+    };
+  }
+
+  const newData = userData.map((e) =>
+    e.id == id ? { ...e, name: newName } : e
+  );
+
+  writeToFile(fileName, newData);
+
+  return { success: true, message: "User Name changed successfully" };
 }

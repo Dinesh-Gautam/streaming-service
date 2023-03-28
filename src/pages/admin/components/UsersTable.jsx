@@ -183,7 +183,34 @@ export default function UsersTable({ userData }) {
     selected.forEach(async (id) => {
       await del(id);
     });
-    setUsers((user) => !selected.some((e) => e.id === user.id));
+    setUsers((prev) => prev.filter((user) => !selected.includes(user.id)));
+    setSelected([]);
+  }
+
+  async function editUser() {
+    const { name, role } = editValue;
+
+    if (!name && role) return;
+    let success = false;
+    selected.forEach(async (id) => {
+      const data = await fetch("/api/admin/user?id=" + id + "&o=" + "edit", {
+        method: "POST",
+        body: JSON.stringify({
+          newName: name || null,
+          newRole: role || null,
+        }),
+      }).then((e) => e.json());
+      if (!data.success) {
+        alert(data.errMessage);
+        return;
+      }
+      console.log(data.message);
+      success = true;
+      setUsers(data.data);
+    });
+
+    if (!success) return;
+    setOpen(false);
     setSelected([]);
   }
 
@@ -217,6 +244,14 @@ export default function UsersTable({ userData }) {
       </FormControl>
     </React.Fragment>
   );
+
+  const onEditValueChange = (type, value) => {
+    setEditValues((prev) => ({ ...prev, [type]: value }));
+  };
+
+  function isEditButtonsDisabled() {
+    return selected.length < 1;
+  }
   return (
     <React.Fragment>
       {/* <Sheet
@@ -279,13 +314,16 @@ export default function UsersTable({ userData }) {
             <Sheet sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <FormControl>
                 <FormLabel>Name</FormLabel>
-                <Input value={editValue.name} type="text">
-                  {" "}
-                </Input>
+                <Input
+                  onChange={(e) => onEditValueChange("name", e.target.value)}
+                  value={editValue.name}
+                  type="text"
+                ></Input>
               </FormControl>
               <FormControl>
                 <FormLabel>Role</FormLabel>
                 <Select
+                  onChange={(e, value) => onEditValueChange("role", value)}
                   value={editValue.role}
                   slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
                 >
@@ -293,13 +331,20 @@ export default function UsersTable({ userData }) {
                   <Option value="user">User</Option>
                 </Select>
               </FormControl>
-              <Button color="primary" onClick={() => setOpen(false)}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  setOpen(false);
+                  editUser();
+                }}
+              >
                 Submit
               </Button>
             </Sheet>
           </ModalDialog>
         </Modal>
         <Button
+          disabled={isEditButtonsDisabled()}
           size="sm"
           variant="outlined"
           color="neutral"
@@ -309,6 +354,7 @@ export default function UsersTable({ userData }) {
           Edit
         </Button>
         <Button
+          disabled={isEditButtonsDisabled()}
           size="sm"
           variant="outlined"
           color="danger"
