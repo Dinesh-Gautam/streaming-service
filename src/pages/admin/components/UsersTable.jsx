@@ -155,12 +155,12 @@ export default function UsersTable({ userData }) {
   const [order, setOrder] = React.useState("desc");
   const [selected, setSelected] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-
+  const [users, setUsers] = React.useState(userData || []);
   const [editValue, setEditValues] = React.useState({ name: "", role: "" });
 
   React.useEffect(() => {
     if (open && selected.length === 1) {
-      const { name, role } = userData.find((e) => e.id == selected[0]);
+      const { name, role } = users.find((e) => e.id == selected[0]);
       setEditValues((prev) => ({ ...prev, name, role }));
     } else {
       setEditValues({ name: "", role: "" });
@@ -180,9 +180,11 @@ export default function UsersTable({ userData }) {
       }
     }
 
-    selected.forEach((id) => {
-      del(id);
+    selected.forEach(async (id) => {
+      await del(id);
     });
+    setUsers((user) => !selected.some((e) => e.id === user.id));
+    setSelected([]);
   }
 
   const renderFilters = () => (
@@ -353,16 +355,16 @@ export default function UsersTable({ userData }) {
               <th style={{ width: 48, textAlign: "center", padding: 12 }}>
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length !== userData.length
+                    selected.length > 0 && selected.length !== users.length
                   }
-                  checked={selected.length === userData.length}
+                  checked={selected.length === users.length}
                   onChange={(event) => {
                     setSelected(
-                      event.target.checked ? userData.map((u) => u.id) : []
+                      event.target.checked ? users.map((u) => u.id) : []
                     );
                   }}
                   color={
-                    selected.length > 0 || selected.length === userData.length
+                    selected.length > 0 || selected.length === users.length
                       ? "primary"
                       : undefined
                   }
@@ -396,7 +398,7 @@ export default function UsersTable({ userData }) {
             </tr>
           </thead>
           <tbody>
-            {stableSort(userData, getComparator(order, "name")).map((user) => (
+            {stableSort(users, getComparator(order, "name")).map((user) => (
               <tr key={user.id}>
                 <td style={{ textAlign: "center" }}>
                   <Checkbox
