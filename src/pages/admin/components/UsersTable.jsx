@@ -286,7 +286,8 @@ export default function UsersTable({ userData }) {
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
           borderRadius: "sm",
           // py: 2,
           pb: 2,
@@ -343,26 +344,39 @@ export default function UsersTable({ userData }) {
             </Sheet>
           </ModalDialog>
         </Modal>
-        <Button
-          disabled={isEditButtonsDisabled()}
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          onClick={() => setOpen(true)}
-          startDecorator={<i data-feather="edit-2" />}
+
+        <Box sx={{ display: "flex", gap: 2, alignItems: "flex-end" }}>
+          <Typography>Total Users:</Typography>
+          <Typography sx={{ opacity: 0.5 }}>{users.length}</Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+          }}
         >
-          Edit
-        </Button>
-        <Button
-          disabled={isEditButtonsDisabled()}
-          size="sm"
-          variant="outlined"
-          color="danger"
-          startDecorator={<i data-feather="user-x" />}
-          onClick={() => deleteUser()}
-        >
-          Delete
-        </Button>
+          <Button
+            disabled={isEditButtonsDisabled()}
+            size="sm"
+            variant="outlined"
+            color="neutral"
+            onClick={() => setOpen(true)}
+            startDecorator={<i data-feather="edit-2" />}
+          >
+            Edit
+          </Button>
+          <Button
+            disabled={isEditButtonsDisabled()}
+            size="sm"
+            variant="outlined"
+            color="danger"
+            startDecorator={<i data-feather="user-x" />}
+            onClick={() => deleteUser()}
+          >
+            Delete
+          </Button>
+        </Box>
+
         {/* <FormControl sx={{ flex: 1 }} size="sm">
           <FormLabel>Search for order</FormLabel>
           <Input

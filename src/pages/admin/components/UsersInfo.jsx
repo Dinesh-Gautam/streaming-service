@@ -1,7 +1,7 @@
 import { Avatar, Box, Sheet, Typography } from "@mui/joy";
 import React from "react";
 
-const UserHeader = ({ userData }) => {
+export const UserHeader = ({ userData }) => {
   return (
     <Box sx={{ mb: 1, display: "flex", gap: 2, alignItems: "baseline" }}>
       <Typography>Total Users:</Typography>
