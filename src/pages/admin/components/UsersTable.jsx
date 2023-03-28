@@ -155,6 +155,36 @@ export default function UsersTable({ userData }) {
   const [order, setOrder] = React.useState("desc");
   const [selected, setSelected] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+
+  const [editValue, setEditValues] = React.useState({ name: "", role: "" });
+
+  React.useEffect(() => {
+    if (open && selected.length === 1) {
+      const { name, role } = userData.find((e) => e.id == selected[0]);
+      setEditValues((prev) => ({ ...prev, name, role }));
+    } else {
+      setEditValues({ name: "", role: "" });
+    }
+  }, [open]);
+
+  async function deleteUser() {
+    async function del(id) {
+      const data = await fetch(
+        "/api/admin/user?id=" + id + "&o=" + "delete"
+      ).then((e) => e.json());
+
+      if (!data.success) {
+        alert(data.errMessage || "some error occurred");
+      } else {
+        console.log(data.message);
+      }
+    }
+
+    selected.forEach((id) => {
+      del(id);
+    });
+  }
+
   const renderFilters = () => (
     <React.Fragment>
       <FormControl size="sm">
@@ -210,29 +240,19 @@ export default function UsersTable({ userData }) {
           color="neutral"
           onClick={() => setOpen(true)}
         >
+          <span>filter</span>
           <i data-feather="filter" />
         </IconButton>
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
-            <ModalClose />x
-            <Typography id="filter-modal" level="h2">
-              Filters
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Sheet sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {renderFilters()}
-              <Button color="primary" onClick={() => setOpen(false)}>
-                Submit
-              </Button>
-            </Sheet>
-          </ModalDialog>
-        </Modal>
-      </Sheet>
+      
+      </Sheet> */}
+
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
+          justifyContent: "flex-end",
           borderRadius: "sm",
-          py: 2,
+          // py: 2,
+          pb: 2,
           display: {
             xs: "none",
             sm: "flex",
@@ -247,7 +267,55 @@ export default function UsersTable({ userData }) {
           },
         }}
       >
-        <FormControl sx={{ flex: 1 }} size="sm">
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <ModalDialog aria-labelledby="edit-modal">
+            <ModalClose />
+            <Typography id="edit-modal" level="h2">
+              Edit
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Sheet sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <FormControl>
+                <FormLabel>Name</FormLabel>
+                <Input value={editValue.name} type="text">
+                  {" "}
+                </Input>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Role</FormLabel>
+                <Select
+                  value={editValue.role}
+                  slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
+                >
+                  <Option value="admin">Admin</Option>
+                  <Option value="user">User</Option>
+                </Select>
+              </FormControl>
+              <Button color="primary" onClick={() => setOpen(false)}>
+                Submit
+              </Button>
+            </Sheet>
+          </ModalDialog>
+        </Modal>
+        <Button
+          size="sm"
+          variant="outlined"
+          color="neutral"
+          onClick={() => setOpen(true)}
+          startDecorator={<i data-feather="edit-2" />}
+        >
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant="outlined"
+          color="danger"
+          startDecorator={<i data-feather="user-x" />}
+          onClick={() => deleteUser()}
+        >
+          Delete
+        </Button>
+        {/* <FormControl sx={{ flex: 1 }} size="sm">
           <FormLabel>Search for order</FormLabel>
           <Input
             placeholder="Search"
@@ -255,8 +323,8 @@ export default function UsersTable({ userData }) {
           />
         </FormControl>
 
-        {renderFilters()}
-      </Box> */}
+        {renderFilters()} */}
+      </Box>
       <Sheet
         className="OrderTableContainer"
         variant="outlined"

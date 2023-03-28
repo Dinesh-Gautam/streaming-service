@@ -51,8 +51,13 @@ export function deleteUser(id) {
     console.log("id is require when delete user data");
     return { success: false, errMessage: "User id is not provided" };
   }
-  const userData = readFile(config.dir + config.userData);
+  const userData = readFile(fileName);
+  if (!id) {
+    console.log("Only one user left, can't be deleted");
+    return { success: false, errMessage: "Only one user left" };
+  }
   const user = userData.find((e) => e.id === id);
+  console.log(user);
   if (!user) {
     return {
       success: false,
@@ -61,7 +66,7 @@ export function deleteUser(id) {
   }
   const newData = userData.filter((e) => e.id !== id);
 
-  writeToFile(config.dir, config.userData, newData);
+  writeToFile(fileName, newData);
 
   return { success: true, message: "User deleted successfully" };
 }
