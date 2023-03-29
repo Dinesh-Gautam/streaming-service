@@ -273,6 +273,13 @@ function UploadPage({ pending }) {
       Object.keys(inputValue).some((e) => !inputValue[e])
     );
   }
+  function disableUploadButton() {
+    return !(
+      videoFileInfo.video &&
+      videoFileInfo.poster &&
+      videoFileInfo.backdrop
+    );
+  }
 
   async function deletePendingVideo() {
     const id = pending.uid;
@@ -286,206 +293,99 @@ function UploadPage({ pending }) {
   }
 
   return (
-    <Box p={2} sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
-      <Card sx={{ flex: 1, gap: 2 }}>
-        <FormControl>
-          <FormLabel>Title</FormLabel>
-          <Input
-            size="md"
-            type="text"
-            name="title"
-            value={inputValue.title}
-            onChange={(event) => updateInputValue(event)}
-            placeholder="Title of the video"
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            type="text"
-            value={inputValue.description}
-            name="description"
-            onChange={(event) => updateInputValue(event)}
-            minRows="4"
-            placeholder="Description of the video"
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Genres</FormLabel>
-          <Input
-            type="text"
-            value={inputValue.genres}
-            name="genres"
-            onChange={(event) => updateInputValue(event)}
-            placeholder="Drama, Thriller, Mystery"
-          />
-        </FormControl>
-      </Card>
-      {
-        // progressData > 99 &&
-        <>
-          <Card
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              p: 4,
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-              borderTop: "1px solid",
-              borderColor: "neutral.800",
-            }}
-          >
-            {" "}
-            {uploadingState && (
-              <Typography
-                // endDecorator={<Check color="success" />}
-                level="h5"
-                endDecorator={<CircularProgress />}
-              >
-                uploading
-              </Typography>
-            )}
-            {pending && (
-              <Box>
-                {progressData && progressData === 100 ? (
-                  <Typography
-                    endDecorator={<Check color="success" />}
-                    level="h5"
+    <>
+      <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row", gap: 2 }}>
+        <Card sx={{ flex: 1, gap: 2 }}>
+          <FormControl>
+            <FormLabel>Title</FormLabel>
+            <Input
+              size="md"
+              type="text"
+              name="title"
+              value={inputValue.title}
+              onChange={(event) => updateInputValue(event)}
+              placeholder="Title of the video"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              type="text"
+              value={inputValue.description}
+              name="description"
+              onChange={(event) => updateInputValue(event)}
+              minRows="4"
+              placeholder="Description of the video"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Genres</FormLabel>
+            <Input
+              type="text"
+              value={inputValue.genres}
+              name="genres"
+              onChange={(event) => updateInputValue(event)}
+              placeholder="Drama, Thriller, Mystery"
+            />
+          </FormControl>
+        </Card>
+
+        <Card
+          sx={{
+            width: "30vw",
+            display: "flex",
+            flexDirection: "column",
+            p: 2,
+            minHeight: 0,
+            overflowY: "auto",
+          }}
+        >
+          {["video", "poster", "backdrop"].map((item) => {
+            return (
+              <Box key={item}>
+                <Typography>{`${item} file`.toUpperCase()}</Typography>
+                {videoFileInfo[item] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <Card
+                    size="sm"
+                    orientation="horizontal"
+                    variant="outlined"
+                    sx={{
+                      minHeight: 0,
+                      my: 2,
+                      bgcolor: "background.body",
+                    }}
                   >
-                    Conversion done
-                  </Typography>
-                ) : progressData && progressData.error ? (
-                  <>
-                    <Typography
-                      endDecorator={<Check color="danger" />}
-                      level="h5"
-                    >
-                      Conversion failed
-                    </Typography>
-                  </>
-                ) : (
-                  <>
-                    <Typography level="h5">
-                      Converting video: {progressData + "%"}
-                    </Typography>
-                    <Box
-                      sx={{
-                        height: 3,
-                        bgcolor: "primary.600",
-                        transition: "width 1s ease-in-out",
-                        width: (progressData ? progressData : 0) + "%",
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    ></Box>
-                  </>
-                )}
-              </Box>
-            )}
-            <Box
-              sx={{
-                alignSelf: "flex-start",
-                ml: "auto",
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
-              {!pending || isNaN(progressData) ? (
-                <Button
-                  disabled={uploadingState}
-                  onClick={() => uploadDataAndFiles()}
-                  size="lg"
-                  startDecorator={<Upload />}
-                >
-                  Upload
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => editMovieData()}
-                  size="lg"
-                  startDecorator={<Upload />}
-                >
-                  Save
-                </Button>
-              )}
-              {pending && (
-                <Button
-                  color="danger"
-                  variant="outlined"
-                  onClick={() => deletePendingVideo()}
-                  size="lg"
-                  startDecorator={<Delete />}
-                >
-                  Delete
-                </Button>
-              )}
-              <Button
-                disabled={disablePublishButton()}
-                variant={disablePublishButton() ? "outlined" : "solid"}
-                color={disablePublishButton() ? "neutral" : "primary"}
-                onClick={publishVideo}
-                size="lg"
-                startDecorator={publishedStatus.published ? <Check /> : <Add />}
-              >
-                {publishedStatus.published ? "published" : "publish"}
-              </Button>
-            </Box>
-          </Card>
+                    {videoFileInfo[item].thumbnailUrl && (
+                      <CardOverflow sx={{ minHeight: 0 }}>
+                        <AspectRatio ratio="1" sx={{ width: 130 }}>
+                          {
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={videoFileInfo[item].thumbnailUrl}
+                              alt="img"
+                            />
+                          }
+                        </AspectRatio>
+                      </CardOverflow>
+                    )}
 
-          <Card
-            sx={{
-              width: "30vw",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {["video", "poster", "backdrop"].map((item) => {
-              return (
-                <Box key={item}>
-                  <Typography>{`${item} file`.toUpperCase()}</Typography>
-                  {videoFileInfo[item] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <Card
-                      orientation="horizontal"
-                      variant="outlined"
-                      sx={{ m: 2, bgcolor: "background.body" }}
-                    >
-                      {videoFileInfo[item].thumbnailUrl && (
-                        <CardOverflow>
-                          <AspectRatio ratio="1" sx={{ width: 150 }}>
-                            {
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={videoFileInfo[item].thumbnailUrl}
-                                alt="img"
-                              />
-                            }
-                          </AspectRatio>
-                        </CardOverflow>
-                      )}
-
-                      <CardContent sx={{ px: 2 }}>
-                        <Typography fontWeight="md" mb={0.5}>
-                          {[videoFileInfo[item].name]}
-                        </Typography>
-                        <Typography level="body2">
-                          {videoFileInfo[item].duration
-                            ? videoFileInfo[item].duration + ", "
-                            : ""}
-                          {videoFileInfo[item].size}
-                        </Typography>
-                        <Typography level="body2">
-                          Type: {videoFileInfo[item].type}
-                        </Typography>
-                      </CardContent>
-                      {/* <Divider /> */}
-                      {/* <CardOverflow
+                    <CardContent sx={{ px: 2 }}>
+                      <Typography fontWeight="md" mb={0.5}>
+                        {[videoFileInfo[item].name]}
+                      </Typography>
+                      <Typography level="body2">
+                        {videoFileInfo[item].duration
+                          ? videoFileInfo[item].duration + ", "
+                          : ""}
+                        {videoFileInfo[item].size}
+                      </Typography>
+                      <Typography level="body2">
+                        Type: {videoFileInfo[item].type}
+                      </Typography>
+                    </CardContent>
+                    {/* <Divider /> */}
+                    {/* <CardOverflow
         variant="soft"
         color="primary"
         sx={{
@@ -500,48 +400,155 @@ function UploadPage({ pending }) {
       >
         Ticket
       </CardOverflow> */}
-                    </Card>
-                  ) : (
-                    // <Card key={item}>
-                    //   <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
-                    // </Card>
-                    <FormControl key={item}>
-                      <FormLabel
-                        sx={{
-                          p: 4,
-                          borderRadius: "md",
-                          border: "1px solid",
-                          borderColor: "neutral.800",
-                          backgroundColor: "neutral.900",
-                          cursor: "pointer",
-                          m: 2,
-                          justifyContent: "center",
+                  </Card>
+                ) : (
+                  // <Card key={item}>
+                  //   <img src={videoFileInfo[item].thumbnailUrl} alt="img" />
+                  // </Card>
+                  <FormControl sx={{ minHeight: 0 }} key={item}>
+                    <FormLabel
+                      sx={{
+                        p: 2,
+                        px: 4,
+                        minHeight: 0,
+                        borderRadius: "md",
+                        border: "1px solid",
+                        borderColor: "neutral.800",
+                        backgroundColor: "neutral.900",
+                        cursor: "pointer",
+                        my: 2,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <h2
+                        style={{
+                          opacity: 0.2,
                         }}
                       >
-                        <h2
-                          style={{
-                            opacity: 0.2,
-                          }}
-                        >
-                          Select {item} file
-                        </h2>
-                      </FormLabel>
-                      <Input
-                        ref={(e) => (inputFileRef.current[item] = e)}
-                        sx={{ display: "none" }}
-                        name={item}
-                        type="file"
-                        onChange={(event) => inputFileHandler(event)}
-                      />
-                    </FormControl>
-                  )}
-                </Box>
-              );
-            })}
-          </Card>
-        </>
-      }
-    </Box>
+                        Select {item} file
+                      </h2>
+                    </FormLabel>
+                    <Input
+                      ref={(e) => (inputFileRef.current[item] = e)}
+                      sx={{ display: "none" }}
+                      name={item}
+                      type="file"
+                      onChange={(event) => inputFileHandler(event)}
+                    />
+                  </FormControl>
+                )}
+              </Box>
+            );
+          })}
+        </Card>
+      </Box>
+      <Card
+        sx={{
+          // position: "absolute",
+          mt: "auto",
+          p: 2,
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+          borderTop: "1px solid",
+          borderColor: "neutral.800",
+        }}
+      >
+        {" "}
+        {uploadingState && (
+          <Typography
+            // endDecorator={<Check color="success" />}
+            level="h5"
+            endDecorator={<CircularProgress />}
+          >
+            uploading
+          </Typography>
+        )}
+        {pending && (
+          <Box>
+            {progressData && progressData === 100 ? (
+              <Typography endDecorator={<Check color="success" />} level="h5">
+                Conversion done
+              </Typography>
+            ) : progressData && progressData.error ? (
+              <>
+                <Typography endDecorator={<Check color="danger" />} level="h5">
+                  Conversion failed
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography level="h5">
+                  Converting video: {progressData + "%"}
+                </Typography>
+                <Box
+                  sx={{
+                    height: 3,
+                    bgcolor: "primary.600",
+                    transition: "width 1s ease-in-out",
+                    width: (progressData ? progressData : 0) + "%",
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                  }}
+                ></Box>
+              </>
+            )}
+          </Box>
+        )}
+        <Box
+          sx={{
+            alignSelf: "flex-start",
+            ml: "auto",
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {!pending || isNaN(progressData) ? (
+            <Button
+              disabled={uploadingState || disableUploadButton()}
+              onClick={() => uploadDataAndFiles()}
+              size="lg"
+              startDecorator={<Upload />}
+            >
+              Upload
+            </Button>
+          ) : (
+            <Button
+              onClick={() => editMovieData()}
+              size="lg"
+              startDecorator={<Upload />}
+            >
+              Save
+            </Button>
+          )}
+          {pending && (
+            <Button
+              color="danger"
+              variant="outlined"
+              onClick={() => deletePendingVideo()}
+              size="lg"
+              startDecorator={<Delete />}
+            >
+              Delete
+            </Button>
+          )}
+          <Button
+            disabled={disablePublishButton()}
+            variant={disablePublishButton() ? "outlined" : "solid"}
+            color={disablePublishButton() ? "neutral" : "primary"}
+            onClick={publishVideo}
+            size="lg"
+            startDecorator={publishedStatus.published ? <Check /> : <Add />}
+          >
+            {publishedStatus.published ? "published" : "publish"}
+          </Button>
+        </Box>
+      </Card>
+    </>
   );
 }
 
