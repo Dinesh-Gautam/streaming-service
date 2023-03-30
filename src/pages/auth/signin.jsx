@@ -16,13 +16,13 @@ const SignIn = (props) => {
     const res = await signIn("credentials", {
       email: userInfo.email,
       password: userInfo.password,
-      redirect: true,
-      callbackUrl: router.query.callbackUrl,
+      redirect: false,
     });
 
     if (!res) return;
     if (res.ok) {
       // router.push("/home");
+      location.href = router.query.callbackUrl;
     } else {
       setError(res.error || "some error occurred");
     }
@@ -40,7 +40,7 @@ const SignIn = (props) => {
               gap: 4,
             }}
           >
-            <Info color="danger" />
+            <Info color="error" />
             <span>{error}</span>
           </div>
         )}

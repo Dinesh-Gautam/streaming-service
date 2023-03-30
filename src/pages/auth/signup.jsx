@@ -58,7 +58,7 @@ const SignupPage = () => {
               gap: 4,
             }}
           >
-            <Info color="danger" />
+            <Info color="error" />
             <span>{error}</span>
           </div>
         )}
