@@ -2,13 +2,14 @@ import { formatParagraph } from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
-import { LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getDetails, getImageUrl } from "@/tmdbapi/tmdbApi";
 import {
   ArrowLeft,
   ArrowRight,
+  Close,
   PlayArrowRounded,
   Star,
 } from "@mui/icons-material";
@@ -16,6 +17,7 @@ import Link from "next/link";
 import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
 import Select from "./elements/customSelect/CustomSelect";
+import { ArrowDown } from "react-feather";
 
 const otherElementsAnimation = {
   initial: {
@@ -46,6 +48,7 @@ function TitleView({ result, layout_type, original, signedIn }) {
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });
   const [id, setId] = useState(result.id);
+  const [moreInfoOpen, setMoreInfoOpen] = useState(false);
   const { ButtonsComponent, videosData } = useYoutubePlayer({
     playerRef,
     playerState,
@@ -256,35 +259,48 @@ function TitleView({ result, layout_type, original, signedIn }) {
                 : new Date(result?.first_air_date).getFullYear(),
             ]}
           />
-          {!original && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                marginTop: "1rem",
-              }}
-            >
-              <Star color="warning" />
-              <Separator
-                values={[
-                  `${result?.vote_average.toFixed(1) || null} (${
-                    result?.vote_count?.toLocaleString() || null
-                  })`,
-                  (result.number_of_episodes &&
-                    result.number_of_episodes + "eps") ||
-                    null,
-                  result.episode_run_time &&
-                    result.episode_run_time.join(" - ") + "min",
-                  result.languages && result.languages.join(", "),
-                  result.runtime && result.runtime + " mins",
-                ]}
-              />
+
+          <motion.div
+            layout="position"
+            layoutId="moreInfoLayout"
+            onClick={() => setMoreInfoOpen(true)}
+            className={styles.moreInfoContainer}
+          >
+            <div>
+              {!original && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    // marginTop: "1rem",
+                  }}
+                >
+                  <Star color="warning" />
+                  <Separator
+                    gap={8}
+                    values={[
+                      `${result?.vote_average.toFixed(1) || null} (${
+                        result?.vote_count?.toLocaleString() || null
+                      })`,
+                      (result.number_of_episodes &&
+                        result.number_of_episodes + "eps") ||
+                        null,
+                      result.episode_run_time &&
+                        result.episode_run_time.join(" - ") + "min",
+                      result.languages && result.languages.join(", "),
+                      result.runtime && result.runtime + " mins",
+                    ]}
+                  />
+                </div>
+              )}
+              <button>
+                More info <ArrowDown />
+              </button>
             </div>
-          )}
-          <div>
+
             <p>{formatParagraph(result.overview || result.description)}</p>
-          </div>
+          </motion.div>
         </motion.div>
         <motion.div>
           {original && (
@@ -452,6 +468,67 @@ function TitleView({ result, layout_type, original, signedIn }) {
           </motion.div>
         </motion.div>
       </motion.div>
+
+      <AnimatePresence>
+        {moreInfoOpen && (
+          <motion.div
+            initial={{
+              background: "rgba(0,0,0,0.0)",
+              backdropFilter: "blur(0px)",
+            }}
+            animate={{
+              background: "rgba(0, 0, 0, 0.5)",
+              backdropFilter: "blur(64px)",
+            }}
+            exit={{
+              background: "rgba(0,0,0,0.0)",
+              backdropFilter: "blur(0px)",
+            }}
+            className={moreInfoOpen ? styles.moreInfoOverlay : ""}
+          >
+            <motion.div
+              layout="position"
+              layoutId="moreInfoLayout"
+              className={styles.moreInfoContainer}
+            >
+              <div>
+                {!original && (
+                  <motion.div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      // marginTop: "1rem",
+                    }}
+                  >
+                    <Star color="warning" />
+                    <Separator
+                      gap={8}
+                      values={[
+                        `${result?.vote_average.toFixed(1) || null} (${
+                          result?.vote_count?.toLocaleString() || null
+                        })`,
+                        (result.number_of_episodes &&
+                          result.number_of_episodes + "eps") ||
+                          null,
+                        result.episode_run_time &&
+                          result.episode_run_time.join(" - ") + "min",
+                        result.languages && result.languages.join(", "),
+                        result.runtime && result.runtime + " mins",
+                      ]}
+                    />
+                  </motion.div>
+                )}
+                <button onClick={() => setMoreInfoOpen(false)}>
+                  close <Close />
+                </button>
+              </div>
+
+              <p>{formatParagraph(result.overview || result.description)}</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {!animating && (
         <motion.div
           style={{

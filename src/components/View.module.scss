@@ -173,7 +173,6 @@ $breakpoints: (
     font-size: clamp(14px, 2vmin, 18px);
   }
   p {
-    margin-top: clamp(1rem, 4vh, 4rem);
     opacity: 0.9;
     max-width: 100%;
     letter-spacing: 2px;
@@ -217,6 +216,44 @@ $breakpoints: (
     svg {
       font-size: 34px;
     }
+  }
+}
+
+.moreInfoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(64px);
+  height: 100vh;
+  width: 100vw;
+  z-index: 1000000;
+  padding: 4rem;
+}
+
+.moreInfoContainer {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+
+  margin-block: 1rem;
+  // margin-top: clamp(1rem, 4vh, 4rem);
+  > div {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding-block: 0.5rem;
+  }
+  button {
+    // padding-top: 1rem;
+    background-color: transparent;
+    border-radius: 0;
+    color: inherit;
+    opacity: 0.5;
+    margin-left: auto;
   }
 }
 

@@ -66,6 +66,7 @@ function Slider({ title, data, setIsScrolling, type }) {
 
   function updateDataArr(type) {
     let slicedArr0, slicedArr1, slicedArr3;
+
     if (type === "next") {
       (slicedArr0 = dataArr.slice(0, 5)),
         (slicedArr1 = dataArr.slice(5, data.length - 7)),
