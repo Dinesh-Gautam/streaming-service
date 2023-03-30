@@ -1,3 +1,58 @@
+$breakpoints: (
+  sm: (
+    min: 576px,
+    max: 575.98px,
+  ),
+  md: (
+    min: 768px,
+    max: 767.98px,
+  ),
+  lg: (
+    min: 992px,
+    max: 991.98px,
+  ),
+  xl: (
+    min: 1200px,
+    max: 1199.98px,
+  ),
+  xxl: (
+    min: 1400px,
+    max: 1399.98px,
+  ),
+);
+
+@mixin breakpoint($breakpoint, $direction: min) {
+  //check if the supplied breakpoint exists in our breakpoints map
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-values: map-get($breakpoints, $breakpoint);
+    $breakpoint-min: map-get($breakpoint-values, min);
+    $breakpoint-max: map-get($breakpoint-values, max);
+
+    //check if we are writing styles for larger or smaller screens
+    @if $direction == min {
+      @media (min-width: $breakpoint-min) {
+        @content;
+      }
+    } @else {
+      @media (max-width: $breakpoint-max) {
+        @content;
+      }
+    }
+
+    // use the custom value if the breakpoint is not part of the pre-defined list
+  } @else {
+    @if $direction == min {
+      @media (min-width: $breakpoint) {
+        @content;
+      }
+    } @else {
+      @media (max-width: $breakpoint) {
+        @content;
+      }
+    }
+  }
+}
+
 .backdropImage {
   position: absolute;
   right: 0;
@@ -56,13 +111,14 @@
     rgba(16, 16, 16, 0.5) 100%
   );
   height: 100vh;
-  padding: 4rem;
+  padding: clamp(1rem, 4vmax, 4rem);
   padding-right: 25%;
   display: flex;
   flex-direction: column;
   color: white;
   gap: 1rem;
-  max-width: 60%;
+  max-width: 65%;
+
   animation: opacityAnimate forwards;
   animation-duration: 1s;
   animation-delay: 1s;
@@ -75,21 +131,54 @@
     //  transparent 100%
   );
   // backdrop-filter: blur(124px);
+  @include breakpoint(xxl, max) {
+    max-width: 70%;
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 1) 20%,
+      rgba(0, 0, 0, 1) 100%,
+      //  transparent 100%
+    );
+  }
+
+  @include breakpoint(xl, max) {
+    max-width: 80%;
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 1) 10%,
+      rgba(0, 0, 0, 1) 100%,
+      //  transparent 100%
+    );
+  }
+  @include breakpoint(lg, max) {
+    max-width: 100%;
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 100%,
+      //  transparent 100%
+    );
+  }
   h1 {
     font-weight: bold;
-    font-size: 84px;
+    font-size: clamp(32px, 8vmin, 84px);
     margin: 0;
     line-height: 100%;
   }
   span {
     opacity: 0.9;
-    font-size: 18px;
+    font-size: clamp(14px, 2vmin, 18px);
   }
   p {
-    margin-top: 4rem;
+    margin-top: clamp(1rem, 4vh, 4rem);
     opacity: 0.9;
     max-width: 100%;
     letter-spacing: 2px;
+    font-size: clamp(14px, 2vmin, 18px);
+
     // opacity: 0.8;
   }
   button {
@@ -97,7 +186,6 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    // margin-top: 4rem;
     border-radius: 100vh;
     overflow: hidden;
     // background: rgba(255, 255, 255, 0.1);
@@ -151,7 +239,7 @@
   position: relative;
   bottom: 0;
   left: 0;
-  margin-top: 2rem;
+  // margin-top: 2rem;
   left: -4rem;
   width: 100%;
   display: flex;
