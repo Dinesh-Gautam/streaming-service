@@ -100,3 +100,14 @@ export async function getVideosOfMovie(id, media_type) {
     });
   return data.results;
 }
+
+export async function getReviews(id, media_type) {
+  if (!id || !media_type) return;
+  const url = `https://api.themoviedb.org/3/${media_type}/${id}/reviews?api_key=${tmdbApiKey}&language=en-US&page=1`;
+  const data = await fetch(url)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err);
+    });
+  return data;
+}

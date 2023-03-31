@@ -1,4 +1,4 @@
-import { formatParagraph } from "@/utils";
+import { FormatParagraph } from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
@@ -6,18 +6,25 @@ import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getDetails, getImageUrl } from "@/tmdbapi/tmdbApi";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Close,
-  PlayArrowRounded,
-  Star,
-} from "@mui/icons-material";
+// import {
+//   ArrowLeft,
+//   ArrowRight,
+//   Close,
+//   PlayArrowRounded,
+//   Star,
+// } from "@mui/icons-material";
+import ArrowLeft from "@mui/icons-material/ArrowLeft";
+import ArrowRight from "@mui/icons-material/ArrowRight";
+import Close from "@mui/icons-material/Close";
+import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+import ArrowDownward from "@mui/icons-material/ArrowDownward";
+import Star from "@mui/icons-material/Star";
 import Link from "next/link";
 import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
 import Select from "./elements/customSelect/CustomSelect";
-import { ArrowDown } from "react-feather";
+import { useData } from "../context/stateContext";
+import { checkIfStringIsValidUrl } from "../utils";
 
 const otherElementsAnimation = {
   initial: {
@@ -41,6 +48,127 @@ const HeadingAnimation = {
     top: 0,
     left: 0,
   },
+};
+
+const MoreInfo = ({ result, id, media_type }) => {
+  const filteredResults = Object.entries(result).filter(
+    ([key, value]) =>
+      (value || value?.length) &&
+      (key === "first_air_date" ||
+        key === "release_date" ||
+        key === "original_name" ||
+        key === "languages" ||
+        key === "original_title" ||
+        key === "original_language" ||
+        key === "production_countries" ||
+        key === "spoken_languages" ||
+        key === "status" ||
+        key === "tagline" ||
+        key === "seasons" ||
+        key === "homepage" ||
+        key === "revenue")
+  );
+  console.log(Object.entries(result));
+  console.log(filteredResults);
+  const { moreInfoData, setMoreInfoData } = useData();
+  const [moreInfo, setMoreInfo] = useState(null);
+  useEffect(() => {
+    const alreadyExists = moreInfoData.find(
+      (e) => e.id === id && e.media_type === media_type
+    );
+
+    if (alreadyExists) {
+      setMoreInfo(alreadyExists.data);
+
+      return;
+    }
+
+    async function fetchMoreInfo() {
+      console.log("fetching more Info");
+      const data = await fetch(
+        "/api/tmdb/more?id=" +
+          id +
+          "&media_type=" +
+          media_type +
+          "&r=" +
+          "reviews,"
+      ).then((e) => e.json());
+      if (data.success) {
+        setMoreInfo(data.data);
+        console.log(data);
+        setMoreInfoData((prev) => [
+          ...prev,
+          { id, media_type, data: data.data },
+        ]);
+      } else {
+        alert("some error occured");
+      }
+    }
+
+    fetchMoreInfo();
+  }, []);
+
+  useEffect(() => {
+    console.log(moreInfo);
+  }, [moreInfo]);
+
+  const topReview = moreInfo?.reviews?.results[0];
+  return (
+    <div className={styles.moreInfoWrapper}>
+      <div className={!moreInfo ? styles.moreInfoLoading : ""}>
+        <h2>User Reviews:</h2>
+        <div className={styles.reviewContainer}>
+          <div className={styles.reviewHeader}>
+            <div className={styles.avatar}>
+              {topReview && topReview.author_details.avatar_path && (
+                <Image
+                  src={
+                    topReview.author_details.avatar_path.startsWith("https")
+                      ? topReview.author_details.avatar_path.replace("/", "")
+                      : getImageUrl(topReview.author_details.avatar_path)
+                  }
+                  alt="user_pic"
+                  width={40}
+                  height={40}
+                />
+              )}
+            </div>
+            <div className={styles.authorInfo}>
+              <h4>{topReview && topReview.author}</h4>
+              <span>{topReview && topReview.author_details.username}</span>
+            </div>
+          </div>
+          <div className={styles.reviewContent}>
+            {topReview && <FormatParagraph para={topReview.content} />}
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>Details</h2>
+        <div className={styles.detailsContainer}>
+          {filteredResults.map(([key, value], index) => {
+            return (
+              <div className={styles.item} key={index}>
+                <span className={styles.key}>{key.replaceAll("_", " ")}: </span>
+                <span className={styles.value}>
+                  {typeof value === "object" ? (
+                    <>
+                      {value
+                        ?.map((e) => e.english_name || e.name || e)
+                        .join(", ")}
+                      <span style={{ opacity: 0.5 }}> ({value.length}) </span>
+                    </>
+                  ) : (
+                    checkIfStringIsValidUrl(value)
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 function TitleView({ result, layout_type, original, signedIn }) {
@@ -259,48 +387,52 @@ function TitleView({ result, layout_type, original, signedIn }) {
                 : new Date(result?.first_air_date).getFullYear(),
             ]}
           />
+          {!moreInfoOpen && (
+            <motion.div
+              layout
+              layoutId="moreInfoLayout"
+              onClick={() => setMoreInfoOpen(true)}
+              className={styles.moreInfoContainer}
+            >
+              <div>
+                {!original && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      // marginTop: "1rem",
+                    }}
+                  >
+                    <Star color="warning" />
+                    <Separator
+                      gap={8}
+                      values={[
+                        `${result?.vote_average.toFixed(1) || null} (${
+                          result?.vote_count?.toLocaleString() || null
+                        })`,
+                        (result.number_of_episodes &&
+                          result.number_of_episodes + "eps") ||
+                          null,
+                        result.episode_run_time &&
+                          result.episode_run_time.join(" - ") + "min",
+                        result.languages && result.languages.join(", "),
+                        result.runtime && result.runtime + " mins",
+                      ]}
+                    />
+                  </div>
+                )}
+                <button>
+                  More info <ArrowDownward />
+                </button>
+              </div>
 
-          <motion.div
-            layout="position"
-            layoutId="moreInfoLayout"
-            onClick={() => setMoreInfoOpen(true)}
-            className={styles.moreInfoContainer}
-          >
-            <div>
-              {!original && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 2,
-                    // marginTop: "1rem",
-                  }}
-                >
-                  <Star color="warning" />
-                  <Separator
-                    gap={8}
-                    values={[
-                      `${result?.vote_average.toFixed(1) || null} (${
-                        result?.vote_count?.toLocaleString() || null
-                      })`,
-                      (result.number_of_episodes &&
-                        result.number_of_episodes + "eps") ||
-                        null,
-                      result.episode_run_time &&
-                        result.episode_run_time.join(" - ") + "min",
-                      result.languages && result.languages.join(", "),
-                      result.runtime && result.runtime + " mins",
-                    ]}
-                  />
-                </div>
-              )}
-              <button>
-                More info <ArrowDown />
-              </button>
-            </div>
-
-            <p>{formatParagraph(result.overview || result.description)}</p>
-          </motion.div>
+              <FormatParagraph
+                hideShowClickHere
+                para={result.overview || result.description}
+              />
+            </motion.div>
+          )}
         </motion.div>
         <motion.div>
           {original && (
@@ -487,7 +619,7 @@ function TitleView({ result, layout_type, original, signedIn }) {
             className={moreInfoOpen ? styles.moreInfoOverlay : ""}
           >
             <motion.div
-              layout="position"
+              layout
               layoutId="moreInfoLayout"
               className={styles.moreInfoContainer}
             >
@@ -520,11 +652,16 @@ function TitleView({ result, layout_type, original, signedIn }) {
                   </motion.div>
                 )}
                 <button onClick={() => setMoreInfoOpen(false)}>
-                  close <Close />
+                  <Close />
                 </button>
               </div>
 
-              <p>{formatParagraph(result.overview || result.description)}</p>
+              <FormatParagraph para={result.overview || result.description} />
+              <MoreInfo
+                result={result}
+                id={result.id}
+                media_type={result.media_type}
+              />
             </motion.div>
           </motion.div>
         )}

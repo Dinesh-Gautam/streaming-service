@@ -62,6 +62,13 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       vote_count = null,
       languages = null,
       runtime = null,
+      homepage = null,
+      original_language = null,
+      production_countries = null,
+      spoken_languages = null,
+      revenue = null,
+      status = null,
+      tagline = null,
     } = results;
     switch (options.type) {
       case "tv":
@@ -86,6 +93,13 @@ export async function getDetails(mediaId, mediaType, options = {}) {
           vote_count,
           languages,
           runtime,
+          homepage,
+          original_language,
+          production_countries,
+          spoken_languages,
+          revenue,
+          status,
+          tagline,
         };
       case "season":
         return {
@@ -132,6 +146,13 @@ export async function getDetails(mediaId, mediaType, options = {}) {
           vote_count,
           languages,
           runtime,
+          homepage,
+          original_language,
+          production_countries,
+          spoken_languages,
+          revenue,
+          status,
+          tagline,
         };
     }
   } catch (e) {

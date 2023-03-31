@@ -28,12 +28,14 @@ export function ContextProvider({ children }) {
     searchSuggestions: null,
   });
   const [videosData, setVideosData] = useState([]);
-
+  const [moreInfoData, setMoreInfoData] = useState([]);
   const value = {
     data,
     dataDispatch,
     videosData,
     setVideosData,
+    moreInfoData,
+    setMoreInfoData,
   };
 
   return <dataContext.Provider value={value}>{children}</dataContext.Provider>;
