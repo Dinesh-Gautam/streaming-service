@@ -2,7 +2,7 @@ import { FormatParagraph } from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getDetails, getImageUrl } from "@/tmdbapi/tmdbApi";
@@ -13,18 +13,37 @@ import { getDetails, getImageUrl } from "@/tmdbapi/tmdbApi";
 //   PlayArrowRounded,
 //   Star,
 // } from "@mui/icons-material";
-import ArrowLeft from "@mui/icons-material/ArrowLeft";
-import ArrowRight from "@mui/icons-material/ArrowRight";
-import Close from "@mui/icons-material/Close";
-import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
-import ArrowDownward from "@mui/icons-material/ArrowDownward";
-import Star from "@mui/icons-material/Star";
-import Link from "next/link";
-import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
+// import ArrowLeft from "@mui/icons-material/ArrowLeft";
+// import ArrowRight from "@mui/icons-material/ArrowRight";
+// import Close from "@mui/icons-material/Close";
+// import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+// import ArrowDownward from "@mui/icons-material/ArrowDownward";
+// import Link from "next/link";
+// import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
 import Select from "./elements/customSelect/CustomSelect";
-import { useData } from "../context/stateContext";
-import { checkIfStringIsValidUrl } from "../utils";
+// import { useData } from "../context/stateContext";
+// import { checkIfStringIsValidUrl } from "../utils";
+import dynamic from "next/dynamic";
+import MoreInfo from "./title/MoreInfo";
+
+// import Star from "@mui/icons-material/Star";
+const Star = dynamic(import("@mui/icons-material/Star"));
+const Close = dynamic(import("@mui/icons-material/Close"));
+const ArrowLeft = dynamic(import("@mui/icons-material/ArrowLeft"));
+const ArrowRight = dynamic(import("@mui/icons-material/ArrowRight"));
+const PlayArrowRounded = dynamic(
+  import("@mui/icons-material/PlayArrowRounded")
+);
+const ArrowDownward = dynamic(import("@mui/icons-material/ArrowDownward"));
+const YoutubeVideoPlayer = dynamic(
+  import("./videoPlayer/youtube/youtubeVideoPlayer")
+);
+const Link = dynamic(import("next/link"));
+
+// const useYoutubePlayer = dynamic(
+//   import("./videoPlayer/youtube/hook/useYoutubePlayer")
+// );
 
 const otherElementsAnimation = {
   initial: {
@@ -48,161 +67,6 @@ const HeadingAnimation = {
     top: 0,
     left: 0,
   },
-};
-
-const MoreInfo = ({ result, id, media_type }) => {
-  const filteredResults = Object.entries(result).filter(
-    ([key, value]) =>
-      (value || value?.length) &&
-      (key === "first_air_date" ||
-        key === "release_date" ||
-        key === "original_name" ||
-        key === "languages" ||
-        key === "original_title" ||
-        key === "original_language" ||
-        key === "production_countries" ||
-        key === "spoken_languages" ||
-        key === "status" ||
-        key === "tagline" ||
-        key === "seasons" ||
-        key === "homepage" ||
-        key === "revenue")
-  );
-  console.log(Object.entries(result));
-  console.log(filteredResults);
-  const { moreInfoData, setMoreInfoData } = useData();
-  const [moreInfo, setMoreInfo] = useState(null);
-  useEffect(() => {
-    const alreadyExists = moreInfoData.find(
-      (e) => e.id === id && e.media_type === media_type
-    );
-
-    if (alreadyExists) {
-      setMoreInfo(alreadyExists.data);
-
-      return;
-    }
-
-    async function fetchMoreInfo() {
-      console.log("fetching more Info");
-      const data = await fetch(
-        "/api/tmdb/more?id=" +
-          id +
-          "&media_type=" +
-          media_type +
-          "&r=" +
-          "reviews,watch_providers"
-      ).then((e) => e.json());
-      if (data.success) {
-        setMoreInfo(data.data);
-        console.log(data);
-        setMoreInfoData((prev) => [
-          ...prev,
-          { id, media_type, data: data.data },
-        ]);
-      } else {
-        alert("some error occured");
-      }
-    }
-
-    fetchMoreInfo();
-  }, []);
-
-  useEffect(() => {
-    console.log(moreInfo);
-  }, [moreInfo]);
-
-  const topReview = moreInfo?.reviews?.results[0];
-  return (
-    <div className={styles.moreInfoWrapper}>
-      <div className={styles.linksContainer}>
-        <h2>Links</h2>
-        <div className={styles.linksGroup}>
-          {moreInfo?.watch_providers.results.IN && (
-            <div>
-              {moreInfo &&
-                moreInfo.watch_providers.results.IN &&
-                moreInfo.watch_providers.results.IN.flatrate.map((provider) => (
-                  <Link
-                    target={"_blank"}
-                    key={provider.id}
-                    href={moreInfo.watch_providers.results.IN.link}
-                  >
-                    <div className={styles.linkLogo}>
-                      <Image
-                        src={getImageUrl(
-                          moreInfo.watch_providers.results.IN.flatrate[0]
-                            .logo_path
-                        )}
-                        alt={
-                          moreInfo.watch_providers.results.IN.flatrate[0]
-                            .provider_name
-                        }
-                        height={50}
-                        width={50}
-                      />
-                    </div>
-                  </Link>
-                ))}
-            </div>
-          )}
-          <div>imdb</div>
-        </div>
-      </div>
-      <div className={!moreInfo ? styles.moreInfoLoading : ""}>
-        <h2>User Reviews:</h2>
-        <div className={styles.reviewContainer}>
-          <div className={styles.reviewHeader}>
-            <div className={styles.avatar}>
-              {topReview && topReview.author_details.avatar_path && (
-                <Image
-                  src={
-                    topReview.author_details.avatar_path.startsWith("/https")
-                      ? topReview.author_details.avatar_path.replace("/", "")
-                      : getImageUrl(topReview.author_details.avatar_path)
-                  }
-                  alt="user_pic"
-                  width={40}
-                  height={40}
-                />
-              )}
-            </div>
-            <div className={styles.authorInfo}>
-              <h4>{topReview && topReview.author}</h4>
-              <span>{topReview && topReview.author_details.username}</span>
-            </div>
-          </div>
-          <div className={styles.reviewContent}>
-            {topReview && <FormatParagraph para={topReview.content} />}
-          </div>
-        </div>
-      </div>
-      <div>
-        <h2>Details</h2>
-        <div className={styles.detailsContainer}>
-          {filteredResults.map(([key, value], index) => {
-            return (
-              <div className={styles.item} key={index}>
-                <span className={styles.key}>{key.replaceAll("_", " ")}: </span>
-                <span className={styles.value}>
-                  {typeof value === "object" ? (
-                    <>
-                      {value
-                        ?.map((e) => e.english_name || e.name || e)
-                        .join(", ")}
-                      <span style={{ opacity: 0.5 }}> ({value.length}) </span>
-                    </>
-                  ) : (
-                    checkIfStringIsValidUrl(value)
-                  )}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
 };
 
 function TitleView({ result, layout_type, original, signedIn }) {

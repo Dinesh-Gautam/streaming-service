@@ -1,4 +1,5 @@
 import {
+  getExternalIds,
   getReviews,
   getWatchProviders,
 } from "../../../helpers/api/search/tmdb";
@@ -34,6 +35,9 @@ export default async function handler(req, res) {
     }
     if (r === "watch_providers") {
       promises.push(getWatchProviders(id, media_type));
+    }
+    if (r === "external_ids") {
+      promises.push(getExternalIds(id, media_type));
     }
   });
 
