@@ -1,4 +1,7 @@
-import { getReviews } from "../../../helpers/api/search/tmdb";
+import {
+  getReviews,
+  getWatchProviders,
+} from "../../../helpers/api/search/tmdb";
 
 export default async function handler(req, res) {
   const id = req.query.id;
@@ -28,6 +31,9 @@ export default async function handler(req, res) {
   requirements.forEach((r) => {
     if (r === "reviews") {
       promises.push(getReviews(id, media_type));
+    }
+    if (r === "watch_providers") {
+      promises.push(getWatchProviders(id, media_type));
     }
   });
 

@@ -91,7 +91,7 @@ const MoreInfo = ({ result, id, media_type }) => {
           "&media_type=" +
           media_type +
           "&r=" +
-          "reviews,"
+          "reviews,watch_providers"
       ).then((e) => e.json());
       if (data.success) {
         setMoreInfo(data.data);
@@ -115,6 +115,40 @@ const MoreInfo = ({ result, id, media_type }) => {
   const topReview = moreInfo?.reviews?.results[0];
   return (
     <div className={styles.moreInfoWrapper}>
+      <div className={styles.linksContainer}>
+        <h2>Links</h2>
+        <div className={styles.linksGroup}>
+          {moreInfo?.watch_providers.results.IN && (
+            <div>
+              {moreInfo &&
+                moreInfo.watch_providers.results.IN &&
+                moreInfo.watch_providers.results.IN.flatrate.map((provider) => (
+                  <Link
+                    target={"_blank"}
+                    key={provider.id}
+                    href={moreInfo.watch_providers.results.IN.link}
+                  >
+                    <div className={styles.linkLogo}>
+                      <Image
+                        src={getImageUrl(
+                          moreInfo.watch_providers.results.IN.flatrate[0]
+                            .logo_path
+                        )}
+                        alt={
+                          moreInfo.watch_providers.results.IN.flatrate[0]
+                            .provider_name
+                        }
+                        height={50}
+                        width={50}
+                      />
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          )}
+          <div>imdb</div>
+        </div>
+      </div>
       <div className={!moreInfo ? styles.moreInfoLoading : ""}>
         <h2>User Reviews:</h2>
         <div className={styles.reviewContainer}>
@@ -123,7 +157,7 @@ const MoreInfo = ({ result, id, media_type }) => {
               {topReview && topReview.author_details.avatar_path && (
                 <Image
                   src={
-                    topReview.author_details.avatar_path.startsWith("https")
+                    topReview.author_details.avatar_path.startsWith("/https")
                       ? topReview.author_details.avatar_path.replace("/", "")
                       : getImageUrl(topReview.author_details.avatar_path)
                   }
