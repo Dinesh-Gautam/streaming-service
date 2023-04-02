@@ -302,6 +302,25 @@ function HomePageSliders(props) {
                             ?.split(" ")
                             .splice(0, 10)
                             .join(" ") || ""} */}
+                    {hoverCardPosition.original && (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                        }}
+                      >
+                        <Separator
+                          values={[
+                            new Date(
+                              props.originalMovies[
+                                hoverCardPosition.index
+                              ]?.first_air_date
+                            ).getFullYear(),
+                          ]}
+                        />
+                      </div>
+                    )}
                     {!hoverCardPosition.original && (
                       <div
                         style={{

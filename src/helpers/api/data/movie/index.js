@@ -12,13 +12,22 @@ export function getPublishedMovies() {
 
     if (fileData.length) {
       const data = fileData.map(
-        ({ title, genres, description, poster_path, backdrop_path, uid }) => ({
+        ({
           title,
           genres,
           description,
           poster_path,
           backdrop_path,
           uid,
+          first_air_date,
+        }) => ({
+          title,
+          genres,
+          description,
+          poster_path,
+          backdrop_path,
+          uid,
+          first_air_date,
         })
       );
       return data;
