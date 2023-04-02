@@ -10,13 +10,69 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 function Slider({ title, data, setIsScrolling, type }) {
   const isMiniSlider = data?.length < 6;
+  const [ItemsLength, setItemsLength] = useState(5);
   const [dataArr, setDataArr] = useState(updateDataArr("before"));
+
+  const [windowWidth, setWindowWidth] = useState(null);
+  const transforms = {
+    5: 140,
+    4: 150,
+    3: 166.5,
+    2: 200,
+    1: 300,
+  };
+
   const [transitionState, setTransitionState] = useState({
     transition: "",
-    transform: "translateX(-140%)",
+    transform: "",
   });
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
+
+  const [itemWidth, setItemWidth] = useState(20);
+
+  useEffect(() => {
+    // const itemsLength =
+    //   Math.min(Math.ceil(window.innerWidth / 4 / 100), 5) || 1;
+    // const widthPercent =
+    //   (window.innerWidth / itemsLength / window.innerWidth) * 100;
+    // setItemWidth(widthPercent);
+    // setItemsLength(itemsLength);
+    // setTransitionState((prev) => ({
+    //   ...prev,
+    //   transform: `translateX(-${transforms[itemsLength]}%)`,
+    // }));
+    const resizeHandler = () => {
+      const width = window.innerWidth;
+      setWindowWidth(width);
+    };
+    window.addEventListener("resize", resizeHandler);
+
+    return () => {
+      window.removeEventListener("resize ", resizeHandler);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (ItemsLength !== null) {
+      console.info("changing items width");
+      const widthPercent =
+        (window.innerWidth / ItemsLength / window.innerWidth) * 100;
+      setItemWidth(widthPercent);
+      setTransitionState((prev) => ({
+        ...prev,
+        transform: `translateX(-${transforms[ItemsLength]}%)`,
+      }));
+      setDataArr(updateDataArr("before"));
+    }
+  }, [ItemsLength]);
+
+  useEffect(() => {
+    const itemsLength =
+      Math.min(Math.ceil(window.innerWidth / 4 / 100), 5) || 1;
+
+    setItemsLength(itemsLength);
+  }, [windowWidth]);
 
   function buttonClick(type) {
     setDisable(true);
@@ -27,9 +83,15 @@ function Slider({ title, data, setIsScrolling, type }) {
       setIsScrolling(true);
       const transition = "transform 1s ease-in-out";
       if (type === "next") {
-        setTransitionState({ transition, transform: "translateX(-240%)" });
+        setTransitionState({
+          transition,
+          transform: `translateX(-${transforms[ItemsLength] + 100}%)`,
+        });
       } else {
-        setTransitionState({ transition, transform: "translateX(-40%)" });
+        setTransitionState({
+          transition,
+          transform: `translateX(-${transforms[ItemsLength] - 100}%)`,
+        });
       }
       disableTimeoutRef.current = setTimeout(() => {
         setDisable(false);
@@ -37,12 +99,12 @@ function Slider({ title, data, setIsScrolling, type }) {
         if (type === "next") {
           setTransitionState({
             transition: "",
-            transform: "translateX(-140%)",
+            transform: `translateX(-${transforms[ItemsLength]}%)`,
           });
         } else {
           setTransitionState({
             transition: "",
-            transform: "translateX(-140%)",
+            transform: `translateX(-${transforms[ItemsLength]}%)`,
           });
         }
         updateDataArr(type);
@@ -68,19 +130,25 @@ function Slider({ title, data, setIsScrolling, type }) {
     let slicedArr0, slicedArr1, slicedArr3;
 
     if (type === "next") {
-      (slicedArr0 = dataArr.slice(0, 5)),
-        (slicedArr1 = dataArr.slice(5, data.length - 7)),
-        (slicedArr3 = dataArr.slice(data.length - 7, data.length));
+      (slicedArr0 = dataArr.slice(0, ItemsLength)),
+        (slicedArr1 = dataArr.slice(
+          ItemsLength,
+          data.length - (ItemsLength + 2)
+        )),
+        (slicedArr3 = dataArr.slice(
+          data.length - (ItemsLength + 2),
+          data.length
+        ));
       setDataArr([...slicedArr1, ...slicedArr3, ...slicedArr0]);
     } else if (type === "before") {
-      slicedArr0 = data.slice(0, 5);
-      slicedArr1 = data.slice(5, data.length - 7);
-      slicedArr3 = data.slice(data.length - 7, data.length);
+      slicedArr0 = data.slice(0, ItemsLength);
+      slicedArr1 = data.slice(ItemsLength, data.length - (ItemsLength + 2));
+      slicedArr3 = data.slice(data.length - (ItemsLength + 2), data.length);
       return [...slicedArr3, ...slicedArr0, ...slicedArr1];
     } else {
-      slicedArr0 = dataArr.slice(0, 5);
-      slicedArr1 = dataArr.slice(5, data.length - 5);
-      slicedArr3 = dataArr.slice(data.length - 5, data.length);
+      slicedArr0 = dataArr.slice(0, ItemsLength);
+      slicedArr1 = dataArr.slice(ItemsLength, data.length - ItemsLength);
+      slicedArr3 = dataArr.slice(data.length - ItemsLength, data.length);
       setDataArr([...slicedArr3, ...slicedArr0, ...slicedArr1]);
     }
   }
@@ -91,9 +159,13 @@ function Slider({ title, data, setIsScrolling, type }) {
         {title && <h2 style={{ marginLeft: "2rem" }}>{title}</h2>}
         {isMiniSlider ? (
           <div className={styles.container}>
-            <div style={{}} className={styles.wrapper}>
+            <div className={styles.wrapper}>
               {data.map((e, index) => (
-                <div className={styles.item} key={index}>
+                <div
+                  style={{ width: itemWidth + "%" }}
+                  className={styles.item}
+                  key={index}
+                >
                   <FadeImageOnLoad
                     loadingBackground
                     rawImageSrc={
@@ -118,11 +190,12 @@ function Slider({ title, data, setIsScrolling, type }) {
                   />
                   <h1
                     style={{
-                      width: "60%",
+                      width: "62%",
                       lineHeight: "100%",
-                      fontSize: 18,
+                      fontSize: 19,
                       padding: "0.5rem 1rem",
-                      position: "relative",
+                      position: "absolute",
+                      marginTop: 18,
                     }}
                   >
                     {e.title}
@@ -142,7 +215,11 @@ function Slider({ title, data, setIsScrolling, type }) {
                 className={styles.wrapper}
               >
                 {dataArr.map((e, index) => (
-                  <div className={styles.item} key={index}>
+                  <div
+                    style={{ width: itemWidth + "%" }}
+                    className={styles.item}
+                    key={index}
+                  >
                     <FadeImageOnLoad
                       loadingBackground
                       imageSrc={e.backdrop_path}
@@ -151,11 +228,15 @@ function Slider({ title, data, setIsScrolling, type }) {
                           className: styles.imageContainer,
                           id: "imageContainer",
                           "data-index": data.indexOf(e),
-                          "data-middle": index > 6 && index < 12,
+                          "data-middle":
+                            index > ItemsLength + 1 &&
+                            index < ItemsLength * 2 + 2,
                           "data-type": type,
                         },
                         image: {
-                          priority: index > 6 && index < 12,
+                          priority:
+                            index > ItemsLength + 1 &&
+                            index < ItemsLength * 2 + 2,
                           height: 1300 / 2,
                           width: 1300,
                         },
@@ -163,11 +244,12 @@ function Slider({ title, data, setIsScrolling, type }) {
                     />
                     <h1
                       style={{
-                        width: "65%",
+                        width: "62%",
                         lineHeight: "100%",
                         fontSize: 19,
                         padding: "0.5rem 1rem",
-                        position: "relative",
+                        position: "absolute",
+                        marginTop: 12,
                       }}
                     >
                       {e.title || e.name}

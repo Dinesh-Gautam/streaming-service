@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  height: 20vh;
+  // height: 25.1vh;
   padding: 0 4%;
   margin-bottom: 5rem;
 }
@@ -11,11 +11,12 @@
 }
 
 .item {
-  padding: 0 2px;
-  width: 20%;
+  padding: 0 0.2vw;
+  width: 25%;
   flex-shrink: 0;
-  height: 100%;
+  height: fit-content;
   position: relative;
+  // aspect-ratio: 16/9;
 }
 .imageContainer {
   background: rgba(255, 255, 255, 0.1);
@@ -25,7 +26,7 @@
   overflow: hidden;
   position: relative;
   max-height: 100%;
-  aspect-ratio: 16/9;
+  display: flex;
   img {
     object-fit: cover;
     height: 100%;
@@ -39,6 +40,7 @@
   position: absolute;
   height: 100%;
   width: 4%;
+  // width: 0.2vw;
   top: 0;
   z-index: 100;
   border-radius: 0;
