@@ -195,7 +195,7 @@ function Slider({ title, data, setIsScrolling, type }) {
                       fontSize: 19,
                       padding: "0.5rem 1rem",
                       position: "absolute",
-                      marginTop: 18,
+                      marginTop: 10,
                     }}
                   >
                     {e.title}
@@ -249,7 +249,7 @@ function Slider({ title, data, setIsScrolling, type }) {
                         fontSize: 19,
                         padding: "0.5rem 1rem",
                         position: "absolute",
-                        marginTop: 12,
+                        marginTop: 10,
                       }}
                     >
                       {e.title || e.name}
