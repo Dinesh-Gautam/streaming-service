@@ -15,7 +15,9 @@ function Suggestions({ searchSuggestions }) {
 
   useEffect(() => {
     if (maxHeight) {
-      setHeight(Math.min(containerRef.current?.offsetHeight, maxHeight) || 0);
+      setHeight(
+        Math.round(Math.min(containerRef.current?.offsetHeight, maxHeight)) || 0
+      );
     }
   }, [searchSuggestions, maxHeight]);
 
@@ -38,39 +40,40 @@ function Suggestions({ searchSuggestions }) {
       ref={mainContainerRef}
       className={styles.suggestionContainer}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-        }}
-        ref={containerRef}
-      >
-        {searchSuggestions.map((suggestion) => {
-          return (
-            <motion.div
-              layout
-              transition={{ type: "ease", duration: 0.5 }}
-              onClick={onClick(suggestion)}
-              className={styles.suggestionResultContainer}
-              key={suggestion.id}
-            >
-              <FadeImageOnLoad
-                imageSrc={suggestion.poster_path}
-                ambientMode
-                ambientOptions={{
-                  top: 0,
-                  left: 0,
-                  transform: "translate(0% , 0%)",
-                }}
-                attr={{
-                  imageContainer: {
-                    className: styles.suggestionImageContainer,
-                  },
-                  image: { height: 80, width: 60 },
-                }}
-              />
-              {/* <FadeImageOnLoad
+      <div className={styles.searchSuggestionWrapper}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+          ref={containerRef}
+        >
+          {searchSuggestions.map((suggestion) => {
+            return (
+              <motion.div
+                layout
+                transition={{ type: "ease", duration: 0.5 }}
+                onClick={onClick(suggestion)}
+                className={styles.suggestionResultContainer}
+                key={suggestion.id}
+              >
+                <FadeImageOnLoad
+                  imageSrc={suggestion.poster_path}
+                  ambientMode
+                  ambientOptions={{
+                    top: 0,
+                    left: 0,
+                    transform: "translate(0% , 0%)",
+                  }}
+                  attr={{
+                    imageContainer: {
+                      className: styles.suggestionImageContainer,
+                    },
+                    image: { height: 80, width: 60 },
+                  }}
+                />
+                {/* <FadeImageOnLoad
                 imageSrc={suggestion.poster_path}
                 attr={{
                   imageContainer: {
@@ -79,24 +82,25 @@ function Suggestions({ searchSuggestions }) {
                   image: { objectFit: "cover", height: 100, width: 200 },
                 }}
               /> */}
-              <div className={styles.suggestionInfoContainer}>
-                <h4>
-                  {suggestion.title ||
-                    suggestion.name ||
-                    suggestion.original_title ||
-                    suggestion.original_name}
-                </h4>
-                <Separator
-                  gap={4}
-                  values={[
-                    suggestion.media_type,
-                    new Date(suggestion.first_air_date).getFullYear(),
-                  ]}
-                />
-              </div>
-            </motion.div>
-          );
-        })}
+                <div className={styles.suggestionInfoContainer}>
+                  <h4>
+                    {suggestion.title ||
+                      suggestion.name ||
+                      suggestion.original_title ||
+                      suggestion.original_name}
+                  </h4>
+                  <Separator
+                    gap={4}
+                    values={[
+                      suggestion.media_type,
+                      new Date(suggestion.first_air_date).getFullYear(),
+                    ]}
+                  />
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </motion.div>
   );

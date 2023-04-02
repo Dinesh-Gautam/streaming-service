@@ -6,7 +6,7 @@ import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import Sheet from "@mui/joy/Sheet";
-import MuiLogo from "./MuiLogo";
+
 import { openSidebar } from "../utils";
 import Link from "next/link";
 
@@ -62,7 +62,7 @@ export default function FirstSidebar() {
           return (
             <Link key={index} href={href}>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={() => openSidebar()}>
                   <i data-feather={icon} />
                 </ListItemButton>
               </ListItem>

@@ -43,11 +43,15 @@
   left: 0;
   right: 0;
   // max-height: 20rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: clip;
   box-sizing: border-box;
   margin-right: 4px;
-  border-right: 1px solid rgba($color: rgb(0, 0, 0), $alpha: 0.5);
+  // border-right: 1px solid rgba($color: rgb(0, 0, 0), $alpha: 0.5);
+}
+
+.searchSuggestionWrapper {
+  overflow: auto;
   &::-webkit-scrollbar {
     background-color: rgba($color: rgb(0, 0, 0), $alpha: 0.2);
     width: 8px;
@@ -61,6 +65,7 @@
     border-radius: 100px;
   }
 }
+
 .suggestionResultContainer {
   display: flex;
   background-color: rgba($color: rgb(0, 0, 0), $alpha: 0.2);
