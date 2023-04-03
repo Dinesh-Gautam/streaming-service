@@ -49,7 +49,13 @@ function Nav({ searchInitialValue, signedIn }) {
                     </div>
                   )}
                   <div className={styles.buttonsContainer}>
-                    <button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        signOut();
+                      }}
+                    >
                       <span>Sign Out</span>
                       <Logout />
                     </button>
@@ -59,7 +65,9 @@ function Nav({ searchInitialValue, signedIn }) {
             </AnimatePresence>
           </button>
         ) : (
-          <button onClick={() => signIn()}>Sign In</button>
+          <button className={styles.normalButton} onClick={() => signIn()}>
+            Sign In
+          </button>
         )}
       </div>
     </div>
