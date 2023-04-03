@@ -6,10 +6,10 @@ import React from "react";
 import FirstSidebar from "./FirstSidebar";
 import Header from "./Header";
 import SecondSidebar from "./SecondSidebar";
-import customTheme from "../theme";
-import useScript from "../useScript";
+import customTheme from "./theme";
+import useScript from "./useScript";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 const useEnhancedEffect =

@@ -3,8 +3,8 @@ import React from "react";
 import { getPendingMovies } from "@/helpers/api/data/admin";
 
 import UploadPage from "@/components/admin/UploadPage";
-import Layout from "../components/Layout";
 import { moviesPageSideBarItems } from ".";
+import Layout from "../../../components/admin/Layout";
 
 function Upload({ pending }) {
   // console.log(pending);

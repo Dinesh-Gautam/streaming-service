@@ -289,11 +289,11 @@ function TitleView({ result, layout_type, original, signedIn }) {
             <motion.div
               layout
               layoutId="moreInfoLayout"
-              onClick={() => setMoreInfoOpen(true)}
+              onClick={() => !original && setMoreInfoOpen(true)}
               className={styles.moreInfoContainer}
             >
-              <div>
-                {!original && (
+              {!original && (
+                <div>
                   <div
                     style={{
                       display: "flex",
@@ -319,14 +319,15 @@ function TitleView({ result, layout_type, original, signedIn }) {
                       ]}
                     />
                   </div>
-                )}
-                <button>
-                  More info <ArrowDownward />
-                </button>
-              </div>
+
+                  <button>
+                    More info <ArrowDownward />
+                  </button>
+                </div>
+              )}
 
               <FormatParagraph
-                hideShowClickHere
+                hideShowClickHere={!original}
                 para={result.overview || result.description}
               />
             </motion.div>

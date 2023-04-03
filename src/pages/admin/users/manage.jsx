@@ -1,8 +1,9 @@
 import React from "react";
 import { usersPageSideBarItems } from ".";
 import { getDetailedUserData } from "../../../helpers/api/data/admin";
-import Layout from "../components/Layout";
-import UsersTable from "../components/UsersTable";
+import UsersTable from "../../../components/admin/UsersTable";
+import Layout from "../../../components/admin/Layout";
+
 function manage({ userData }) {
   return <UsersTable userData={userData} />;
 }

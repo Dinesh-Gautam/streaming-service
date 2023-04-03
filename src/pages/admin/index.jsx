@@ -1,7 +1,7 @@
 import React from "react";
 
 import App from "./AdminApp";
-import Layout from "./components/Layout";
+import Layout from "../../components/admin/Layout";
 
 export default function adminPage() {
   return <App />;

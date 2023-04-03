@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
+// import Chip from "@mui/joy/Chip";
 import List from "@mui/joy/List";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItem from "@mui/joy/ListItem";
@@ -10,7 +10,7 @@ import ListItemButton from "@mui/joy/ListItemButton";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import { closeSidebar } from "../utils";
+import { closeSidebar } from "./utils";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";

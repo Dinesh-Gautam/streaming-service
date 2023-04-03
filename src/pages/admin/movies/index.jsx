@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { getPendingMovies } from "../../../helpers/api/data/admin";
 import { getPublishedMovies } from "../../../helpers/api/data/movie";
-import Layout from "../components/Layout";
+import Layout from "../../../components/admin/Layout";
 
 function MoviePage({ pendingUploads, uploadedVideos }) {
   return (

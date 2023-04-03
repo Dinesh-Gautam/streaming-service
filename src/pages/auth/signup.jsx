@@ -114,6 +114,7 @@ const SignupPage = () => {
     </div>
   );
 };
+
 export async function getServerSideProps(context) {
   return redirectIfUserIsAuthenticated({ context });
 }

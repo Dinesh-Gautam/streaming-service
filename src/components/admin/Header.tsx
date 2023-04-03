@@ -4,7 +4,7 @@ import IconButton from '@mui/joy/IconButton';
 import Sheet from '@mui/joy/Sheet';
 import MuiLogo from './MuiLogo';
 import ColorSchemeToggle from './ColorSchemeToggle';
-import { toggleSidebar } from '../utils';
+import { toggleSidebar } from './utils';
 
 export default function Header() {
   return (

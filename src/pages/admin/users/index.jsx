@@ -1,7 +1,7 @@
 import React from "react";
 import { getAllUsersInfo } from "../../../helpers/api/data/admin";
-import Layout from "../components/Layout";
-import UsersInfo from "../components/UsersInfo";
+import UsersInfo from "../../../components/admin/UsersInfo";
+import Layout from "../../../components/admin/Layout";
 
 function Users({ userData }) {
   return <UsersInfo userData={userData} />;

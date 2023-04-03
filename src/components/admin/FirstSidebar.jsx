@@ -7,7 +7,7 @@ import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import Sheet from "@mui/joy/Sheet";
 
-import { openSidebar } from "../utils";
+import { openSidebar } from "./utils";
 import Link from "next/link";
 
 const firstSidebarItems = [
