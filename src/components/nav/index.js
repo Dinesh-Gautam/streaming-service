@@ -1,7 +1,14 @@
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Search from "../search/index";
 import styles from "./nav.module.scss";
+import Avatar from "@mui/joy/Avatar";
+import { useState } from "react";
+import { Logout } from "@mui/icons-material";
+import { AnimatePresence, motion } from "framer-motion";
 function Nav({ searchInitialValue, signedIn }) {
+  const [open, setOpen] = useState(false);
+  const user = useSession().data;
+
   return (
     <div className={styles.navContainer}>
       <div className={styles.navRightContainer}></div>
@@ -9,13 +16,47 @@ function Nav({ searchInitialValue, signedIn }) {
       <div className={styles.navLeftContainer}>
         {signedIn ? (
           <button
+            onBlur={() => {
+              setOpen(false);
+            }}
             onClick={() =>
-              signOut({
-                redirect: "/",
-              })
+              // signOut({
+              //   redirect: "/",
+              // })
+              setOpen((prev) => !prev)
             }
           >
-            Sign Out
+            {/* Sign Out */}
+            <Avatar />
+            <AnimatePresence>
+              {open && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  className={styles.userModalContainer}
+                >
+                  {user && (
+                    <div className={styles.userInfo}>
+                      <h6>{user.user.name}</h6>
+                      <span>{user.user.email}</span>
+                    </div>
+                  )}
+                  <div className={styles.buttonsContainer}>
+                    <button>
+                      <span>Sign Out</span>
+                      <Logout />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         ) : (
           <button onClick={() => signIn()}>Sign In</button>
