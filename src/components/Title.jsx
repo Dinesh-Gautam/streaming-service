@@ -433,42 +433,43 @@ function TitleView({ result, layout_type, original, signedIn }) {
                     {seasonInfo.episodes.map(
                       (epi, index) =>
                         epi.still_path !== null && (
-                          <div
-                            onClick={() =>
-                              findSeriesOnClick(
-                                result.title ||
-                                  result.name ||
-                                  result.original_title ||
-                                  result.original_name,
-                                epi.season_number,
-                                epi.episode_number
-                              )
-                            }
-                            className={styles.episode}
+                          <Link
                             key={epi.id}
+                            href={
+                              "/title/watch/?media_type=" +
+                              result?.media_type +
+                              "&id=" +
+                              result?.id +
+                              "&s=" +
+                              epi.season_number +
+                              "&e=" +
+                              epi.episode_number
+                            }
                           >
-                            <span className={styles.episodeNumber}>
-                              {(index + 1 < 10 ? "0" : "") + (index + 1)}
-                            </span>
-                            <span className={styles.episodeName}>
-                              {epi.name}
-                            </span>
-                            <FadeImageOnLoad
-                              loadingBackground
-                              imageSrc={epi.still_path}
-                              duration={0.5}
-                              attr={{
-                                imageContainer: {
-                                  className: styles.episodeImageContainer,
-                                },
-                                image: {
-                                  objectFit: "cover",
-                                  width: 228,
-                                  height: 148,
-                                },
-                              }}
-                            />
-                          </div>
+                            <div className={styles.episode}>
+                              <span className={styles.episodeNumber}>
+                                {(index + 1 < 10 ? "0" : "") + (index + 1)}
+                              </span>
+                              <span className={styles.episodeName}>
+                                {epi.name}
+                              </span>
+                              <FadeImageOnLoad
+                                loadingBackground
+                                imageSrc={epi.still_path}
+                                duration={0.5}
+                                attr={{
+                                  imageContainer: {
+                                    className: styles.episodeImageContainer,
+                                  },
+                                  image: {
+                                    objectFit: "cover",
+                                    width: 228,
+                                    height: 148,
+                                  },
+                                }}
+                              />
+                            </div>
+                          </Link>
                         )
                     )}
                   </div>
@@ -495,6 +496,38 @@ function TitleView({ result, layout_type, original, signedIn }) {
                   }
             }
           >
+            <Link
+              target="_blank"
+              href={
+                "/title/watch/?media_type=" +
+                result?.media_type +
+                "&id=" +
+                result?.id
+              }
+            >
+              <button
+                style={{
+                  marginBottom: "1rem",
+                }}
+                // onClick={
+                // () =>
+                // router.push(
+                //   `api/videoStream?ih=${videoFileInfo.infoHash}&i=${videoFileInfo.videoFileIndex}`
+                // )
+                // }
+              >
+                <div
+                  style={{
+                    paddingLeft: "2rem",
+                  }}
+                >
+                  Watch Now
+                </div>
+                <span>
+                  <PlayArrowRounded fontSize="large" />
+                </span>
+              </button>
+            </Link>
             <ButtonsComponent size="large" />
           </motion.div>
         </motion.div>
