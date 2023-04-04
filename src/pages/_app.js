@@ -2,10 +2,10 @@ import "../styles/globals.scss";
 import "../components/videoPlayer/customStyle.scss";
 import { SessionProvider } from "next-auth/react";
 
-// import NextNProgress from "nextjs-progressbar";
+import NextNProgress from "nextjs-progressbar";
 import { Poppins } from "@next/font/google";
 import dynamic from "next/dynamic";
-const NextNProgress = dynamic(import("nextjs-progressbar"));
+// const NextNProgress = dynamic(import("nextjs-progressbar"));
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800", "900"],
