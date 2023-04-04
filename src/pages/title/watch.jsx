@@ -3,14 +3,10 @@ import React, { useEffect, useRef } from "react";
 function Watch({ url }) {
   const iframe = useRef(null);
 
-  useEffect(() => {
-    if (!iframe.current) return;
-    console.log(iframe.current);
-  }, [iframe.current]);
-
   return (
     <div style={{ height: "100vh", width: "100vw", overflowY: "hidden" }}>
       <iframe
+        allowFullScreen
         ref={iframe}
         style={{
           height: "100%",
@@ -29,7 +25,7 @@ export async function getServerSideProps(req) {
   const id = req.query.id;
   const media_type = req.query.media_type;
   const season = req.query.s ?? 1;
-  const episode = req.query.episode ?? 1;
+  const episode = req.query.e ?? 1;
   const embedUrl =
     "https://www.2embed.to/embed/tmdb/" +
     media_type +

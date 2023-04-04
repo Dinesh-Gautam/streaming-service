@@ -435,6 +435,7 @@ function TitleView({ result, layout_type, original, signedIn }) {
                         epi.still_path !== null && (
                           <Link
                             key={epi.id}
+                            target="_blank"
                             href={
                               "/title/watch/?media_type=" +
                               result?.media_type +
@@ -496,38 +497,40 @@ function TitleView({ result, layout_type, original, signedIn }) {
                   }
             }
           >
-            <Link
-              target="_blank"
-              href={
-                "/title/watch/?media_type=" +
-                result?.media_type +
-                "&id=" +
-                result?.id
-              }
-            >
-              <button
-                style={{
-                  marginBottom: "1rem",
-                }}
-                // onClick={
-                // () =>
-                // router.push(
-                //   `api/videoStream?ih=${videoFileInfo.infoHash}&i=${videoFileInfo.videoFileIndex}`
-                // )
-                // }
+            {!original && result.media_type === "movie" && (
+              <Link
+                target="_blank"
+                href={
+                  "/title/watch/?media_type=" +
+                  result?.media_type +
+                  "&id=" +
+                  result?.id
+                }
               >
-                <div
+                <button
                   style={{
-                    paddingLeft: "2rem",
+                    marginBottom: "1rem",
                   }}
+                  // onClick={
+                  // () =>
+                  // router.push(
+                  //   `api/videoStream?ih=${videoFileInfo.infoHash}&i=${videoFileInfo.videoFileIndex}`
+                  // )
+                  // }
                 >
-                  Watch Now
-                </div>
-                <span>
-                  <PlayArrowRounded fontSize="large" />
-                </span>
-              </button>
-            </Link>
+                  <div
+                    style={{
+                      paddingLeft: "2rem",
+                    }}
+                  >
+                    Watch Now
+                  </div>
+                  <span>
+                    <PlayArrowRounded fontSize="large" />
+                  </span>
+                </button>
+              </Link>
+            )}
             <ButtonsComponent size="large" />
           </motion.div>
         </motion.div>
