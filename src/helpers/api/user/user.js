@@ -77,29 +77,19 @@ export async function addUser(data) {
   return { success: true, message: "user added successfully" };
 }
 
-export function deleteUser(id) {
-  if (!id) {
+export async function deleteUser(ids) {
+  if (!ids) {
     console.log("id is require when delete user data");
     return { success: false, errMessage: "User id is not provided" };
   }
-  const userData = readFile(fileName);
-  if (!id) {
-    console.log("Only one user left, can't be deleted");
-    return { success: false, errMessage: "Only one user left" };
-  }
-  const user = userData.find((e) => e.id === id);
-  console.log(user);
-  if (!user) {
+  const deleted = await User.deleteMany({ _id: { $in: ids } });
+  if (deleted) {
     return {
-      success: false,
-      errMessage: "user does not exists",
+      success: true,
+      message: deleted.deletedCount + " users deleted successfully",
     };
   }
-  const newData = userData.filter((e) => e.id !== id);
-
-  writeToFile(fileName, newData);
-
-  return { success: true, message: "User deleted successfully" };
+  return { success: false, message: "Some error occurred" };
 }
 
 export function changeUserRole(id, newRole) {

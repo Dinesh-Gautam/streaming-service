@@ -168,21 +168,15 @@ export default function UsersTable({ userData }) {
   }, [open]);
 
   async function deleteUser() {
-    async function del(id) {
-      const data = await fetch(
-        "/api/admin/user?id=" + id + "&o=" + "delete"
-      ).then((e) => e.json());
+    const data = await fetch(
+      "/api/admin/user?ids=" + selected.join(",") + "&o=" + "delete"
+    ).then((e) => e.json());
 
-      if (!data.success) {
-        alert(data.errMessage || "some error occurred");
-      } else {
-        console.log(data.message);
-      }
+    if (!data.success) {
+      alert(data.errMessage || "some error occurred");
+      return;
     }
 
-    selected.forEach(async (id) => {
-      await del(id);
-    });
     setUsers((prev) => prev.filter((user) => !selected.includes(user.id)));
     setSelected([]);
   }

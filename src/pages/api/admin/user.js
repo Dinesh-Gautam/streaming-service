@@ -7,9 +7,9 @@ import {
 
 export default async function handler(req, res) {
   const operation = req.query.o;
-  const id = req.query.id;
+  const ids = req.query.ids.split(",");
 
-  if (!id) {
+  if (!ids) {
     res
       .status(400)
       .json({ success: false, errMessage: "id parameter is not provided" });
@@ -41,11 +41,11 @@ export default async function handler(req, res) {
   }
 
   if (operation === "delete") {
-    const data = deleteUser(id);
+    const data = await deleteUser(ids);
     if (!data) {
       res
         .status(500)
-        .json({ success: true, errMessage: "some error occurred" });
+        .json({ success: false, errMessage: "some error occurred" });
       return;
     }
     res.send(data);
