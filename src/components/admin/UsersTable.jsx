@@ -184,26 +184,22 @@ export default function UsersTable({ userData }) {
   async function editUser() {
     const { name, role } = editValue;
 
-    if (!name && role) return;
-    let success = false;
-    selected.forEach(async (id) => {
-      const data = await fetch("/api/admin/user?id=" + id + "&o=" + "edit", {
+    const data = await fetch(
+      "/api/admin/user?ids=" + selected.join(",") + "&o=" + "edit",
+      {
         method: "POST",
         body: JSON.stringify({
           newName: name || null,
           newRole: role || null,
         }),
-      }).then((e) => e.json());
-      if (!data.success) {
-        alert(data.errMessage);
-        return;
       }
-      console.log(data.message);
-      success = true;
-      setUsers(data.data);
-    });
-
-    if (!success) return;
+    ).then((e) => e.json());
+    if (!data.success) {
+      alert(data.errMessage);
+      return;
+    }
+    console.log(data.message);
+    setUsers(data.data);
     setOpen(false);
     setSelected([]);
   }

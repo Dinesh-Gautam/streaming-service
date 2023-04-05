@@ -92,50 +92,72 @@ export async function deleteUser(ids) {
   return { success: false, message: "Some error occurred" };
 }
 
-export function changeUserRole(id, newRole) {
-  if (!id) {
+// export function changeUserRole(id, newRole) {
+//   if (!id) {
+//     console.log("id is require when changing user role");
+//     return { success: false, errMessage: "User id is not provided" };
+//   }
+//   const userData = readFile(config.dir + config.userData);
+//   const user = userData.find((e) => e.id === id);
+//   if (!user) {
+//     return {
+//       success: false,
+//       errMessage: "user does not exists",
+//     };
+//   }
+//   if (!newRole) {
+//     const defaultRole = "user";
+//     newRole = user.role || defaultRole;
+//   }
+//   const newData = userData.map((e) =>
+//     e.id == id ? { ...e, role: newRole } : e
+//   );
+
+//   writeToFile(fileName, newData);
+
+//   return { success: true, message: "User role changed successfully" };
+// }
+// export function changeUserName(id, newName) {
+//   if (!id) {
+//     console.log("id is require when changing user name");
+//     return { success: false, errMessage: "User id is not provided" };
+//   }
+//   const userData = readFile(fileName);
+//   const user = userData.find((e) => e.id === id);
+//   if (!user) {
+//     return {
+//       success: false,
+//       errMessage: "user does not exists",
+//     };
+//   }
+
+//   const newData = userData.map((e) =>
+//     e.id == id ? { ...e, name: newName } : e
+//   );
+
+//   writeToFile(fileName, newData);
+
+//   return { success: true, message: "User Name changed successfully" };
+// }
+
+export async function editUserData(ids, newRole, newName) {
+  if (!ids) {
     console.log("id is require when changing user role");
     return { success: false, errMessage: "User id is not provided" };
   }
-  const userData = readFile(config.dir + config.userData);
-  const user = userData.find((e) => e.id === id);
-  if (!user) {
-    return {
-      success: false,
-      errMessage: "user does not exists",
-    };
-  }
-  if (!newRole) {
-    const defaultRole = "user";
-    newRole = user.role || defaultRole;
-  }
-  const newData = userData.map((e) =>
-    e.id == id ? { ...e, role: newRole } : e
-  );
 
-  writeToFile(fileName, newData);
-
-  return { success: true, message: "User role changed successfully" };
-}
-export function changeUserName(id, newName) {
-  if (!id) {
-    console.log("id is require when changing user name");
-    return { success: false, errMessage: "User id is not provided" };
+  const updateObj = {};
+  if (newName) {
+    updateObj.name = newName;
   }
-  const userData = readFile(fileName);
-  const user = userData.find((e) => e.id === id);
-  if (!user) {
-    return {
-      success: false,
-      errMessage: "user does not exists",
-    };
+  if (newRole) {
+    updateObj.role = newRole;
   }
 
-  const newData = userData.map((e) =>
-    e.id == id ? { ...e, name: newName } : e
-  );
+  const updated = await User.updateMany({ _id: { $in: ids } }, updateObj);
+  if (updated) {
+    return { success: true, message: "successfully updated" };
+  }
 
-  writeToFile(fileName, newData);
-
-  return { success: true, message: "User Name changed successfully" };
+  return { success: false, errMessage: "some error occurred" };
 }

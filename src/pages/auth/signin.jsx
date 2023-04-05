@@ -18,11 +18,10 @@ const SignIn = (props) => {
       password: userInfo.password,
       redirect: false,
     });
-
-    if (!res) return;
+    console.log(res);
     if (res.ok) {
       // router.push("/home");
-      location.href = router.query.callbackUrl;
+      location.href = router.query.callbackUrl || location.origin + "/home";
     } else {
       setError(res.error || "some error occurred");
     }
