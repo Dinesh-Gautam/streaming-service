@@ -22,12 +22,13 @@ const SignupPage = () => {
         name,
       }),
     }).then((e) => e.json());
-
+    console.log(data);
     if (data.success) {
       alert(data.message);
     } else {
       setError(data.errMessage);
     }
+    return data.success;
   }
 
   const handleSubmit = async (event) => {
@@ -37,11 +38,10 @@ const SignupPage = () => {
       setError("Passwords don't match!");
       return;
     }
-    try {
-      await signup({ username, password });
+
+    const success = await signup({ username, password });
+    if (success) {
       router.push("/auth/signin");
-    } catch (error) {
-      setError(error.message);
     }
   };
 

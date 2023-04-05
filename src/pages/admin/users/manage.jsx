@@ -17,11 +17,11 @@ manage.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps() {
-  const userData = getDetailedUserData().data;
-  console.log(userData);
+  const userData = await getDetailedUserData();
+
   return {
     props: {
-      userData: userData || null,
+      userData: userData.data || null,
     },
   };
 }

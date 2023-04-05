@@ -23,35 +23,37 @@ function UsersInfo({ userData, type }) {
           overflowY: "auto",
         }}
       >
-        <UserHeader userData={userData} />
-        {userData.map((user) => {
-          return (
-            <Box
-              key={user.id}
-              sx={{
-                display: "flex",
-                gap: 2,
-                alignItems: "center",
-                backgroundColor: "background.body",
-                p: 1,
-                px: 2,
-                borderRadius: 12,
-              }}
-            >
-              <Avatar size="sm" />
-              <div>
-                <Typography
-                  fontWeight="lg"
-                  level="body3"
-                  textColor="text.primary"
-                >
-                  {user.name}
-                </Typography>
-                <Typography level="body3">{user.email}</Typography>
-              </div>
-            </Box>
-          );
-        })}
+        <h1>Cannot get user Data</h1>
+        {userData && <UserHeader userData={userData} />}
+        {userData &&
+          userData.map((user) => {
+            return (
+              <Box
+                key={user.id}
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                  backgroundColor: "background.body",
+                  p: 1,
+                  px: 2,
+                  borderRadius: 12,
+                }}
+              >
+                <Avatar size="sm" />
+                <div>
+                  <Typography
+                    fontWeight="lg"
+                    level="body3"
+                    textColor="text.primary"
+                  >
+                    {user.name}
+                  </Typography>
+                  <Typography level="body3">{user.email}</Typography>
+                </div>
+              </Box>
+            );
+          })}
       </Box>
     </>
   );

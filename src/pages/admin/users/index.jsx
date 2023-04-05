@@ -29,11 +29,11 @@ Users.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps() {
-  const userData = getAllUsersInfo().data;
+  const userData = await getAllUsersInfo();
 
   return {
     props: {
-      userData: userData || null,
+      userData: userData.data || null,
     },
   };
 }

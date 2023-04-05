@@ -2,6 +2,7 @@ import { config } from "../config";
 import fs from "fs";
 import { saveMovieToPublishedMovie } from "../movie";
 import { readFile } from "../../user/user";
+import User from "../../../../db/schemas/userSchema";
 
 export function publishMovie(id) {
   if (!id) {
@@ -59,33 +60,39 @@ export function getPendingMovies(id) {
   }
 }
 
-export function getAllUsersInfo() {
-  let data = readFile(config.dir + config.userData);
-
-  if (data && data.length) {
-    data = data.map(({ id, name, username }) => ({
-      id,
+export async function getAllUsersInfo() {
+  const dataArr = await User.find().select({
+    _id: 1,
+    name: 1,
+    username: 1,
+  });
+  const data = dataArr.map(({ _id, name, username }) => {
+    return {
       name,
       email: username,
-    }));
+      id: _id.toString(),
+    };
+  });
+
+  if (data) {
     return { success: true, data };
-  } else {
-    return { success: false, errMessage: "No users exists" };
   }
+  return { success: false, errMessage: "some error occurred" };
 }
-export function getDetailedUserData() {
-  let data = readFile(config.dir + config.userData);
-
-  if (data && data.length) {
-    data = data.map(({ id, name, username, role, creationDate }) => ({
-      id,
+export async function getDetailedUserData() {
+  const dataArr = await User.find().select({ password: 0 });
+  const data = dataArr.map(({ _id, name, username, role, creationDate }) => {
+    return {
       name,
       email: username,
+      id: _id.toString(),
       role,
-      creationDate: creationDate || "3-26-2023",
-    }));
+      creationDate: creationDate.toString(),
+    };
+  });
+
+  if (data) {
     return { success: true, data };
-  } else {
-    return { success: false, errMessage: "No users exists" };
   }
+  return { success: false, errMessage: "some error occurred" };
 }
