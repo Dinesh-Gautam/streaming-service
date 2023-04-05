@@ -3,6 +3,7 @@ import fs from "fs";
 import { saveMovieToPublishedMovie } from "../movie";
 import { readFile } from "../../user/user";
 import User from "../../../../db/schemas/userSchema";
+import Pending from "../../../../db/schemas/pendingSchema";
 
 export function publishMovie(id) {
   if (!id) {
@@ -42,20 +43,36 @@ export function publishMovie(id) {
   }
 }
 
-export function getPendingMovies(id) {
+export async function getPendingMovies(id) {
   try {
-    const data =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || null;
-
-    if (id !== undefined && data) {
-      return data.find((e) => e.uid === id);
-    }
-
-    return data;
+    const {
+      title,
+      description,
+      genres,
+      first_air_date,
+      media_type,
+      poster_path,
+      backdrop_path,
+      _id,
+      video,
+      poster,
+      backdrop,
+    } = await Pending.findOne({ _id: id }, { __v: 0 });
+    return {
+      video: JSON.stringify(video),
+      poster: JSON.stringify(poster),
+      backdrop: JSON.stringify(backdrop),
+      title,
+      description,
+      genres,
+      first_air_date,
+      media_type,
+      poster_path,
+      backdrop_path,
+      uid: _id.toString(),
+    };
   } catch (e) {
-    console.log(config.pendingMovies, "does not exists");
+    console.log(e);
     return null;
   }
 }

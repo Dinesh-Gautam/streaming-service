@@ -19,7 +19,6 @@ import { CardContent } from "@mui/material";
 
 function UploadPage({ pending }) {
   // const [inputTitle, setInputTitle] = useState(pending?.title || "");
-
   const [inputValue, setInputValue] = useState({
     title: pending?.title || "",
     description: pending?.description || "",
@@ -46,13 +45,13 @@ function UploadPage({ pending }) {
     poster: pending?.poster && JSON.parse(pending?.poster),
     backdrop: pending?.backdrop && JSON.parse(pending?.backdrop),
   });
-
+  console.log(pending);
   useEffect(() => {
     if (!progressInterval.current && pending && !pending.progress?.completed) {
       console.log("starting progress interval");
-      if (pending?.progress?.percent) {
-        if (!isNaN(pending?.progress?.percent)) {
-          setProgressData(Math.round(pending?.progress?.percent));
+      if (pending?.progress?.progressPercent) {
+        if (!isNaN(pending?.progress?.progressPercent)) {
+          setProgressData(Math.round(pending?.progress?.progressPercent));
         }
       }
       startProgressInterval(pending.uid);
@@ -86,7 +85,7 @@ function UploadPage({ pending }) {
           setProgressData(progressData);
           return;
         }
-        setProgressData(Math.round(progressData.percent));
+        setProgressData(Math.round(progressData.progressPercent));
         console.log(progressData);
       }, 1000);
     }
@@ -196,7 +195,6 @@ function UploadPage({ pending }) {
     // Create a new FormData object to send the file
     setUploadingState(true);
     const formData = new FormData();
-    console.log(videoFileInfo);
     Object.keys(videoFileInfo).forEach((key) => {
       const value = videoFileInfo[key];
       formData.append("data", value.file);
@@ -216,13 +214,6 @@ function UploadPage({ pending }) {
     });
 
     Object.keys(inputValue).forEach((key) => {
-      // if (key === "genres") {
-      //   const value = inputValue[key]
-      //     .split(",")
-      //     .map((e) => ({ name: e.trim() }));
-      //   formData.append(key, value);
-      //   return;
-      // }
       const value = inputValue[key];
       formData.append(key, value);
     });
@@ -236,12 +227,11 @@ function UploadPage({ pending }) {
     const response = await fetch("/api/admin/convert", {
       method: "POST",
       body: formData,
-    });
+    }).then((e) => e.json());
 
-    if (response.ok) {
-      const { data } = await response.json();
-      console.log(data);
-      router.replace(location.href + "?id=" + data.uid);
+    if (response.uploadDone) {
+      console.log(response);
+      router.replace(location.href + "?id=" + response.uid);
     }
     setUploadingState(false);
   }

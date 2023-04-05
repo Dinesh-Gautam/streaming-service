@@ -1,3 +1,5 @@
+import Pending from "../../../../db/schemas/pendingSchema";
+import Progress from "../../../../db/schemas/progressSchema";
 import { config } from "../config";
 
 import fs from "fs";
@@ -124,33 +126,31 @@ export function saveMovieData(data) {
   return null;
 }
 
-export function savePendingMovieData(data) {
+export async function savePendingMovieData(data) {
   // saving not published movies
   if (!data) {
     return;
   }
-  console.log("saving data");
+  console.log("saving pending data");
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || [];
-    if (fileData.some((e) => e.uid === data.uid)) {
-      console.log("movie already exists");
-      return null;
-    }
-    fileData.push(data);
-    fs.writeFileSync(
-      config.dir + config.pendingMovies,
-      JSON.stringify(fileData)
-    );
+    const pending = new Pending(data);
+    const schemaData = await pending.save();
+    const id = schemaData._id.toString();
+    const progress = new Progress({
+      videoId: id,
+      progressPercent: 0,
+      completed: false,
+      error: false,
+    });
+    await progress.save();
+    return id;
   } catch (error) {
-    fs.writeFileSync(config.dir + config.pendingMovies, JSON.stringify([data]));
+    console.log(error);
   }
   return null;
 }
 
-export function updateMovieProgressData(id, data) {
+export async function updateMovieProgressData(id, data) {
   // updates the progress of the movie conversion to mpeg-dash format
   if (!data) {
     console.log("progress data not provided");
@@ -162,29 +162,30 @@ export function updateMovieProgressData(id, data) {
   }
   console.log("updating progress data");
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || [];
-
-    const movie = fileData.find((e) => e.uid === id);
-    if (!movie) {
-      console.log("can't find movie for updating progress data");
-      return null;
-    }
-    fileData.map((e) => {
-      if (e.uid === id) {
-        e.progress = data;
-      }
-      return e;
-    });
-    fs.writeFileSync(
-      config.dir + config.pendingMovies,
-      JSON.stringify(fileData)
+    const progressData = await Progress.findOneAndUpdate(
+      { videoId: id },
+      { progressPercent: data.percent, ...data }
     );
+    return progressData;
   } catch (error) {
-    // fs.writeFileSync("data.json", JSON.stringify([data]));
-    console.error("some error occurred while updating the progress data");
+    console.log(error);
+  }
+  return null;
+}
+
+export async function getProgressData(id) {
+  try {
+    const { videoId, progressPercent, completed, error } =
+      await Progress.findOne({ videoId: id }, { __v: 0, _id: 0 });
+
+    return {
+      videoId: videoId.toString(),
+      progressPercent,
+      completed,
+      error,
+    };
+  } catch (e) {
+    console.log(e);
   }
   return null;
 }

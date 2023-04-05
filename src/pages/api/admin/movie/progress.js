@@ -1,5 +1,6 @@
 import { config } from "@/helpers/api/data/config";
 import fs from "fs";
+import { getProgressData } from "../../../../helpers/api/data/movie";
 
 export default async function handler(req, res) {
   const uid = req.query.id;
@@ -9,18 +10,8 @@ export default async function handler(req, res) {
     return;
   }
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || [];
-
-    const data = fileData.find((e) => e.uid === uid);
-    if (!data) {
-      res.send("can't find progress data");
-      return;
-    }
-    const progress = data.progress || {};
-    res.send(progress);
+    const progressData = await getProgressData(uid);
+    res.send(progressData);
   } catch (e) {
     res.send({ success: false, error: "some error occurred" });
   }

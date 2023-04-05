@@ -15,19 +15,21 @@ function Nav({ searchInitialValue, signedIn }) {
       <Search initialValue={searchInitialValue} />
       <div className={styles.navLeftContainer}>
         {signedIn ? (
-          <button
-            onBlur={() => {
-              setOpen(false);
-            }}
-            onClick={() =>
-              // signOut({
-              //   redirect: "/",
-              // })
-              setOpen((prev) => !prev)
-            }
-          >
-            {/* Sign Out */}
-            <Avatar />
+          <>
+            <button
+              onBlur={() => {
+                setOpen(false);
+              }}
+              onClick={() =>
+                // signOut({
+                //   redirect: "/",
+                // })
+                setOpen((prev) => !prev)
+              }
+            >
+              {/* Sign Out */}
+              <Avatar />
+            </button>
             <AnimatePresence>
               {open && (
                 <motion.div
@@ -49,6 +51,18 @@ function Nav({ searchInitialValue, signedIn }) {
                     </div>
                   )}
                   <div className={styles.buttonsContainer}>
+                    {user.role === "admin" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          signOut();
+                        }}
+                      >
+                        <span>Admin</span>
+                        <Logout />
+                      </button>
+                    )}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -63,7 +77,7 @@ function Nav({ searchInitialValue, signedIn }) {
                 </motion.div>
               )}
             </AnimatePresence>
-          </button>
+          </>
         ) : (
           <button className={styles.normalButton} onClick={() => signIn()}>
             Sign In

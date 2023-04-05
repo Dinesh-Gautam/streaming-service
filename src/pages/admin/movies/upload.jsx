@@ -5,6 +5,7 @@ import { getPendingMovies } from "@/helpers/api/data/admin";
 import UploadPage from "@/components/admin/UploadPage";
 import { moviesPageSideBarItems } from ".";
 import Layout from "../../../components/admin/Layout";
+import { getProgressData } from "../../../helpers/api/data/movie";
 
 function Upload({ pending }) {
   // console.log(pending);
@@ -19,7 +20,7 @@ Upload.getLayout = function getLayout(page) {
   );
 };
 
-export function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   const { id } = context.query;
 
   if (!id) {
@@ -28,11 +29,13 @@ export function getServerSideProps(context) {
     };
   }
 
-  const pending = getPendingMovies(id);
+  const pending = await getPendingMovies(id);
+  const progress = await getProgressData(id);
+  console.log(progress);
   return {
     props: pending
       ? {
-          pending,
+          pending: { ...pending, progress },
         }
       : {},
   };

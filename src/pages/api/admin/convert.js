@@ -24,23 +24,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }).array("data", 3);
 
 export default async function handler(req, res) {
-  return await upload(req, res, (err) => {
-    console.log(req.body);
-
+  return await upload(req, res, async (err) => {
+    // console.log(req.body);
+    // return;
     const movieData = {
       ...req.body,
-      uid: req.body?.uuid || uuidv4(),
+      video: JSON.parse(req.body.video),
+      poster: JSON.parse(req.body.poster),
+      backdrop: JSON.parse(req.body.backdrop),
       poster_path: req.files[1].path.replaceAll("uploads\\", "/"),
       backdrop_path: req.files[2].path.replaceAll("uploads\\", "/"),
     };
 
-    savePendingMovieData(movieData);
+    const uid = await savePendingMovieData(movieData);
 
+    if (!uid) {
+      res.send({ success: false, uploadDone: false });
+      return;
+    }
     res.send({
       uploadDone: true,
+      uid,
       data: movieData,
     });
-    consoleEncode(req.files[0].path, movieData.title, movieData.uid);
+    consoleEncode(req.files[0].path, movieData.title, uid);
   });
 }
 
@@ -162,7 +169,7 @@ function consoleEncode(fn, title, uid) {
         const percent = (time / totalTime) * 100;
         info.percent = percent.toFixed(2);
       }
-      console.log("progress", info);
+      // console.log("progress", info);
       updateMovieProgressData(uid, info);
     })
 

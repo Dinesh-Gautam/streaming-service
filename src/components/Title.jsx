@@ -84,7 +84,6 @@ function TitleView({ result, layout_type, original, signedIn }) {
     media_type: result.media_type,
   });
 
-  console.log(result);
   const [hideAll, setHideAll] = useState(false);
   const [seasonSelect, setSeasonSelect] = useState(null);
   const [seasonInfo, setSeasonInfo] = useState(
@@ -188,7 +187,6 @@ function TitleView({ result, layout_type, original, signedIn }) {
   return (
     <motion.div
       onAnimationEnd={() => {
-        console.log("animation complete");
         setAnimating(false);
       }}
       layout
@@ -641,7 +639,6 @@ function TitleView({ result, layout_type, original, signedIn }) {
           clearTimeout(hideTimeOutRef.current);
 
           if (!playerState.playing) return;
-          console.log("hovering");
           setHideAll(false);
           hideTimeOutRef.current = setTimeout(() => {
             if (!playerState.playing) return;
