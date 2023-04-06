@@ -1,10 +1,6 @@
 import FadeImageOnLoad from "@/components/elements/FadeImageOnLoad";
-import { style } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import styles from "./slider.module.scss";
-import Image from "next/image";
-import { getImageUrl } from "@/tmdbapi/tmdbApi";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
@@ -26,22 +22,13 @@ function Slider({ title, data, setIsScrolling, type }) {
     transition: "",
     transform: "",
   });
+
   const [disable, setDisable] = useState(false);
   const disableTimeoutRef = useRef(null);
 
   const [itemWidth, setItemWidth] = useState(20);
 
   useEffect(() => {
-    // const itemsLength =
-    //   Math.min(Math.ceil(window.innerWidth / 4 / 100), 5) || 1;
-    // const widthPercent =
-    //   (window.innerWidth / itemsLength / window.innerWidth) * 100;
-    // setItemWidth(widthPercent);
-    // setItemsLength(itemsLength);
-    // setTransitionState((prev) => ({
-    //   ...prev,
-    //   transform: `translateX(-${transforms[itemsLength]}%)`,
-    // }));
     const resizeHandler = () => {
       const width = window.innerWidth;
       setWindowWidth(width);
@@ -113,9 +100,6 @@ function Slider({ title, data, setIsScrolling, type }) {
         disableTimeoutRef.current = null;
       }, 1000);
     }
-
-    // setAnimating(true);
-    // clearTimeout(timeOutRef.current);
   }
 
   function handleNext() {

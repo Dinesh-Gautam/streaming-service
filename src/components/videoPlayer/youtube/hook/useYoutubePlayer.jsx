@@ -15,6 +15,7 @@ function useYoutubePlayer({
   setId,
   id,
   media_type,
+  pauseWhile,
 }) {
   const { videosData, setVideosData } = useData([]);
   //   const playerRef = useRef(null);
@@ -23,7 +24,7 @@ function useYoutubePlayer({
     setPlayerState((prev) => ({ ...prev, playing: false }));
     if (!id) return;
     if (videosData.find((e) => e.id === id)) return;
-
+    if (pauseWhile) return;
     fetch("/api/tmdb/videos?id=" + id + "&type=" + media_type)
       .then((e) => e.json())
       .then(({ data }) => {
