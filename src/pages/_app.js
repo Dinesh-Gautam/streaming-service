@@ -1,11 +1,8 @@
 import "../styles/globals.scss";
 import "../components/videoPlayer/customStyle.scss";
 import { SessionProvider } from "next-auth/react";
-
-import NextNProgress from "nextjs-progressbar";
 import { Poppins } from "@next/font/google";
-import dynamic from "next/dynamic";
-// const NextNProgress = dynamic(import("nextjs-progressbar"));
+import NextNProgress from "nextjs-progressbar";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -23,10 +20,8 @@ export default function App({ Component, pageProps }) {
         }
       `}</style>
       <SessionProvider session={pageProps.session}>
-        {/* <CssVarsProvider defaultMode="dark"> */}
         <NextNProgress color="rgba(255,255,255,0.8)" />
         {getLayout(<Component {...pageProps} />)}
-        {/* </CssVarsProvider> */}
       </SessionProvider>
     </>
   );

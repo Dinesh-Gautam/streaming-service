@@ -67,27 +67,27 @@ export async function tmdbSearch(options) {
 }
 
 export async function getPopularMovies(
-  mediaType = "movie",
-  type = "popular",
-  optional
+  first = "movie",
+  second = "popular",
+  optionalPath
 ) {
-  const data = await fetch(
-    `https://api.themoviedb.org/3/${mediaType}/${type}${
-      optional ? "/" + optional : ""
-    }?api_key=${tmdbApiKey}`
-  )
+  const url = `https://api.themoviedb.org/3/${first}/${second}${
+    optionalPath ? "/" + optionalPath : ""
+  }?api_key=${tmdbApiKey}`;
+
+  const data = await fetch(url)
     .then((res) => res.json())
     .catch((err) => {
       console.log(err);
     });
-  console.log();
-  return {
-    ...data,
-    results: data.results.map((e) => ({
-      ...e,
-      media_type: mediaType === "tv" || type === "tv" ? "tv" : "movie",
-    })),
-  };
+
+  return addCommonElementsToObjectsOfArray(data.results, {
+    media_type: first === "tv" || second === "tv" ? "tv" : "movie",
+  });
+}
+
+function addCommonElementsToObjectsOfArray(array, elementsObj) {
+  return array.map((item) => ({ ...item, ...elementsObj }));
 }
 
 export async function getVideosOfMovie(id, media_type) {

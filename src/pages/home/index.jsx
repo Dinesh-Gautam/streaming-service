@@ -1,47 +1,19 @@
-import HomePageSliders from "@/components/home/slider/HomePageSlider";
-import { getPublishedMovies } from "@/helpers/api/data/movie";
 import { getSession } from "next-auth/react";
-import Link from "next/link";
 import React from "react";
 import Banner from "../../components/home/banner";
 import Nav from "../../components/nav";
+import HomePageSliders from "@/components/home/slider/HomePageSlider";
 import { ContextProvider } from "../../context/stateContext";
+import { getPublishedMovies } from "@/helpers/api/data/movie";
 import { getPopularMovies } from "../../helpers/api/search/tmdb";
-import { redirectIfUserIsNotAuthenticated } from "../../helpers/redirect";
 
-function MainHome({
-  session,
-  popularMovies,
-  movies,
-  nowPlaying,
-  trendingMovies,
-  trendingTv,
-  signedIn,
-}) {
+function MainHome(props) {
   return (
     <ContextProvider>
       <div>
-        <Nav signedIn={signedIn} />
-        {popularMovies && <Banner popularMovies={popularMovies.results} />}
-        {/* {movies && (
-          <div>
-            <h2>Original Movies</h2>
-            <div>
-              {movies.map((movie) => (
-                <Link key={movie.uid} href={"/movie" + "?id=" + movie.uid}>
-                  {movie.title}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )} */}
-        <HomePageSliders
-          popularMovies={popularMovies}
-          originalMovies={movies}
-          nowPlaying={nowPlaying}
-          trendingMovies={trendingMovies}
-          trendingTv={trendingTv}
-        />
+        <Nav signedIn={props.signedIn} />
+        {props.popularMovies && <Banner popularMovies={props.popularMovies} />}
+        <HomePageSliders {...props} />
       </div>
     </ContextProvider>
   );
@@ -56,25 +28,13 @@ export async function getServerSideProps(context) {
       getPopularMovies("trending", "tv", "week"),
     ]);
 
-  const movies = await getPublishedMovies();
-  // return redirectIfUserIsNotAuthenticated({
-  //   context,
-  //   path: "/",
-  //   props: {
-  //     popularMovies,
-  //     movies,
-  //     nowPlaying,
-  //     trendingMovies,
-  //     trendingTv,
-  //   },
-  // });
+  const originalMovies = await getPublishedMovies();
   const session = await getSession(context);
-  console.log(session);
   return {
     props: {
       signedIn: !!session,
       popularMovies,
-      movies,
+      originalMovies,
       nowPlaying,
       trendingMovies,
       trendingTv,
