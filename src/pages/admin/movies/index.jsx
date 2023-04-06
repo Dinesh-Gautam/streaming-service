@@ -123,8 +123,9 @@ function MoviePage({ pendingUploads, uploadedVideos }) {
   );
 }
 export async function getServerSideProps() {
-  const data = getPendingMovies();
-  const uploadedVideos = getPublishedMovies();
+  const data = await getPendingMovies();
+
+  const uploadedVideos = await getPublishedMovies();
   return {
     props: {
       pendingUploads: data && data.length ? data : null,

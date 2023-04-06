@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const data = deletePendingMovie(id);
+  const data = await deletePendingMovie(id);
 
   if (!data) {
     res.send({

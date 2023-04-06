@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (!id) {
     res.send("id parameter is missing");
   }
-  const movieData = getMovieData(id);
+  const movieData = await getMovieData(id);
 
   // check if the user is eligible
 

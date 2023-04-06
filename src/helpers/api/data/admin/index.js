@@ -5,33 +5,16 @@ import { readFile } from "../../user/user";
 import User from "../../../../db/schemas/userSchema";
 import Pending from "../../../../db/schemas/pendingSchema";
 
-export function publishMovie(id) {
+export async function publishMovie(id) {
   if (!id) {
     console.log("id is not provided");
     return null;
   }
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || [];
+    const movieData = await getPendingMovies(id);
 
-    if (!fileData.length) {
-      console.log("info:", "fileData:", config.pendingMovies, "length is zero");
-    }
-
-    const movieData = fileData.find((e) => e.uid === id);
-    if (!movieData) {
-      console.log("can't find movie in:", config.pendingMovies);
-      return null;
-    }
-
-    const updatedTempFileData = fileData.filter((e) => e.uid !== id);
-    saveMovieToPublishedMovie(movieData);
-    fs.writeFileSync(
-      config.dir + config.pendingMovies,
-      JSON.stringify(updatedTempFileData)
-    );
+    // return null;
+    await saveMovieToPublishedMovie(movieData);
     return movieData;
   } catch (e) {
     console.log(
@@ -44,6 +27,39 @@ export function publishMovie(id) {
 }
 
 export async function getPendingMovies(id) {
+  if (!id) {
+    // get all pending videos
+    const data = await Pending.find();
+
+    return data.map(
+      ({
+        title,
+        description,
+        genres,
+        first_air_date,
+        media_type,
+        poster_path,
+        backdrop_path,
+        _id,
+        video,
+        poster,
+        backdrop,
+      }) => ({
+        video: JSON.stringify(video),
+        poster: JSON.stringify(poster),
+        backdrop: JSON.stringify(backdrop),
+        title,
+        description,
+        genres,
+        first_air_date,
+        media_type,
+        poster_path,
+        backdrop_path,
+        uid: _id.toString(),
+      })
+    );
+  }
+
   try {
     const {
       title,
@@ -58,6 +74,7 @@ export async function getPendingMovies(id) {
       poster,
       backdrop,
     } = await Pending.findOne({ _id: id }, { __v: 0 });
+
     return {
       video: JSON.stringify(video),
       poster: JSON.stringify(poster),

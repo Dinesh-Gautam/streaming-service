@@ -25,8 +25,7 @@ export async function getServerSideProps(context) {
       props: {},
     };
   }
-  const movieData = getMovieData(uid);
-  console.log(context);
+  const movieData = await getMovieData(uid);
   const callbackUrl = `${process.env.NEXTAUTH_URL}`;
   return redirectIfUserIsNotAuthenticated({
     context,

@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
         });
       }
     } else {
-      searchResult = getOriginalMovieDetails(id);
+      searchResult = await getOriginalMovieDetails(id);
     }
     return {
       props: {

@@ -56,7 +56,7 @@ export async function getServerSideProps(context) {
       getPopularMovies("trending", "tv", "week"),
     ]);
 
-  const movies = getPublishedMovies();
+  const movies = await getPublishedMovies();
   // return redirectIfUserIsNotAuthenticated({
   //   context,
   //   path: "/",

@@ -186,6 +186,7 @@ function UploadPage({ pending }) {
 
       if (publish.ok) {
         setPublishStatus({ published: true });
+        router.replace(location.origin + location.pathname);
       }
     }
   }
@@ -263,6 +264,7 @@ function UploadPage({ pending }) {
       Object.keys(inputValue).some((e) => !inputValue[e])
     );
   }
+
   function disableUploadButton() {
     return !(
       videoFileInfo.video &&

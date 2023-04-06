@@ -176,10 +176,10 @@ function consoleEncode(fn, title, uid) {
     .on("stderr", function (stderrLine) {
       // console.log("Stderr output: " + stderrLine);
     })
-    .on("end", function () {
+    .on("end", async function () {
       console.log("complete");
-      updateMovieProgressData(uid, { completed: true });
-      saveMovieData({
+      await updateMovieProgressData(uid, { completed: true });
+      await saveMovieData({
         title,
         uid,
         videoFileName: `${name}.mpd`,

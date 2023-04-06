@@ -1,16 +1,15 @@
+import MovieData from "../../../../db/schemas/movieData";
+import Movie from "../../../../db/schemas/movieSchema";
 import Pending from "../../../../db/schemas/pendingSchema";
 import Progress from "../../../../db/schemas/progressSchema";
 import { config } from "../config";
 
 import fs from "fs";
 
-export function getPublishedMovies() {
+export async function getPublishedMovies() {
   // get all the original movies
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.publishedMovies).toString()
-      ) || [];
+    const fileData = await Movie.find();
 
     if (fileData.length) {
       const data = fileData.map(
@@ -20,7 +19,7 @@ export function getPublishedMovies() {
           description,
           poster_path,
           backdrop_path,
-          uid,
+          _id,
           first_air_date,
         }) => ({
           title,
@@ -28,7 +27,7 @@ export function getPublishedMovies() {
           description,
           poster_path,
           backdrop_path,
-          uid,
+          uid: _id.toString(),
           first_air_date,
         })
       );
@@ -36,12 +35,12 @@ export function getPublishedMovies() {
     }
     return null;
   } catch (e) {
-    console.log(config.publishedMovies, "does not exists");
+    console.log("some error occurred");
   }
   return null;
 }
 
-export function saveMovieToPublishedMovie(data) {
+export async function saveMovieToPublishedMovie(data) {
   // publishing movies
   if (!data) {
     console.log("data is required when publishing movies");
@@ -56,42 +55,27 @@ export function saveMovieToPublishedMovie(data) {
   console.log("saving original movies");
 
   try {
-    const fileData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.publishedMovies).toString()
-      ) || [];
+    const movieData = new Movie({
+      ...data,
+      _id: data.uid,
+      video: JSON.parse(data.video),
+      poster: JSON.parse(data.poster),
+      backdrop: JSON.parse(data.backdrop),
+    });
+    const published = await movieData.save();
+    await Pending.deleteOne({ _id: data.uid });
 
-    const movie = fileData.find((e) => e.uid === data.uid);
-    if (movie) {
-      console.log("movie already exists");
-      fileData.map((e) => {
-        if (e.uid === data.uid) {
-          return data;
-        }
-        return e;
-      });
-    } else {
-      fileData.push(data);
-    }
-
-    fs.writeFileSync(
-      config.dir + config.publishedMovies,
-      JSON.stringify(fileData)
-    );
+    console.log(published);
+    return movieData;
   } catch (error) {
     console.error(error);
-    console.log("creating new movies.json file");
-    const fileData = [data];
+
     // fs.writeFileSync("data.json", JSON.stringify([data]));
-    fs.writeFileSync(
-      config.dir + config.publishedMovies,
-      JSON.stringify(fileData)
-    );
   }
   return null;
 }
 
-export function saveMovieData(data) {
+export async function saveMovieData(data) {
   // contains urls for the movie
   if (!data) {
     console.log("data is required when saving movie data");
@@ -100,26 +84,10 @@ export function saveMovieData(data) {
   const { uid } = data;
   console.log("saving movie data");
   try {
-    const fileData =
-      JSON.parse(fs.readFileSync(config.dir + config.movieData).toString()) ||
-      [];
-
-    const movie = fileData.find((e) => e.uid === uid);
-    if (movie) {
-      console.log("movie metadata already exists");
-      fileData.map((e) => {
-        if (e.uid === uid) {
-          return { ...data };
-        }
-        return e;
-      });
-    } else {
-      fileData.push(data);
-    }
-
-    fs.writeFileSync(config.dir + config.movieData, JSON.stringify(fileData));
+    const movieData = new MovieData({ ...data, videoId: uid });
+    return await movieData.save();
   } catch (error) {
-    const fileData = [data];
+    console.log("some error occurred");
     //  fs.writeFileSync("data.json", JSON.stringify([data]));
     fs.writeFileSync(config.dir + config.movieData, JSON.stringify(fileData));
   }
@@ -190,76 +158,68 @@ export async function getProgressData(id) {
   return null;
 }
 
-export function getMovieData(id) {
+export async function getMovieData(id) {
   // read file containing movie data such as url and other data
   if (!id) {
     console.log("id is required when getting movie data");
     return null;
   }
-  try {
-    const movieData =
-      JSON.parse(fs.readFileSync(config.dir + config.movieData).toString()) ||
-      [];
-    const data = movieData.find((e) => e.uid == id);
-    if (!data) {
-      console.log("can't find movie data");
-      return null;
-    }
-    return data;
-  } catch (e) {
-    console.log(config.dir + config.movieData, "does not exists");
-  }
 
+  try {
+    const { title, videoFileName, videoFileDir, videoId } =
+      await MovieData.findOne({ videoId: id });
+    return { title, videoFileName, videoFileDir, uid: videoId };
+  } catch (e) {
+    console.log("some error occured");
+  }
   return null;
 }
 
-export function deletePendingMovie(id) {
+export async function deletePendingMovie(id) {
   if (!id) {
     console.log("id is required when deleting movie data");
     return null;
   }
 
   try {
-    let pendingMovieData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.pendingMovies).toString()
-      ) || [];
-    const data = pendingMovieData.find((e) => e.uid == id);
-    if (!data) {
-      console.log("can't find movie data when deleting from pending movies");
-      return null;
-    }
-    pendingMovieData = pendingMovieData.filter((e) => e.uid !== id);
-    fs.writeFileSync(
-      config.dir + config.pendingMovies,
-      JSON.stringify(pendingMovieData)
-    );
+    const data = await Pending.deleteOne({ _id: id });
     return data;
   } catch (e) {
-    console.log(config.dir + config.movieData, "does not exists");
+    console.log("some error occurred");
   }
 
   return null;
 }
 
-export function getOriginalMovieDetails(id) {
+export async function getOriginalMovieDetails(id) {
   if (!id) {
     console.log("id is required when getting movie data");
     return null;
   }
   try {
-    const movieData =
-      JSON.parse(
-        fs.readFileSync(config.dir + config.publishedMovies).toString()
-      ) || [];
-    const data = movieData.find((e) => e.uid == id);
-    if (!data) {
-      console.log("can't find movie data");
-      return null;
-    }
-    return data;
+    const {
+      title,
+      description,
+      genres,
+      first_air_date,
+      media_type,
+      poster_path,
+      backdrop_path,
+      _id,
+    } = await Movie.findOne({ _id: id });
+
+    return {
+      title,
+      description,
+      genres,
+      first_air_date,
+      media_type,
+      poster_path,
+      backdrop_path,
+      uid: _id.toString(),
+    };
   } catch (e) {
-    console.log(config.dir + config.movieData, "does not exists");
+    console.log("some error occurred");
   }
 
   return null;
