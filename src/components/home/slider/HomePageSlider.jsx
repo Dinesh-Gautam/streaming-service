@@ -1,5 +1,4 @@
 import Separator from "@/components/elements/separator";
-import useYoutubePlayer from "@/components/videoPlayer/youtube/hook/useYoutubePlayer";
 import YoutubeVideoPlayer from "@/components/videoPlayer/youtube/youtubeVideoPlayer";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
 import { Star } from "@mui/icons-material";
@@ -9,48 +8,37 @@ import Link from "next/link";
 import React, {
   Children,
   cloneElement,
-  createContext,
   isValidElement,
-  useContext,
-  useEffect,
   useRef,
   useState,
 } from "react";
 import Slider from "./Slider";
 import styles from "./slider.module.scss";
-
+import YoutubeVideoPlayerProvider from "../../videoPlayer/youtube/youtubePlayerContext";
+import YoutubeControlButtons from "../../videoPlayer/youtube/youtubePlayerControlsButtons";
 function HomePageSliders(props) {
   return (
     <HoverCardProvider {...props}>
       {props.originalMovies && props.originalMovies.length && (
         <Slider
-          // setIsScrolling={setIsScrolling}
           title="Original Movies"
           data={props.originalMovies}
           type={"originalMovies"}
         />
       )}
       <Slider
-        // setIsScrolling={setIsScrolling}
         title="Trending Movies"
         data={props.trendingMovies}
         type={"trendingMovies"}
       />
-      <Slider
-        // setIsScrolling={setIsScrolling}
-        title="Now Playing"
-        data={props.nowPlaying}
-        type={"nowPlaying"}
-      />
+      <Slider title="Now Playing" data={props.nowPlaying} type={"nowPlaying"} />
 
       <Slider
-        // setIsScrolling={setIsScrolling}
         title="Trending Tv Shows"
         data={props.trendingTv}
         type={"trendingTv"}
       />
       <Slider
-        // setIsScrolling={setIsScrolling}
         title="Top 10"
         data={props.popularMovies}
         type={"popularMovies"}
@@ -71,30 +59,7 @@ const HoverCardProvider = (props) => {
   const clearingInterval = useRef(false);
   const [isScrolling, setIsScrolling] = useState(false);
 
-  // const playerRef = useRef(null);
-  // const [playerState, setPlayerState] = useState({ playing: false });
   const [animating, setAnimating] = useState(true);
-
-  // const [id, setId] = useState(null);
-  // const { ButtonsComponent, videosData } = useYoutubePlayer({
-  //   playerRef,
-  //   playerState,
-  //   setPlayerState,
-  //   setId,
-  //   id,
-  //   pauseWhile: animating,
-  //   media_type: hoverCardPosition.type
-  //     ? props[hoverCardPosition.type][hoverCardPosition.index]?.media_type
-  //     : props.popularMovies[hoverCardPosition.index]?.media_type,
-  // });
-  // useEffect(() => {
-  //   const id = hoverCardPosition.type
-  //     ? props[hoverCardPosition.type][hoverCardPosition.index]?.id
-  //     : props.popularMovies[hoverCardPosition.index]?.id;
-  //   setId(id);
-
-  //   console.log(hoverCardPosition);
-  // }, [hoverCardPosition]);
 
   async function clearHover() {
     if (timeOutRef.current) {
@@ -106,6 +71,11 @@ const HoverCardProvider = (props) => {
       setInContainer(false);
       setAnimating(false);
     }
+  }
+  function getHoverCardMovie() {
+    return props[hoverCardPosition.type || "popularMovies"][
+      hoverCardPosition.index ?? 0
+    ];
   }
 
   return (
@@ -154,32 +124,36 @@ const HoverCardProvider = (props) => {
           return cloneElement(child, { ...child.props, setIsScrolling });
         })}
       </div>
-      <HoverCard
-        context={{
-          hoverCardPosition,
-          hoverCardActive,
-          timeOutRef,
-          setAnimating,
-          clearHover,
-        }}
-        props={props}
-      />
+      <YoutubeVideoPlayerProvider
+        id={getHoverCardMovie()?.id}
+        media_type={getHoverCardMovie()?.media_type || "movie"}
+      >
+        <HoverCard
+          context={{
+            hoverCardPosition,
+            hoverCardActive,
+            timeOutRef,
+            animating,
+            setAnimating,
+            clearHover,
+            getHoverCardMovie,
+          }}
+        />
+      </YoutubeVideoPlayerProvider>
     </>
   );
 };
 
-const HoverCard = ({ context, props }) => {
+const HoverCard = ({ context }) => {
   const {
     hoverCardPosition,
     hoverCardActive,
     timeOutRef,
+    animating,
     setAnimating,
     clearHover,
+    getHoverCardMovie,
   } = context;
-  function getHoverCardMovie() {
-    return props[hoverCardPosition.type][hoverCardPosition.index];
-  }
-
   return (
     <AnimatePresence>
       {hoverCardActive && (
@@ -232,20 +206,9 @@ const HoverCard = ({ context, props }) => {
               }
             >
               <motion.div layoutId={"hover"} className={styles.imageContainer}>
-                {/* {!hoverCardPosition.original &&
-              !animating &&
-              videosData.length > 0 &&
-              videosData.find((e) => e.id === id) &&
-              playerState.playing && (
-                <YoutubeVideoPlayer
-                  playerRef={playerRef}
-                  playerState={playerState}
-                  setPlayerState={setPlayerState}
-                  videoId={
-                    videosData.find((e) => e.id === id)?.videos[0]?.key
-                  }
-                />
-              )} */}
+                {!hoverCardPosition.original && !animating && (
+                  <YoutubeVideoPlayer />
+                )}
                 <Image
                   src={
                     hoverCardPosition.original
@@ -286,7 +249,7 @@ const HoverCard = ({ context, props }) => {
                       opacity: 0,
                     }}
                   >
-                    {/* {!hoverCardPosition.original && <ButtonsComponent />} */}
+                    {!hoverCardPosition.original && <YoutubeControlButtons />}
                   </motion.div>
                 </div>
                 <motion.div
@@ -303,7 +266,6 @@ const HoverCard = ({ context, props }) => {
                       gap: 2,
                     }}
                   >
-                    {console.log(hoverCardPosition.original)}
                     {hoverCardPosition.original ? (
                       <Separator
                         values={[
@@ -364,4 +326,5 @@ const HoverCard = ({ context, props }) => {
     </AnimatePresence>
   );
 };
+
 export default HomePageSliders;
