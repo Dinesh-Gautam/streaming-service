@@ -27,8 +27,12 @@ function YoutubeVideoPlayer({ roundedBorder }) {
       mute: playerState.muted,
     },
   });
-
   useEffect(() => {
+    setVideoPlayerReady(false);
+  }, []);
+  useEffect(() => {
+    setVideoPlayerReady(false);
+
     return () => {
       setVideoPlayerReady(false);
       if (!playerRef.current) return;
@@ -39,7 +43,6 @@ function YoutubeVideoPlayer({ roundedBorder }) {
       }
       playerRef.current.destroy();
       playerRef.current = null;
-      setVideoPlayerReady(false);
       console.log("destroying youtube player");
     };
   }, [id]);
