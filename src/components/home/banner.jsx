@@ -16,6 +16,8 @@ import {
 } from "@mui/icons-material";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
 import { useData } from "../../context/stateContext";
+import YoutubeControlButtons from "../videoPlayer/youtube/youtubePlayerControlsButtons";
+import YoutubeVideoPlayerProvider from "../videoPlayer/youtube/youtubePlayerContext";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -25,47 +27,12 @@ const PopularMoviesBanner = ({ popularMovies }) => {
   const [nextIndex, setNextIndex] = useState(2);
 
   const [disable, setDisable] = useState(false);
+  const [animating, setAnimating] = useState(false);
   const disableTimeoutRef = useRef(null);
-
-  const { videosData, setVideosData } = useData();
-  const playerRef = useRef(null);
-  const [playerState, setPlayerState] = useState({ playing: false });
-  useEffect(() => {
-    setPlayerState((prev) => ({ ...prev, playing: false }));
-    const id = popularMovies[currentIndex].id;
-    if (videosData.find((e) => e.id === id)) return;
-
-    fetch(
-      "/api/tmdb/videos?id=" +
-        id +
-        "&type=" +
-        popularMovies[currentIndex].media_type
-    )
-      .then((e) => e.json())
-      .then(({ data }) => {
-        setVideosData((prev) => [
-          ...prev,
-          {
-            id,
-            videos: data
-              .filter((video) => video.official && video.type === "Trailer")
-              .sort((a, b) => {
-                return new Date(a.published_at) - new Date(b.published_at);
-              }),
-          },
-        ]);
-      })
-      .catch((e) => console.error(e));
-
-    console.log(currentIndex);
-  }, [currentIndex]);
-
-  useEffect(() => {
-    console.log(videosData);
-  }, [videosData]);
 
   function buttonClick() {
     setDisable(true);
+    setAnimating(true);
     clearTimeout(disableTimeoutRef.current);
 
     if (!disableTimeoutRef.current) {
@@ -78,6 +45,12 @@ const PopularMoviesBanner = ({ popularMovies }) => {
       }, 800);
     }
   }
+
+  useEffect(() => {
+    if (animating) {
+      setAnimating(false);
+    }
+  }, [currentIndex]);
 
   function setIndexNext(prev) {
     const index = prev + 1;
@@ -109,7 +82,10 @@ const PopularMoviesBanner = ({ popularMovies }) => {
   };
 
   return (
-    <>
+    <YoutubeVideoPlayerProvider
+      id={popularMovies[currentIndex]?.id}
+      media_type={popularMovies[currentIndex]?.media_type || "movie"}
+    >
       <div className={styles.bannerContainer}>
         {popularMovies.map((movie, index) => {
           return (
@@ -164,80 +140,26 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }}
                 ></FadeImageOnLoad>
               </Link>
-              <>
-                <div
-                  className={
-                    styles.bottom +
-                    " " +
-                    (currentIndex === index ? styles.visible : "")
-                  }
-                >
-                  <h1>{movie.title || ""}</h1>
-                  <div className={styles.videoControls}>
-                    {playerState.playing && (
-                      <button
-                        onClick={() => {
-                          const muteState = playerRef.current.isMuted();
-                          muteState
-                            ? playerRef.current.unMute()
-                            : playerRef.current.mute();
-                          setPlayerState((prev) => ({
-                            ...prev,
-                            muted: !muteState,
-                          }));
-                        }}
-                      >
-                        {playerState.muted ? (
-                          <VolumeOff />
-                        ) : (
-                          <VolumeUpRounded />
-                        )}
-                      </button>
-                    )}
-                    {!!videosData.find((e) => e.id === movie.id)?.videos
-                      .length && (
-                      <button
-                        onClick={() => {
-                          if (!playerRef.current) return;
-                          console.log(playerRef.current);
-                          if (!playerState.playing) {
-                            playerRef.current.playVideo();
-                            setPlayerState((prev) => ({
-                              ...prev,
-                              playing: true,
-                            }));
-                          }
-                          if (playerState.playing) {
-                            playerRef.current.pauseVideo();
-                            setPlayerState((prev) => ({
-                              ...prev,
-                              playing: false,
-                            }));
-                          }
-                        }}
-                        disabled={currentIndex !== index}
-                      >
-                        {playerState.playing ? <Pause /> : <PlayArrow />}
-                      </button>
-                    )}
+              {!animating && (
+                <>
+                  <div
+                    className={
+                      styles.bottom +
+                      " " +
+                      (currentIndex === index ? styles.visible : "")
+                    }
+                  >
+                    <h1>{movie.title || ""}</h1>
+                    <div className={styles.videoControls}>
+                      {<YoutubeControlButtons />}
+                    </div>
                   </div>
-                </div>
 
-                {index === currentIndex &&
-                  videosData.length > 0 &&
-                  videosData.find((e) => e.id === movie.id) && (
-                    <YoutubeVideoPlayer
-                      roundedBorder
-                      playerRef={playerRef}
-                      playerState={playerState}
-                      setPlayerState={setPlayerState}
-                      videoId={
-                        videosData.find((e) => e.id === movie.id)?.videos[0]
-                          ?.key
-                      }
-                    />
+                  {index === currentIndex && (
+                    <YoutubeVideoPlayer roundedBorder />
                   )}
-              </>
+                </>
+              )}
             </div>
           );
         })}
@@ -283,7 +205,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
           Next
         </button>
       </div>
-    </>
+    </YoutubeVideoPlayerProvider>
   );
 };
 
