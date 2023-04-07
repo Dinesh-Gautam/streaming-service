@@ -1,21 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { getImageUrl } from "../../tmdbapi/tmdbApi";
 import styles from "./banner.module.scss";
 import FadeImageOnLoad from "../elements/FadeImageOnLoad";
 import Link from "next/link";
-import { red } from "@mui/material/colors";
-import {
-  Pause,
-  PauseCircleFilled,
-  PlayArrow,
-  VolumeMuteRounded,
-  VolumeOff,
-  VolumeUpRounded,
-} from "@mui/icons-material";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
-import { useData } from "../../context/stateContext";
 import YoutubeControlButtons from "../videoPlayer/youtube/youtubePlayerControlsButtons";
 import YoutubeVideoPlayerProvider from "../videoPlayer/youtube/youtubePlayerContext";
 
@@ -127,7 +114,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }
                   ambientMode
                   positionAbsolute
-                  ambientOptions={{ blur: 128, scale: 1 }}
+                  ambientOptions={{ opacity: 1, blur: 124, scale: 1 }}
                   attr={{
                     imageContainer: {
                       layoutId: "banner" + movie.id,
@@ -163,33 +150,7 @@ const PopularMoviesBanner = ({ popularMovies }) => {
             </div>
           );
         })}
-        {/* <div className={styles.banner + " " + styles.left}> */}
-        {/* <Image
-          src={getImageUrl(popularMovies[prevIndex].backdrop_path)}
-          alt={popularMovies[prevIndex].title}
-          width={200}
-          height={200}
-        /> */}
-        {/* <h3>{popularMovies[prevIndex].title}</h3> */}
-        {/* </div> */}
-        {/* <div className={styles.banner + " " + styles.middle}> */}
-        {/* <Image
-          src={getImageUrl(popularMovies[currentIndex].backdrop_path)}
-          alt={popularMovies[currentIndex].title}
-          width={500}
-          height={300}
-        /> */}
-        {/* <h3>{popularMovies[currentIndex].title}</h3> */}
-        {/* </div> */}
-        {/* <div className={styles.banner + " " + styles.right}> */}
-        {/* <Image
-          src={getImageUrl(popularMovies[nextIndex].backdrop_path)}
-          alt={popularMovies[nextIndex].title}
-          width={200}
-          height={200}
-        /> */}
-        {/* <h3>{popularMovies[nextIndex].title}</h3> */}
-        {/* </div> */}
+
         <button
           disabled={disable}
           className={styles.leftButton}

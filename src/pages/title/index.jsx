@@ -3,15 +3,21 @@ import { ContextProvider } from "@/context/stateContext";
 import { getOriginalMovieDetails } from "@/helpers/api/data/movie";
 import { getDetails } from "@/tmdbapi/tmdbApi";
 import React from "react";
+import YoutubeVideoPlayerProvider from "../../components/videoPlayer/youtube/youtubePlayerContext";
 
 function Title({ result, layout_type, original }) {
   return (
     <ContextProvider>
-      <TitleView
-        result={result}
-        layout_type={layout_type}
-        original={original}
-      />
+      <YoutubeVideoPlayerProvider
+        id={result?.id}
+        media_type={result.media_type || "movie"}
+      >
+        <TitleView
+          result={result}
+          layout_type={layout_type}
+          original={original}
+        />
+      </YoutubeVideoPlayerProvider>
     </ContextProvider>
   );
 }
@@ -46,6 +52,7 @@ export async function getServerSideProps(context) {
       }
     } else {
       searchResult = await getOriginalMovieDetails(id);
+      searchResult.original = Boolean(original);
     }
     return {
       props: {
