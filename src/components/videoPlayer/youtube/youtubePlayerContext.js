@@ -11,6 +11,7 @@ function YoutubeVideoPlayerProvider({ id, media_type, children }) {
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({ playing: false });
   const { videosData, setVideosData } = useData([]);
+  const [videoPlayerReady, setVideoPlayerReady] = useState(false);
   const contextValues = {
     playerRef,
     playerState,
@@ -19,6 +20,8 @@ function YoutubeVideoPlayerProvider({ id, media_type, children }) {
     media_type,
     videosData,
     setVideosData,
+    videoPlayerReady,
+    setVideoPlayerReady,
   };
   return (
     <videoPlayerContext.Provider value={contextValues}>

@@ -17,6 +17,7 @@ function YoutubeControlButtons({ size }) {
     media_type,
     videosData,
     setVideosData,
+    videoPlayerReady,
   } = useYoutubePlayer();
 
   useEffect(() => {
@@ -69,39 +70,40 @@ function YoutubeControlButtons({ size }) {
           )}
         </button>
       )}
-      {!!videosData.find((e) => e.id === id)?.videos.length && (
-        <button
-          style={{
-            height,
-            width,
-          }}
-          onClick={() => {
-            if (!playerRef.current) return;
+      {!!videosData.find((e) => e.id === id)?.videos.length &&
+        videoPlayerReady && (
+          <button
+            style={{
+              height,
+              width,
+            }}
+            onClick={() => {
+              if (!playerRef.current) return;
 
-            if (!playerState.playing) {
-              playerRef.current.playVideo();
-              setPlayerState((prev) => ({
-                ...prev,
-                playing: true,
-              }));
-            }
-            if (playerState.playing) {
-              playerRef.current.pauseVideo();
-              setPlayerState((prev) => ({
-                ...prev,
-                playing: false,
-              }));
-            }
-          }}
-          // disabled={currentIndex !== index}
-        >
-          {playerState.playing ? (
-            <Pause fontSize={size || "small"} />
-          ) : (
-            <PlayArrow fontSize={size || "small"} />
-          )}
-        </button>
-      )}
+              if (!playerState.playing) {
+                playerRef.current.playVideo();
+                setPlayerState((prev) => ({
+                  ...prev,
+                  playing: true,
+                }));
+              }
+              if (playerState.playing) {
+                playerRef.current.pauseVideo();
+                setPlayerState((prev) => ({
+                  ...prev,
+                  playing: false,
+                }));
+              }
+            }}
+            // disabled={currentIndex !== index}
+          >
+            {playerState.playing ? (
+              <Pause fontSize={size || "small"} />
+            ) : (
+              <PlayArrow fontSize={size || "small"} />
+            )}
+          </button>
+        )}
     </div>
   );
 }

@@ -3,8 +3,14 @@ import YouTube from "react-youtube";
 import styles from "./youtubePlayer.module.scss";
 import { useYoutubePlayer } from "./youtubePlayerContext";
 function YoutubeVideoPlayer({ roundedBorder }) {
-  const { videosData, playerRef, playerState, setPlayerState, id } =
-    useYoutubePlayer();
+  const {
+    videosData,
+    playerRef,
+    playerState,
+    setPlayerState,
+    id,
+    setVideoPlayerReady,
+  } = useYoutubePlayer();
   const videoId = videosData.find((e) => e.id === id)?.videos[0]?.key;
 
   const opts = useRef({
@@ -24,6 +30,7 @@ function YoutubeVideoPlayer({ roundedBorder }) {
 
   useEffect(() => {
     return () => {
+      setVideoPlayerReady(false);
       if (!playerRef.current) return;
       try {
         playerRef.current.unloadModule();
@@ -31,27 +38,30 @@ function YoutubeVideoPlayer({ roundedBorder }) {
         console.log(e);
       }
       playerRef.current.destroy();
+      playerRef.current = null;
+      setVideoPlayerReady(false);
       console.log("destroying youtube player");
     };
-  }, []);
+  }, [id]);
 
   return (
     videosData.length > 0 &&
     videosData.find((e) => e.id === id) && (
       <div className={styles.container}>
-        {((!playerRef.current ||
-          playerRef.current?.playerInfo?.videoData?.video_id !== videoId) &&
-          videoId &&
-          console.log("rendering", videoId)) || (
+        {videoId && (
           <YouTube
             style={{
               opacity: playerState.playing ? 1 : 0,
               borderRadius: roundedBorder ? 12 : 0,
               overflow: "hidden",
             }}
+            loading="eager"
             videoId={videoId}
             opts={opts.current}
+            onError={(e) => console.log(e)}
             onReady={(event) => {
+              setVideoPlayerReady(true);
+              console.log(event);
               playerRef.current = event.target;
             }}
             onStateChange={(event) => {
