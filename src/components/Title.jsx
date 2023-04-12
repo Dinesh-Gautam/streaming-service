@@ -6,41 +6,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./View.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
-// import {
-//   ArrowLeft,
-//   ArrowRight,
-//   Close,
-//   PlayArrowRounded,
-//   Star,
-// } from "@mui/icons-material";
-// import ArrowLeft from "@mui/icons-material/ArrowLeft";
-// import ArrowRight from "@mui/icons-material/ArrowRight";
-// import Close from "@mui/icons-material/Close";
-// import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
-// import ArrowDownward from "@mui/icons-material/ArrowDownward";
-// import Link from "next/link";
-// import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
-// import useYoutubePlayer from "./videoPlayer/youtube/hook/useYoutubePlayer";
+import ArrowLeft from "@mui/icons-material/ArrowLeft";
+import ArrowRight from "@mui/icons-material/ArrowRight";
+import Close from "@mui/icons-material/Close";
+import Star from "@mui/icons-material/Star";
+import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+import ArrowDownward from "@mui/icons-material/ArrowDownward";
+import Link from "next/link";
+import YoutubeVideoPlayer from "./videoPlayer/youtube/youtubeVideoPlayer";
 import Select from "./elements/customSelect/CustomSelect";
-// import { useData } from "../context/stateContext";
-// import { checkIfStringIsValidUrl } from "../utils";
-import dynamic from "next/dynamic";
 import MoreInfo from "./title/MoreInfo";
 import YoutubeControlButtons from "./videoPlayer/youtube/youtubePlayerControlsButtons";
 import { useYoutubePlayer } from "./videoPlayer/youtube/youtubePlayerContext";
-
-const Star = dynamic(import("@mui/icons-material/Star"));
-const Close = dynamic(import("@mui/icons-material/Close"));
-const ArrowLeft = dynamic(import("@mui/icons-material/ArrowLeft"));
-const ArrowRight = dynamic(import("@mui/icons-material/ArrowRight"));
-const PlayArrowRounded = dynamic(
-  import("@mui/icons-material/PlayArrowRounded")
-);
-const ArrowDownward = dynamic(import("@mui/icons-material/ArrowDownward"));
-const YoutubeVideoPlayer = dynamic(
-  import("./videoPlayer/youtube/youtubeVideoPlayer")
-);
-const Link = dynamic(import("next/link"));
 
 const otherElementsAnimation = {
   initial: {
@@ -52,20 +29,7 @@ const otherElementsAnimation = {
   },
 };
 
-const HeadingAnimation = {
-  initial: {
-    position: "relative",
-    top: 0,
-    left: 0,
-  },
-  animate: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-  },
-};
-
-function TitleView({ result, layout_type, original, signedIn }) {
+function TitleView({ result, layout_type }) {
   const [animating, setAnimating] = useState(true);
   const [moreInfoOpen, setMoreInfoOpen] = useState(false);
   const { playerState } = useYoutubePlayer();

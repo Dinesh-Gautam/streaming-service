@@ -3,13 +3,14 @@ import { getGenre } from "../../tmdbapi/tmdbApi";
 import { tmdbSearch } from "@/helpers/api/search/tmdb";
 import { ContextProvider } from "@/context/stateContext";
 import Nav from "@/components/nav";
+import { getSession } from "next-auth/react";
 
-function SearchResultDetailed({ query, result }) {
+function SearchResultDetailed({ query, result, isSignedIn }) {
   return (
     <ContextProvider>
       {query ? (
         <div>
-          <Nav searchInitialValue={query} />
+          <Nav signedIn={isSignedIn} searchInitialValue={query} />
           {result && result.length ? (
             <SearchResult results={result} />
           ) : (
@@ -48,6 +49,7 @@ function SearchResultDetailed({ query, result }) {
 
 export async function getServerSideProps(context) {
   const query = context.query.q;
+  const session = await getSession(context);
   if (!query) {
     return {
       props: {},
@@ -63,6 +65,7 @@ export async function getServerSideProps(context) {
   });
   return {
     props: {
+      isSignedIn: !!session,
       query,
       result: mappedResults,
     },
