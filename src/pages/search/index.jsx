@@ -29,7 +29,7 @@ function SearchResultDetailed({ query, result, isSignedIn }) {
         </div>
       ) : (
         <div>
-          <Nav />
+          <Nav signedIn={isSignedIn} />
           <h1
             style={{
               width: "fit-content",
