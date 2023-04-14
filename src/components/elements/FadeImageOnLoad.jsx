@@ -50,7 +50,11 @@ function FadeImageOnLoad(props) {
                 // onLoadingComplete={() => setImageLoaded(true)}
                 alt={props.imageSrc}
                 style={{
-                  filter: `blur(${props.ambientOptions?.blur || 24}px)`,
+                  filter: `blur(${
+                    props.ambientOptions?.blur || 24
+                  }px) saturate(${
+                    props.ambientOptions?.saturation ?? 1
+                  }) brightness(${props.ambientOptions?.brightness ?? 1})`,
                   opacity: 0.7,
                   position: "absolute",
                   top: "50%",

@@ -23,7 +23,7 @@ function UsersInfo({ userData, type }) {
           overflowY: "auto",
         }}
       >
-        <h1>Cannot get user Data</h1>
+        {!userData && <h1>Cannot get user Data</h1>}
         {userData && <UserHeader userData={userData} />}
         {userData &&
           userData.map((user) => {

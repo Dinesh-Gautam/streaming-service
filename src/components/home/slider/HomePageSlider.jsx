@@ -81,6 +81,10 @@ const HoverCardProvider = (props) => {
   return (
     <>
       <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+        }}
         onMouseLeave={() => {
           if (!timeOutRef.current) return;
           if (!inContainer) {

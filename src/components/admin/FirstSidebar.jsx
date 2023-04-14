@@ -9,6 +9,7 @@ import Sheet from "@mui/joy/Sheet";
 
 import { openSidebar } from "./utils";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const firstSidebarItems = [
   { icon: "home", href: "/admin" },
@@ -17,6 +18,7 @@ const firstSidebarItems = [
 ];
 
 export default function FirstSidebar() {
+  const url = useRouter();
   return (
     <Sheet
       className="FirstSidebar"
@@ -62,7 +64,11 @@ export default function FirstSidebar() {
           return (
             <Link key={index} href={href}>
               <ListItem>
-                <ListItemButton onClick={() => openSidebar()}>
+                <ListItemButton
+                  selected={url.pathname === href}
+                  variant={url.pathname === href ? "solid" : "plain"}
+                  onClick={() => openSidebar()}
+                >
                   <i data-feather={icon} />
                 </ListItemButton>
               </ListItem>

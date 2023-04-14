@@ -114,7 +114,13 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }
                   ambientMode
                   positionAbsolute
-                  ambientOptions={{ opacity: 1, blur: 124, scale: 1 }}
+                  ambientOptions={{
+                    opacity: 0.5,
+                    saturation: 1.4,
+                    brightness: 2,
+                    blur: 124,
+                    scale: 1,
+                  }}
                   attr={{
                     imageContainer: {
                       layoutId: "banner" + movie.id,
