@@ -29,11 +29,6 @@ const Select = ({ options, onChange, defaultValue }) => {
     options.find((e) => e.value === defaultValue) || null
   );
 
-  // useEffect(() => {
-  //   if (!onChange || selectedOption === null) return;
-  //   onChange(selectedOption);
-  // }, [selectedOption]);
-
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     onChange(option);
@@ -57,15 +52,6 @@ const Select = ({ options, onChange, defaultValue }) => {
         className={styles.selectContainer}
         variants={variants.selectBox}
         onClick={handleSelectBoxClick}
-        // style={
-        //   isOpen
-        //     ? {
-        //         borderBottomLeftRadius: "0px",
-        //         borderBottomRightRadius: "0px",
-        //         borderBottom: "none",
-        //       }
-        //     : {}
-        // }
       >
         <div>{selectedOption ? selectedOption.label : "Select season"}</div>
         <motion.svg
@@ -84,9 +70,6 @@ const Select = ({ options, onChange, defaultValue }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            // initial="closed"
-            // animate="open"
-            // exit="closed"
             className={styles.optionContainer}
             variants={variants.optionContainer}
             transition={{ duration: 0.2 }}

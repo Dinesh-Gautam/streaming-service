@@ -20,14 +20,8 @@ function Nav({ searchInitialValue, signedIn }) {
               onBlur={() => {
                 setOpen(false);
               }}
-              onClick={() =>
-                // signOut({
-                //   redirect: "/",
-                // })
-                setOpen((prev) => !prev)
-              }
+              onClick={() => setOpen((prev) => !prev)}
             >
-              {/* Sign Out */}
               <Avatar />
             </button>
             <AnimatePresence>

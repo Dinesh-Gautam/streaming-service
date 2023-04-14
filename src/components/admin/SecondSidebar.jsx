@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/joy/Box";
-// import Chip from "@mui/joy/Chip";
 import List from "@mui/joy/List";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItem from "@mui/joy/ListItem";
@@ -105,58 +104,6 @@ export default function SecondSidebar({ sideBarItems, title }) {
                 </Link>
               );
             })}
-
-          {/* <ListItem>
-            <ListItemButton onClick={() => closeSidebar()}>
-              <ListItemDecorator>
-                <i data-feather="bell" />
-              </ListItemDecorator>
-              <ListItemContent>Notification</ListItemContent>
-              <Chip variant="soft" size="sm">
-                10
-              </Chip>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton onClick={() => closeSidebar()}>
-              <ListItemDecorator>
-                <i data-feather="bar-chart" />
-              </ListItemDecorator>
-              <ListItemContent>Analytics</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton onClick={() => closeSidebar()}>
-              <ListItemDecorator>
-                <i data-feather="star" />
-              </ListItemDecorator>
-              <ListItemContent>Saved reports</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton selected variant="soft">
-              <ListItemDecorator>
-                <i data-feather="shopping-cart" />
-              </ListItemDecorator>
-              <ListItemContent>Orders</ListItemContent>
-            </ListItemButton>
-          </ListItem> */}
-          {/* <ListItem>
-            <ListItemButton onClick={() => closeSidebar()}>
-              <ListItemDecorator>
-                <i data-feather="user" />
-              </ListItemDecorator>
-              <ListItemContent>User reports</ListItemContent>
-            </ListItemButton>
-          </ListItem> */}
-          {/* <ListItem>
-            <ListItemButton onClick={() => closeSidebar()}>
-              <ListItemDecorator>
-                <i data-feather="settings" />
-              </ListItemDecorator>
-              <ListItemContent>Manage notifications</ListItemContent>
-            </ListItemButton>
-          </ListItem> */}
         </List>
         <Box
           sx={{

@@ -57,7 +57,6 @@ export default function FirstSidebar() {
           },
         }}
       />
-      {/* <MuiLogo /> */}
 
       <List sx={{ "--List-item-radius": "8px", "--List-gap": "12px" }}>
         {firstSidebarItems.map(({ icon, href }, index) => {
@@ -75,61 +74,7 @@ export default function FirstSidebar() {
             </Link>
           );
         })}
-
-        {/* <ListItem>
-          <ListItemButton
-            selected
-            variant="solid"
-            color="primary"
-            onClick={() => openSidebar()}
-          >
-            <i data-feather="bar-chart-2" />
-          </ListItemButton>
-        </ListItem> */}
-        {/* <Link href="/admin/movies">
-          <ListItem>
-            <ListItemButton onClick={() => openSidebar()}>
-              <i data-feather="layers" />
-            </ListItemButton>
-          </ListItem>
-        </Link> */}
-        {/* <ListItem>
-          <ListItemButton onClick={() => openSidebar()}>
-            <i data-feather="check-square" />
-          </ListItemButton>
-        </ListItem> */}
-        {/* <ListItem>
-          <ListItemButton onClick={() => openSidebar()}>
-            <i data-feather="flag" />
-          </ListItemButton>
-        </ListItem> */}
-        {/* <Link href="/admin/users">
-          <ListItem variant="solid">
-            <ListItemButton onClick={() => openSidebar()}>
-              <i data-feather="users" />
-            </ListItemButton>
-          </ListItem>
-        </Link> */}
       </List>
-      {/* <List
-        sx={{
-          mt: "auto",
-          flexGrow: 0,
-          "--List-item-radius": "8px",
-          "--List-gap": "8px",
-        }}
-      >
-        <ListItem>
-          <ListItemButton>
-            <i data-feather="life-buoy" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton>
-            <i data-feather="settings" />
-          </ListItemButton>
-        </ListItem>
-      </List> */}
       <Divider />
       <Avatar variant="outlined" src="none" />
     </Sheet>

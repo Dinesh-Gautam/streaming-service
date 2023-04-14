@@ -18,7 +18,6 @@ import { Add, Check, Delete, Upload } from "@mui/icons-material";
 import { CardContent } from "@mui/material";
 
 function UploadPage({ pending }) {
-  // const [inputTitle, setInputTitle] = useState(pending?.title || "");
   const [inputValue, setInputValue] = useState({
     title: pending?.title || "",
     description: pending?.description || "",
@@ -56,13 +55,6 @@ function UploadPage({ pending }) {
       }
       startProgressInterval(pending.uid);
     }
-
-    // return () => {
-    //   if (progressInterval.current) {
-    //     console.log("clearing progress interval");
-    //     clearInterval(progressInterval.current);
-    //   }
-    // };
 
     console.log(pending);
   }, [pending]);

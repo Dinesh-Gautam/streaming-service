@@ -8,7 +8,6 @@ import Layout from "../../../components/admin/Layout";
 import { getProgressData } from "../../../helpers/api/data/movie";
 
 function Upload({ pending }) {
-  // console.log(pending);
   return <UploadPage pending={pending} />;
 }
 

@@ -10,9 +10,6 @@ function MoviePage({ pendingUploads, uploadedVideos }) {
   return (
     <>
       <Box>
-        {/* <Box sx={{ m: 2 }}>
-          <Typography level="h3">Admin</Typography>
-        </Box> */}
         <Box sx={{ display: "flex", width: "100%", gap: 2, m: 2 }}>
           {pendingUploads ? (
             <Sheet
@@ -144,11 +141,6 @@ export const moviesPageSideBarItems = [
     value: "Upload",
     href: "/admin/movies/upload",
   },
-  // {
-  //   icon: "check-square",
-  //   value: "Published",
-  //   href: "/admin/uploaded",
-  // },
 ];
 
 MoviePage.getLayout = function getLayout(page) {

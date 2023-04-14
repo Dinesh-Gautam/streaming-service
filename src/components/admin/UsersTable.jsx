@@ -18,110 +18,8 @@ import Option from "@mui/joy/Option";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import Checkbox from "@mui/joy/Checkbox";
-import IconButton, { iconButtonClasses } from "@mui/joy/IconButton";
+import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
-
-const rows = [
-  {
-    id: "INV-1234",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "O",
-      name: "Olivia Ryhe",
-      email: "olivia@email.com",
-    },
-    subscription: "Yearly",
-  },
-  {
-    id: "INV-1233",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "S",
-      name: "Steve Hampton",
-      email: "steve.hamp@email.com",
-    },
-    subscription: "Monthly",
-  },
-  {
-    id: "INV-1232",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "C",
-      name: "Ciaran Murray",
-      email: "ciaran.murray@email.com",
-    },
-    subscription: "Yearly",
-  },
-  {
-    id: "INV-1231",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "M",
-      name: "Maria Macdonald",
-      email: "maria.mc@email.com",
-    },
-    subscription: "Yearly",
-  },
-  {
-    id: "INV-1230",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "C",
-      name: "Charles Fulton",
-      email: "fulton@email.com",
-    },
-    subscription: "Yearly",
-  },
-  {
-    id: "INV-1229",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "J",
-      name: "Jay Hooper",
-      email: "hooper@email.com",
-    },
-    subscription: "Yearly",
-  },
-  {
-    id: "INV-1228",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "K",
-      name: "Krystal Stevens",
-      email: "k.stevens@email.com",
-    },
-    subscription: "Monthly",
-  },
-  {
-    id: "INV-1227",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "S",
-      name: "Sachin Flynn",
-      email: "s.flyn@email.com",
-    },
-    subscription: "Monthly",
-  },
-  {
-    id: "INV-1226",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "B",
-      name: "Bradley Rosales",
-      email: "brad123@email.com",
-    },
-    subscription: "Monthly",
-  },
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -204,37 +102,6 @@ export default function UsersTable({ userData }) {
     setSelected([]);
   }
 
-  const renderFilters = () => (
-    <React.Fragment>
-      <FormControl size="sm">
-        <FormLabel>Status</FormLabel>
-        <Select
-          placeholder="Filter by status"
-          slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
-        >
-          <Option value="paid">Paid</Option>
-          <Option value="pending">Pending</Option>
-          <Option value="refunded">Refunded</Option>
-          <Option value="cancelled">Cancelled</Option>
-        </Select>
-      </FormControl>
-
-      <FormControl size="sm">
-        <FormLabel>Category</FormLabel>
-        <Select placeholder="All">
-          <Option value="all">All</Option>
-        </Select>
-      </FormControl>
-
-      <FormControl size="sm">
-        <FormLabel>Customer</FormLabel>
-        <Select placeholder="All">
-          <Option value="all">All</Option>
-        </Select>
-      </FormControl>
-    </React.Fragment>
-  );
-
   const onEditValueChange = (type, value) => {
     setEditValues((prev) => ({ ...prev, [type]: value }));
   };
@@ -244,35 +111,6 @@ export default function UsersTable({ userData }) {
   }
   return (
     <React.Fragment>
-      {/* <Sheet
-        className="SearchAndFilters-mobile"
-        sx={{
-          display: {
-            xs: "flex",
-            sm: "none",
-          },
-          my: 1,
-          gap: 1,
-        }}
-      >
-        <Input
-          size="sm"
-          placeholder="Search"
-          startDecorator={<i data-feather="search" />}
-          sx={{ flexGrow: 1 }}
-        />
-        <IconButton
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          onClick={() => setOpen(true)}
-        >
-          <span>filter</span>
-          <i data-feather="filter" />
-        </IconButton>
-      
-      </Sheet> */}
-
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
@@ -366,16 +204,6 @@ export default function UsersTable({ userData }) {
             Delete
           </Button>
         </Box>
-
-        {/* <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for order</FormLabel>
-          <Input
-            placeholder="Search"
-            startDecorator={<i data-feather="search" />}
-          />
-        </FormControl>
-
-        {renderFilters()} */}
       </Box>
       <Sheet
         className="OrderTableContainer"
@@ -421,28 +249,9 @@ export default function UsersTable({ userData }) {
                   sx={{ verticalAlign: "text-bottom" }}
                 />
               </th>
-              {/* <th style={{ width: 140, padding: 12 }}>
-                <Link
-                  underline="none"
-                  color="primary"
-                  component="button"
-                  onClick={() => setOrder(order === "asc" ? "desc" : "asc")}
-                  fontWeight="lg"
-                  endDecorator={<i data-feather="arrow-down" />}
-                  sx={{
-                    "& svg": {
-                      transition: "0.2s",
-                      transform:
-                        order === "desc" ? "rotate(0deg)" : "rotate(180deg)",
-                    },
-                  }}
-                >
-                  Invoice
-                </Link>
-              </th> */}
+
               <th style={{ width: 120, padding: 12 }}>Date</th>
               <th style={{ width: 220, padding: 12 }}>User</th>
-              {/* <th style={{ width: 120, padding: 12 }}>Status</th> */}
               <th style={{ width: 120, padding: 12 }}>Role</th>
               <th style={{ width: 160, padding: 12 }}> Subscription </th>
             </tr>
@@ -465,34 +274,11 @@ export default function UsersTable({ userData }) {
                     sx={{ verticalAlign: "text-bottom" }}
                   />
                 </td>
-                {/* <td>
-                  <Typography fontWeight="md">{row.id}</Typography>
-                </td> */}
+
                 <td>
                   {new Date(user.creationDate).toLocaleDateString("en-IN")}
                 </td>
-                {/* <td>
-                  <Chip
-                    variant="soft"
-                    size="sm"
-                    startDecorator={
-                      {
-                        Paid: <i data-feather="check" />,
-                        Refunded: <i data-feather="corner-up-left" />,
-                        Cancelled: <i data-feather="x" />,
-                      }[row.status]
-                    }
-                    color={
-                      {
-                        Paid: "success",
-                        Refunded: "neutral",
-                        Cancelled: "danger",
-                      }[row.status]
-                    }
-                  >
-                    {row.status}
-                  </Chip>
-                </td> */}
+
                 <td>
                   <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                     <Avatar size="sm">{user.name[0].toUpperCase()}</Avatar>
@@ -511,19 +297,6 @@ export default function UsersTable({ userData }) {
                 <td>{user.role}</td>
 
                 <td>None</td>
-                {/* <td>
-                  <Link fontWeight="lg" component="button" color="neutral">
-                    Archive
-                  </Link>
-                  <Link
-                    fontWeight="lg"
-                    component="button"
-                    color="primary"
-                    sx={{ ml: 2 }}
-                  >
-                    Download
-                  </Link>
-                </td> */}
               </tr>
             ))}
           </tbody>
@@ -553,49 +326,6 @@ export default function UsersTable({ userData }) {
           <i data-feather="arrow-right" />
         </IconButton>
       </Box>
-      {/* <Box
-        className="Pagination-laptopUp"
-        sx={{
-          pt: 4,
-          gap: 1,
-          [`& .${iconButtonClasses.root}`]: { borderRadius: "50%" },
-          display: {
-            xs: "none",
-            md: "flex",
-          },
-        }}
-      >
-        <Button
-          size="sm"
-          variant="plain"
-          color="neutral"
-          startDecorator={<i data-feather="arrow-left" />}
-        >
-          Previous
-        </Button>
-
-        <Box sx={{ flex: 1 }} />
-        {["1", "2", "3", "…", "8", "9", "10"].map((page) => (
-          <IconButton
-            key={page}
-            size="sm"
-            variant={Number(page) ? "outlined" : "plain"}
-            color="neutral"
-          >
-            {page}
-          </IconButton>
-        ))}
-        <Box sx={{ flex: 1 }} />
-
-        <Button
-          size="sm"
-          variant="plain"
-          color="neutral"
-          endDecorator={<i data-feather="arrow-right" />}
-        >
-          Next
-        </Button>
-      </Box> */}
     </React.Fragment>
   );
 }

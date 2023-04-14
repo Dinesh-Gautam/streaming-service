@@ -34,9 +34,6 @@ function FadeImageOnLoad(props) {
         {props.loadingBackground && !imageLoaded && <Suspense />}
       </AnimatePresence>
       <motion.div
-        // style={{
-        //   position: "relative",
-        // }}
         initial="initial"
         animate="animate"
         variants={!imageLoaded ? initialVariant : imageLoadedVariant}
@@ -47,7 +44,6 @@ function FadeImageOnLoad(props) {
             {props.ambientMode && (
               <Image
                 src={getImageUrl(props.imageSrc, { original: props.original })}
-                // onLoadingComplete={() => setImageLoaded(true)}
                 alt={props.imageSrc}
                 style={{
                   filter: `blur(${
@@ -65,9 +61,6 @@ function FadeImageOnLoad(props) {
                   ...props.ambientOptions,
                   zIndex: -100,
                 }}
-                //   objectFit="cover"
-                //   height={208}
-                //   width={148}
                 {...props.attr.image}
               />
             )}
@@ -80,9 +73,6 @@ function FadeImageOnLoad(props) {
                 }
                 onLoadingComplete={() => setImageLoaded(true)}
                 alt={props.imageSrc}
-                //   objectFit="cover"
-                //   height={208}
-                //   width={148}
                 {...props.attr.image}
               />
             )}
