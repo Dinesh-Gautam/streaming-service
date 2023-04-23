@@ -5,6 +5,8 @@ import Link from "next/link";
 import YoutubeVideoPlayer from "../videoPlayer/youtube/youtubeVideoPlayer";
 import YoutubeControlButtons from "../videoPlayer/youtube/youtubePlayerControlsButtons";
 import YoutubeVideoPlayerProvider from "../videoPlayer/youtube/youtubePlayerContext";
+import FadeInOnMound from "../elements/FadeInOnMound";
+import { AnimatePresence } from "framer-motion";
 
 const PopularMoviesBanner = ({ popularMovies }) => {
   const [prevIndex, setPrevIndex] = useState(0);
@@ -133,26 +135,29 @@ const PopularMoviesBanner = ({ popularMovies }) => {
                   }}
                 ></FadeImageOnLoad>
               </Link>
-              {!animating && (
-                <>
-                  <div
-                    className={
-                      styles.bottom +
-                      " " +
-                      (currentIndex === index ? styles.visible : "")
-                    }
-                  >
-                    <h1>{movie.title || ""}</h1>
-                    <div className={styles.videoControls}>
-                      {<YoutubeControlButtons />}
+              <AnimatePresence>
+                {!animating && currentIndex === index && (
+                  <FadeInOnMound>
+                    <div
+                      className={
+                        styles.bottom
+                        // +
+                        // " " +
+                        // (currentIndex === index ? styles.visible : "")
+                      }
+                    >
+                      <h1>{movie.title || ""}</h1>
+                      <div className={styles.videoControls}>
+                        <YoutubeControlButtons />
+                      </div>
                     </div>
-                  </div>
 
-                  {index === currentIndex && (
-                    <YoutubeVideoPlayer roundedBorder />
-                  )}
-                </>
-              )}
+                    {index === currentIndex && (
+                      <YoutubeVideoPlayer roundedBorder />
+                    )}
+                  </FadeInOnMound>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

@@ -4,9 +4,11 @@ import {
   VolumeOff,
   VolumeUpRounded,
 } from "@mui/icons-material";
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./youtubeControlButtons.module.scss";
 import { useYoutubePlayer } from "./youtubePlayerContext";
+import FadeInOnMound from "../../elements/FadeInOnMound";
+import { AnimatePresence } from "framer-motion";
 
 function YoutubeControlButtons({ size }) {
   const {
@@ -14,9 +16,7 @@ function YoutubeControlButtons({ size }) {
     playerState,
     setPlayerState,
     id,
-    media_type,
     videosData,
-    setVideosData,
     videoPlayerReady,
   } = useYoutubePlayer();
 
@@ -47,40 +47,44 @@ function YoutubeControlButtons({ size }) {
           )}
         </button>
       )}
-      {!!videosData.find((e) => e.id === id)?.videos.length &&
-        videoPlayerReady && (
-          <button
-            style={{
-              height,
-              width,
-            }}
-            onClick={() => {
-              if (!playerRef.current) return;
+      <AnimatePresence>
+        {!!videosData.find((e) => e.id === id)?.videos.length &&
+          videoPlayerReady && (
+            <FadeInOnMound>
+              <button
+                style={{
+                  height,
+                  width,
+                }}
+                onClick={() => {
+                  if (!playerRef.current) return;
 
-              if (!playerState.playing) {
-                playerRef.current.playVideo();
-                setPlayerState((prev) => ({
-                  ...prev,
-                  playing: true,
-                }));
-              }
-              if (playerState.playing) {
-                playerRef.current.pauseVideo();
-                setPlayerState((prev) => ({
-                  ...prev,
-                  playing: false,
-                }));
-              }
-            }}
-            // disabled={currentIndex !== index}
-          >
-            {playerState.playing ? (
-              <Pause fontSize={size || "small"} />
-            ) : (
-              <PlayArrow fontSize={size || "small"} />
-            )}
-          </button>
-        )}
+                  if (!playerState.playing) {
+                    playerRef.current.playVideo();
+                    setPlayerState((prev) => ({
+                      ...prev,
+                      playing: true,
+                    }));
+                  }
+                  if (playerState.playing) {
+                    playerRef.current.pauseVideo();
+                    setPlayerState((prev) => ({
+                      ...prev,
+                      playing: false,
+                    }));
+                  }
+                }}
+                // disabled={currentIndex !== index}
+              >
+                {playerState.playing ? (
+                  <Pause fontSize={size || "small"} />
+                ) : (
+                  <PlayArrow fontSize={size || "small"} />
+                )}
+              </button>
+            </FadeInOnMound>
+          )}
+      </AnimatePresence>
     </div>
   );
 }
