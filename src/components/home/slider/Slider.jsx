@@ -55,10 +55,9 @@ function Slider({ title, data, setIsScrolling, type }) {
   }, [ItemsLength]);
 
   useEffect(() => {
-    const itemsLength =
-      Math.min(Math.ceil(window.innerWidth / 4 / 100), 5) || 1;
+    const itemsLength = Math.min(Math.ceil(window.innerWidth / 4 / 100), 5);
 
-    setItemsLength(itemsLength);
+    setItemsLength(Math.max(itemsLength, 1));
   }, [windowWidth]);
 
   function buttonClick(type) {
@@ -139,7 +138,7 @@ function Slider({ title, data, setIsScrolling, type }) {
 
   return (
     data && (
-      <>
+      <div className={styles.sliderContainer}>
         {title && <h2 style={{ marginLeft: "2rem" }}>{title}</h2>}
         {isMiniSlider ? (
           <div className={styles.container}>
@@ -258,7 +257,7 @@ function Slider({ title, data, setIsScrolling, type }) {
             </div>
           )
         )}
-      </>
+      </div>
     )
   );
 }

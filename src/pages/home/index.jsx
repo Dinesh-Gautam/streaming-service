@@ -12,6 +12,7 @@ function MainHome(props) {
     <ContextProvider>
       <div>
         <Nav signedIn={props.signedIn} />
+
         {props.popularMovies && <Banner popularMovies={props.popularMovies} />}
         <HomePageSliders {...props} />
       </div>

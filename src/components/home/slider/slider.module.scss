@@ -1,6 +1,8 @@
+.sliderContainer {
+  font-size: clamp(12px, 2vw, 16px);
+}
 .container {
   position: relative;
-  // height: 25.1vh;
   padding: 0 4%;
   margin-bottom: 5rem;
 }

@@ -5,16 +5,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .navLeftContainer {
-  align-self: flex-end;
+  // align-self: flex-end;
   flex: 1;
-  //   max-width: fit-content;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-inline: 2rem;
+  // padding-inline: 2rem;
+  margin-right: 1rem;
   position: relative;
   button {
     padding: 0;
