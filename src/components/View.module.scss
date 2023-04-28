@@ -184,6 +184,10 @@
   padding: 1em 4em;
   display: flex;
   justify-content: flex-start;
+  @include breakpoint(lg, max) {
+    font-size: 12px;
+    padding: 0;
+  }
   .moreInfoContainer {
     max-height: 100%;
     justify-content: flex-start;
@@ -194,7 +198,7 @@
   h2 {
     opacity: 0.5;
     line-height: 100%;
-    margin: 0.5rem;
+    margin: 0.5em;
   }
   button {
     display: flex;
@@ -232,7 +236,7 @@
 .movieInfo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1em;
 }
 
 .separator {
@@ -240,7 +244,7 @@
   display: inline-block;
   height: 2ch;
   width: 2px;
-  margin: 6px;
+  margin: 1vw;
 }
 
 .seasonContainer {

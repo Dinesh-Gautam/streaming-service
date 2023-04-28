@@ -71,7 +71,6 @@ function TitleView({ result, layout_type }) {
         </HideWhenPlayerIsPlaying>
         <div>
           {result.media_type === "tv" && <TvSeasonsDrawer result={result} />}
-
           <Buttons result={result} />
         </div>
       </HideUntilMouseInactive>
