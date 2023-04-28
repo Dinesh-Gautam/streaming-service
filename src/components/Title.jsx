@@ -155,7 +155,7 @@ function ClickableLessInfo({ result, moreInfoOpen, setMoreInfoOpen }) {
         className={styles.moreInfoContainer}
       >
         {!result.original && (
-          <div>
+          <div style={{ flexWrap: "wrap" }}>
             <div
               style={{
                 display: "flex",

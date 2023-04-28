@@ -65,11 +65,17 @@
   color: white;
   gap: 1rem;
   max-width: 65%;
-
   animation: opacityAnimate forwards;
   animation-duration: 1s;
   animation-delay: 1s;
   opacity: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  @include breakpoint(sm, max) {
+    font-size: 14px;
+    padding-right: 4em;
+  }
+
   mask-image: linear-gradient(
     to left,
     transparent 0%,
@@ -111,19 +117,19 @@
   }
   h1 {
     font-weight: bold;
-    font-size: clamp(32px, 8vmin, 84px);
+    font-size: clamp(2em, 8vmin, 5.25em);
     margin: 0;
     line-height: 100%;
   }
   span {
     opacity: 0.9;
-    font-size: clamp(14px, 2vmin, 18px);
+    font-size: clamp(0.8em, 2vmin, 1.2em);
   }
   p {
     opacity: 0.9;
     max-width: 100%;
     letter-spacing: 2px;
-    font-size: clamp(14px, 2vmin, 18px);
+    font-size: clamp(0.8em, 2vmin, 1.2em);
 
     // opacity: 0.8;
   }
@@ -131,14 +137,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 1em;
     border-radius: 100vh;
     overflow: hidden;
+    font-size: 1em;
     // background: rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.7);
     // backdrop-filter: blur(64px);
     // padding: 16px 16px * 3;
-    padding: 6px;
+    padding: 0.4em;
     // padding-left: 2em;
     // border: 1px solid rgba(255, 255, 255, 0.2);
     // box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
@@ -148,12 +155,12 @@
       opacity: 0.2;
     }
     span {
-      padding-left: 2rem;
+      padding-left: 2em;
     }
     span {
-      padding: 0.5rem;
+      padding: 0.5em;
       opacity: 0.9;
-      font-size: 48px;
+      font-size: 1em;
       background-color: rgba(255, 255, 255, 1);
       display: flex;
       align-items: center;
@@ -161,7 +168,7 @@
       border-radius: 50%;
     }
     svg {
-      font-size: 34px;
+      font-size: 2em;
     }
   }
 }
@@ -174,7 +181,7 @@
   height: 100vh;
   width: 100vw;
   z-index: 1000000;
-  padding: 1rem 4rem;
+  padding: 1em 4em;
   display: flex;
   justify-content: flex-start;
   .moreInfoContainer {
@@ -198,13 +205,13 @@
 
 .moreInfoContainer {
   background: rgba(0, 0, 0, 0.3);
-  padding: 0.5rem 1.5rem;
+  padding: 0.5em 1.5em;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   position: relative;
-  margin-block: 1rem;
+  margin-block: 1em;
   // margin-top: clamp(1rem, 4vh, 4rem);
   > div:nth-child(1) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -272,7 +279,7 @@
     content: "";
     right: 0;
     // transform: translateX(100%);
-    width: 1rem * 6;
+    width: 1em * 6;
     // padding-right: 8rem;
     // justify-content: flex-start;s
     background: linear-gradient(
@@ -280,7 +287,9 @@
       rgba(16, 16, 16, 0.9) 0%,
       rgba(255, 255, 255, 0) 100%
     );
-
+    @include breakpoint(lg, max) {
+      transform: translateX(-50%);
+    }
     z-index: 100;
   }
 
@@ -304,7 +313,7 @@
   overflow: hidden;
   bottom: 0;
   left: 0;
-  max-width: 100vw;
+  max-width: calc(100vw + 4rem);
   scroll-behavior: smooth;
   padding: 3rem 0;
   position: relative;
