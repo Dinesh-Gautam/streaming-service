@@ -1,11 +1,12 @@
+@import "../styles/mixins";
 .container {
   display: flex;
   flex-direction: column;
-  max-width: 60vw;
+  max-width: 1000px;
   margin: auto;
-  margin-top: 1rem;
+  margin-block: 1rem;
   gap: 12px;
-  margin-bottom: 1rem;
+  padding-inline: 2rem;
 }
 
 .itemContainer {
@@ -19,10 +20,14 @@
   display: flex;
   align-items: center;
   position: relative;
-  background-color: rgba(16, 16, 16, 0.5);
-  backdrop-filter: blur(164px) saturate(1);
   z-index: 1;
   max-height: 208px;
+  @include breakpoint(lg, max) {
+    max-height: calc(208px / 1.5);
+  }
+  @include breakpoint(md, max) {
+    max-height: calc(208px / 2);
+  }
 }
 
 .imageContainer {
@@ -32,25 +37,37 @@
   border-radius: 12px;
   display: flex;
   overflow: hidden;
+  @include breakpoint(lg, max) {
+    img {
+      width: 100%;
+      height: calc(208px / 1.5);
+    }
+  }
+  @include breakpoint(md, max) {
+    img {
+      width: 100%;
+      height: calc(208px / 2);
+    }
+  }
 }
 
 .infoContainer {
   font-family: "Poppins", sans-serif;
-  padding: 32px;
+  padding: 2em;
   flex: 1;
   overflow: hidden;
-
+  font-size: clamp(8px, 1.2vw, 16px);
   h1 {
     margin: 0;
     text-transform: capitalize;
     line-height: 120%;
-    font-size: 32px;
+    font-size: 2em;
     color: rgba($color: #fff, $alpha: 0.9);
     font-weight: 500;
     letter-spacing: 2px;
   }
   span {
-    font-size: 16px;
+    font-size: 1em;
     color: rgba(255, 255, 255, 0.5);
   }
   p {
@@ -64,7 +81,10 @@
 .description {
   max-width: 60%;
   max-height: 6vh;
-  margin-top: 24px;
+  margin-top: 1.5em;
+  @include breakpoint(md, max) {
+    display: none;
+  }
 }
 .movieInfo {
   display: flex;
@@ -78,8 +98,11 @@
   margin: 6px;
 }
 .arrowRight {
-  margin-right: 4rem;
+  margin-right: 4em;
   color: #fff;
+  @include breakpoint(lg, max) {
+    display: none;
+  }
 }
 .backgroundImg {
   position: absolute;
@@ -89,4 +112,5 @@
   height: 100%;
   background-color: gray;
   display: flex;
+  filter: blur(124px) saturate(2);
 }

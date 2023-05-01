@@ -71,7 +71,6 @@ function TitleView({ result, layout_type }) {
         </HideWhenPlayerIsPlaying>
         <div>
           {result.media_type === "tv" && <TvSeasonsDrawer result={result} />}
-
           <Buttons result={result} />
         </div>
       </HideUntilMouseInactive>
@@ -155,7 +154,7 @@ function ClickableLessInfo({ result, moreInfoOpen, setMoreInfoOpen }) {
         className={styles.moreInfoContainer}
       >
         {!result.original && (
-          <div>
+          <div style={{ flexWrap: "wrap" }}>
             <div
               style={{
                 display: "flex",

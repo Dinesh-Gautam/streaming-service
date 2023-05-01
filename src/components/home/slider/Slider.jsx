@@ -57,7 +57,7 @@ function Slider({ title, data, setIsScrolling, type }) {
   useEffect(() => {
     const itemsLength = Math.min(Math.ceil(window.innerWidth / 4 / 100), 5);
 
-    setItemsLength(Math.max(itemsLength, 1));
+    setItemsLength(Math.max(itemsLength, 2));
   }, [windowWidth]);
 
   function buttonClick(type) {
@@ -171,18 +171,7 @@ function Slider({ title, data, setIsScrolling, type }) {
                       },
                     }}
                   />
-                  <h1
-                    style={{
-                      width: "62%",
-                      lineHeight: "100%",
-                      fontSize: 19,
-                      padding: "0.5rem 1rem",
-                      position: "absolute",
-                      marginTop: 10,
-                    }}
-                  >
-                    {e.title}
-                  </h1>
+                  <h1 className={styles.movieName}>{e.title}</h1>
                 </div>
               ))}
             </div>
@@ -225,18 +214,7 @@ function Slider({ title, data, setIsScrolling, type }) {
                         },
                       }}
                     />
-                    <h1
-                      style={{
-                        width: "62%",
-                        lineHeight: "100%",
-                        fontSize: 19,
-                        padding: "0.5rem 1rem",
-                        position: "absolute",
-                        marginTop: 10,
-                      }}
-                    >
-                      {e.title || e.name}
-                    </h1>
+                    <h1 className={styles.movieName}>{e.title || e.name}</h1>
                   </div>
                 ))}
               </div>

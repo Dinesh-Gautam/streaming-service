@@ -9,7 +9,7 @@
   border-radius: 6px;
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1em;
   padding: 10px;
   position: relative;
   width: 100%;
@@ -19,8 +19,8 @@
   align-items: center;
   .arrow {
     margin-left: auto;
-    height: 22px;
-    width: 22px;
+    height: 1.5em;
+    width: 1.5em;
     fill: none;
     stroke-width: 2px;
     stroke: rgba(255, 255, 255, 1);
@@ -47,7 +47,7 @@
   padding: 10px;
   cursor: pointer;
   color: rgba(255, 255, 255, 1);
-  font-size: 16px;
+  font-size: 1em;
   margin: 4px;
   border-radius: 6px;
   transition: background-color 0.2s ease;

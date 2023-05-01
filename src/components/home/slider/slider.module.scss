@@ -1,3 +1,5 @@
+@import "../../../styles/mixins";
+
 .sliderContainer {
   font-size: clamp(12px, 2vw, 16px);
 }
@@ -113,5 +115,20 @@
     // padding-bottom: 1rem;
     // width: 100%;
     font-size: 11px;
+  }
+}
+
+.movieName {
+  width: 62%;
+  line-height: 100%;
+  font-size: 19px;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  margin-top: 10px;
+  @include breakpoint(sm, max) {
+    font-size: 12px;
+  }
+  @include breakpoint(md, max) {
+    font-size: 14px;
   }
 }
