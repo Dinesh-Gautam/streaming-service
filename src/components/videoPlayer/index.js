@@ -4,6 +4,12 @@ import styles from "./shakaPlayer.module.scss";
 
 const shaka = require("shaka-player/dist/shaka-player.ui.js");
 
+import mux from "mux.js";
+
+if (!window.muxjs) {
+  window.muxjs = mux;
+}
+
 function ShakaVideoPlayer({ manifestUrl }) {
   const videoRef = useRef(null);
   const videoContainerRef = useRef(null);
