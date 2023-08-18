@@ -15,6 +15,7 @@ function Watch({ url, videoUrls }) {
     <div style={{ height: "100vh", width: "100vw", overflowY: "hidden" }}>
       {!videoUrls ? (
         <iframe
+          allow="'self'"
           allowFullScreen
           ref={iframe}
           style={{
@@ -24,7 +25,8 @@ function Watch({ url, videoUrls }) {
             overflow: "hidden",
           }}
           src={url}
-          frameborder="0"
+          name="self"
+          framerBorder="0"
         ></iframe>
       ) : (
         <ShakaVideoPlayer manifestUrl={videoUrls[0]} />
