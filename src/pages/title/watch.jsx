@@ -15,7 +15,7 @@ function Watch({ url, videoUrls }) {
     <div style={{ height: "100vh", width: "100vw", overflowY: "hidden" }}>
       {!videoUrls ? (
         <iframe
-          allow="'self'"
+          allow="self autoplay"
           allowFullScreen
           ref={iframe}
           style={{
@@ -23,10 +23,10 @@ function Watch({ url, videoUrls }) {
             width: "100%",
             margin: 0,
             overflow: "hidden",
+            border: "none",
           }}
           src={url}
           name="self"
-          framerBorder="0"
         ></iframe>
       ) : (
         <ShakaVideoPlayer manifestUrl={videoUrls[0]} />
@@ -40,24 +40,28 @@ export async function getServerSideProps(req) {
   const media_type = req.query.media_type;
   const season = req.query.s ?? 1;
   const episode = req.query.e ?? 1;
+  // const embedUrl =
+  //   "https://2embed.cc/embed/" +
+  //   id +
+  //   (media_type === "tv" ? `?s=${season}&e=${episode}` : "");
+
   const embedUrl =
-    "https://2embed.cc/embed/" +
-    id +
+    `https://vidsrc.to/embed/${media_type}/${id}` +
     (media_type === "tv" ? `?s=${season}&e=${episode}` : "");
 
-  const embed_page = await TwoEmbed.getEmbedPageSrc(media_type, {
-    id,
-    season,
-    episode,
-  });
+  // const embed_page = await TwoEmbed.getEmbedPageSrc(media_type, {
+  //   id,
+  //   season,
+  //   episode,
+  // });
 
-  const sources = await TwoEmbed.extract_content(embed_page);
-  console.log(sources);
+  // const sources = await TwoEmbed.extract_content(embed_page);
+  // console.log(sources);
 
   return {
     props: {
       url: embedUrl,
-      videoUrls: sources,
+      // videoUrls: sources,
     },
   };
 }
