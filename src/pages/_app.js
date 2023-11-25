@@ -1,5 +1,7 @@
 import "../styles/globals.scss";
-import "../components/videoPlayer/customStyle.scss";
+// import "../components/videoPlayer/customStyle.scss";
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "@next/font/google";
 import NextNProgress from "nextjs-progressbar";

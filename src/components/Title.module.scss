@@ -216,6 +216,7 @@
   flex-direction: column;
   position: relative;
   margin-block: 1em;
+  left: -1.5em;
   // margin-top: clamp(1rem, 4vh, 4rem);
   > div:nth-child(1) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);

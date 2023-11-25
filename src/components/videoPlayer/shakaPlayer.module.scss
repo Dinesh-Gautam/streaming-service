@@ -1,8 +1,14 @@
 .videoContainer {
   height: 100vh;
   width: 100vw;
-  video {
-    margin: 0 auto;
-    width: 100vmax;
+  button {
+    padding: 0;
   }
+  video {
+    height: 100vmin;
+  }
+  // video {
+  //   margin: 0 auto;
+  //   width: 100vmax;
+  // }
 }

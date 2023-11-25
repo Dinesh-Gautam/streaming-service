@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import FadeImageOnLoad from "./elements/FadeImageOnLoad";
 import Separator from "./elements/separator";
 import { AnimatePresence, motion } from "framer-motion";
-import styles from "./View.module.scss";
+import styles from "./Title.module.scss";
 import Image from "next/image";
 import { getImageUrl } from "@/tmdbapi/tmdbApi";
 import ArrowLeft from "@mui/icons-material/ArrowLeft";
@@ -109,10 +109,23 @@ function Title({ result }) {
           transformOrigin: "top left",
         }}
       >
-        {result.title ||
+        {!result.logo ? (
+          result.title ||
           result.name ||
           result.original_title ||
-          result.original_name}
+          result.original_name
+        ) : (
+          <Image
+            src={result.logo}
+            width={800}
+            height={800}
+            style={{
+              objectFit: "contain",
+              height: "100%",
+              width: "60%",
+            }}
+          />
+        )}
       </motion.h1>
     </motion.div>
   );
@@ -413,7 +426,14 @@ function WatchNowButton({ result }) {
       <Link
         target="_blank"
         href={
-          "/title/watch/?media_type=" + result?.media_type + "&id=" + result?.id
+          "/title/watch/?media_type=" +
+          result?.media_type +
+          "&id=" +
+          result?.id +
+          "&title=" +
+          result?.title +
+          "&year=" +
+          new Date(result?.first_air_date).getFullYear()
         }
       >
         <button
