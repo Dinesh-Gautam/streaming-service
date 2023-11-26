@@ -1,4 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   Controls,
@@ -15,83 +21,73 @@ import {
 // import "shaka-player/dist/controls.css";
 import styles from "./shakaPlayer.module.scss";
 import { HighQuality } from "@mui/icons-material";
-import { MoreVertical } from "react-feather";
+import { Check, ChevronLeft, ChevronRight, MoreVertical } from "react-feather";
 
-function VidStackPlayer({ sources }) {
-  const playerRef = useRef(null);
+const playerContext = createContext(null);
 
-  useEffect(() => {
-    if (playerRef.current) {
-    }
-  }, [playerRef]);
+const useVidPlayer = () => useContext(playerContext);
+
+const PlayerProvider = ({ sources, children }) => {
+  sources = [sources];
+  const [sourceUrl, setSourceUrl] = useState(
+    sources && sources.length > 0
+      ? getHighestQualityUrl(sources[0])
+      : {
+          sourceId: "",
+          url: "",
+          value: "",
+        }
+  );
 
   return (
-    <div style={{ position: "relative" }} className={styles.videoContainer}>
-      <MediaPlayer
-        ref={playerRef}
-        title="Sprite Fight"
-        src={[
-          {
-            src: "https://media-files.vidstack.io/hls/index.m3u8",
-            type: "application/x-mpegurl",
-          },
-        ]}
-      >
-        <MediaProvider />
-        <DefaultVideoLayout icons={defaultLayoutIcons} />
-        <SourceSelector />
-      </MediaPlayer>
-    </div>
+    <playerContext.Provider value={{ sources, sourceUrl, setSourceUrl }}>
+      {children}
+    </playerContext.Provider>
+  );
+};
+
+function getHighestQualityUrl(source) {
+  const maxResolution = Math.max(...Object.keys(source.stream.qualities));
+  const url = source.stream.qualities[maxResolution].url;
+  const sourceId = source.sourceId;
+  return { sourceId, value: maxResolution + "", url };
+}
+
+function VidStackPlayer({ sources }) {
+  // const sources = [
+  //   {
+  //     sourceId: "superstream",
+  //     stream: {
+  //       qualities: { 360: { url: "some url" }, 720: { url: "some url" } },
+  //       type: "file",
+  //       flags: ["no-cors"],
+  //     },
+  //   },
+  // ];
+
+  return (
+    <PlayerProvider sources={sources}>
+      <div style={{ position: "relative" }} className={styles.videoContainer}>
+        <Player />
+      </div>
+    </PlayerProvider>
+  );
+}
+
+function Player() {
+  const { sources, sourceUrl } = useVidPlayer();
+
+  return (
+    <MediaPlayer autoplay title="" src={sourceUrl.url}>
+      <MediaProvider />
+      <DefaultVideoLayout icons={defaultLayoutIcons} />
+      <SourceSelector />
+    </MediaPlayer>
   );
 }
 
 function SourceSelector() {
-  const player = useMediaPlayer();
-
-  const options = [
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-    {
-      label: "1080p",
-      value: "1080",
-      bitrateText: "10 mbps",
-      select: () => {},
-    },
-  ];
+  const { sources, sourceUrl } = useVidPlayer();
 
   return (
     <div
@@ -118,68 +114,21 @@ function SourceSelector() {
             placement="bottom end"
             className="vds-settings-menu-items vds-menu-items"
           >
-            <Menu.Root className="vds-menu" style={{ background: "red" }}>
-              <SubmenuButton
-                label="Quality"
-                hint={"1080p"}
-                disabled={options.disabled}
-                // icon={HighQuality}
-              />
-              <Menu.Items className="vds-quality-menu vds-menu-items">
-                <Menu.RadioGroup
-                  className="vds-radio-group"
-                  value={options.selectedValue}
-                >
-                  {options.map(({ label, value, bitrateText, select }) => (
-                    <Menu.Radio
-                      className="vds-radio"
-                      value={value}
-                      onSelect={select}
-                      key={value}
-                    >
-                      <div className="vds-radio-check" />
-                      <span className="vds-radio-label">{label}</span>
-                      {bitrateText ? (
-                        <span className="vds-radio-hint">{bitrateText}</span>
-                      ) : null}
-                    </Menu.Radio>
-                  ))}
-                </Menu.RadioGroup>
-              </Menu.Items>
-            </Menu.Root>
-
-            {/* <Menu.Root>
-              <SubmenuButton
-                label="Quality"
-                hint={"1080p"}
-                disabled={options.disabled}
-                // icon={HighQuality}
-              />
-              <Menu.Content
-                placement={"top start"}
-               
+            {sources.map((source) => (
+              <Menu.Root
+                key={source.sourceId}
+                className="vds-menu"
+                style={{ background: "red" }}
               >
-                <Menu.RadioGroup
-                  className="vds-radio-group"
-                  value={options.selectedValue}
-                >
-                  {options.map(({ label, value, bitrateText, select }) => (
-                    <Menu.Radio
-                      className="vds-radio"
-                      value={value}
-                      onSelect={select}
-                      key={value}
-                    >
-                      <div className="vds-radio-check" />
-                      <span className="vds-radio-label">{label}</span>
-                      {bitrateText ? (
-                        <span className="vds-radio-hint">{bitrateText}</span>
-                      ) : null}
-                    </Menu.Radio>
-                  ))}
-                </Menu.RadioGroup>
-              </Menu.Content>
-            </Menu.Root> */}
+                <SubmenuButton
+                  label={source.sourceId}
+                  hint={sourceUrl.value + "p"}
+                  // icon={HighQuality}
+                />
+
+                <SourceQualitySelector source={source} />
+              </Menu.Root>
+            ))}
           </Menu.Items>
         </Menu.Root>
       </Controls.Root>
@@ -189,10 +138,56 @@ function SourceSelector() {
 function SubmenuButton({ label, hint, icon: Icon, disabled }) {
   return (
     <Menu.Button className="vds-menu-button" disabled={disabled}>
+      <ChevronLeft className="vds-menu-button-close-icon vds-icon" />
+
       {/* <Icon className="vds-menu-button-icon" /> */}
       <span className="vds-menu-button-label">{label}</span>
       <span className="vds-menu-button-hint">{hint}</span>
+      <ChevronRight className="vds-menu-button-open-icon vds-icon" />
     </Menu.Button>
+  );
+}
+
+function SourceQualitySelector({ source }) {
+  const { sourceUrl, setSourceUrl } = useVidPlayer();
+  const options = Object.keys(source.stream.qualities)
+    .sort((a, b) => {
+      return b - a;
+    })
+    .map((key) => ({
+      label: key + "p",
+      value: key,
+      select: () =>
+        setSourceUrl({
+          sourceId: source.sourceId,
+          value: key,
+          url: source.stream.qualities[key].url,
+        }),
+    }));
+  return (
+    <Menu.Items className="vds-menu-items">
+      <Menu.RadioGroup className="vds-radio-group" value={sourceUrl.value}>
+        {options.map(({ label, value, bitrateText, select }) => (
+          <Menu.Radio
+            className="vds-radio"
+            value={value}
+            onSelect={select}
+            key={value}
+          >
+            <span
+              style={{
+                visibility: sourceUrl.value !== value ? "hidden" : "visible",
+              }}
+              className="vds-radio-check"
+            />
+            <span className="vds-radio-label">{label}</span>
+            {bitrateText && (
+              <span className="vds-radio-hint">{bitrateText}</span>
+            )}
+          </Menu.Radio>
+        ))}
+      </Menu.RadioGroup>
+    </Menu.Items>
   );
 }
 

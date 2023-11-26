@@ -38,7 +38,7 @@ function Watch({ url, videoUrls }) {
           name="self"
         ></iframe>
       ) : (
-        <ShakaVideoPlayer sources={videoUrls.qualities} />
+        <ShakaVideoPlayer sources={videoUrls} />
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export async function getServerSideProps(req) {
   // const embeds = providers.listEmbeds();
 
   console.log("loading..");
-  // console.log(media);
+  console.log(media);
   // const sourcePromises = sources.map(async (source) =>
   //   providers
   //     .runSourceScraper({
@@ -101,36 +101,34 @@ export async function getServerSideProps(req) {
   //     .then((e) => console.log("success"))
   //     .catch((e) => console.log("error"))
   // );
-  const data = null;
-  // const data = await providers.runAll({
-  //   media: media,
-  //   events: {
-  //     init(evt) {
-  //       console.log("init");
-  //       console.log(evt);
-  //     },
-  //     start(id) {
-  //       console.log("start");
-  //       console.log(id);
-  //     },
-  //     update(evt) {
-  //       console.log("update");
-  //       console.log(evt);
-  //     },
-  //     discoverEmbeds(evt) {
-  //       console.log("discoverEmbeds");
-  //       console.log(evt);
-  //     },
-  //   },
-  // });
-  console.log("loading done..");
   // const data = null;
-  console.log(data);
+  const data = await providers.runAll({
+    media: media,
+    events: {
+      // init(evt) {
+      //   console.log("init");
+      //   console.log(evt);
+      // },
+      // start(id) {
+      //   console.log("start");
+      //   console.log(id);
+      // },
+      // update(evt) {
+      //   console.log("update");
+      //   console.log(evt);
+      // },
+      // discoverEmbeds(evt) {
+      //   console.log("discoverEmbeds");
+      //   console.log(evt);
+      // },
+    },
+  });
+  console.log("loading done..");
   return {
     props: {
       // url: embedUrl,
-      videoUrls: data?.stream || "false",
-      // videoUrls: data?.stream || null,
+      // videoUrls: data?.stream || "false",
+      videoUrls: data || null,
     },
   };
 }
