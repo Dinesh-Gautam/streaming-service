@@ -315,7 +315,6 @@ function Buttons({ result }) {
               }
         }
       >
-        <WatchNowButton result={result} />
         {!result.original && <YoutubeControlButtons size="large" />}
       </motion.div>
     </>
@@ -418,44 +417,6 @@ const useHideUntilMouseInactivity = () => {
   }, [playerState]);
   return { hideAll, onMouseMove };
 };
-
-function WatchNowButton({ result }) {
-  return (
-    !result.original &&
-    result.media_type === "movie" && (
-      <Link
-        target="_blank"
-        href={
-          "/title/watch/?media_type=" +
-          result?.media_type +
-          "&id=" +
-          result?.id +
-          "&title=" +
-          result?.title +
-          "&year=" +
-          new Date(result?.first_air_date).getFullYear()
-        }
-      >
-        <button
-          style={{
-            marginBottom: "1rem",
-          }}
-        >
-          <div
-            style={{
-              paddingLeft: "2rem",
-            }}
-          >
-            Watch Now
-          </div>
-          <span>
-            <PlayArrowRounded fontSize="large" />
-          </span>
-        </button>
-      </Link>
-    )
-  );
-}
 
 function HideWhenPlayerIsPlaying({ children, ...props }) {
   const { playerState } = useYoutubePlayer();
@@ -627,42 +588,27 @@ function TvSeasonsDrawer({ result }) {
               {seasonInfo.episodes.map(
                 (epi, index) =>
                   epi.still_path !== null && (
-                    <Link
-                      key={epi.id}
-                      target="_blank"
-                      href={
-                        "/title/watch/?media_type=" +
-                        result?.media_type +
-                        "&id=" +
-                        result?.id +
-                        "&s=" +
-                        epi.season_number +
-                        "&e=" +
-                        epi.episode_number
-                      }
-                    >
-                      <div className={styles.episode}>
-                        <span className={styles.episodeNumber}>
-                          {(index + 1 < 10 ? "0" : "") + (index + 1)}
-                        </span>
-                        <span className={styles.episodeName}>{epi.name}</span>
-                        <FadeImageOnLoad
-                          loadingBackground
-                          imageSrc={epi.still_path}
-                          duration={0.5}
-                          attr={{
-                            imageContainer: {
-                              className: styles.episodeImageContainer,
-                            },
-                            image: {
-                              objectFit: "cover",
-                              width: 228,
-                              height: 148,
-                            },
-                          }}
-                        />
-                      </div>
-                    </Link>
+                    <div key={epi.id} className={styles.episode}>
+                      <span className={styles.episodeNumber}>
+                        {(index + 1 < 10 ? "0" : "") + (index + 1)}
+                      </span>
+                      <span className={styles.episodeName}>{epi.name}</span>
+                      <FadeImageOnLoad
+                        loadingBackground
+                        imageSrc={epi.still_path}
+                        duration={0.5}
+                        attr={{
+                          imageContainer: {
+                            className: styles.episodeImageContainer,
+                          },
+                          image: {
+                            objectFit: "cover",
+                            width: 228,
+                            height: 148,
+                          },
+                        }}
+                      />
+                    </div>
                   )
               )}
             </div>

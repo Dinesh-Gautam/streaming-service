@@ -21,7 +21,6 @@ export async function searchSuggest(query, options = {}) {
 
 export async function getDetails(mediaId, mediaType, options = {}) {
   // console.log("fetching movie Info....");
-
   try {
     let results;
 
@@ -30,6 +29,7 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${
         options.season || 1
       }?api_key=${api_key}`;
+
       results = await fetch(url).then((res) => res.json());
     } else {
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${api_key}&language=en-US&append_to_response=external_ids`;
@@ -70,11 +70,10 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       tagline = null,
       external_ids = null,
     } = results;
-    const { imdb_id } = external_ids;
+    const { imdb_id } = external_ids ?? { imdb_id: null };
     let logo = null;
-    console.log(imdb_id);
-    console.log(results);
-    if (imdb_id || id) {
+
+    if (imdb_id) {
       // get media logo
       const streamioUrl = `https://v3-cinemeta.strem.io/meta/${
         media_type === "movie" ? media_type : "series"
@@ -82,7 +81,6 @@ export async function getDetails(mediaId, mediaType, options = {}) {
       const { meta } = await fetch(streamioUrl).then((res) => res.json());
       logo = meta.logo;
       vote_average = Number(meta.imdbRating);
-      console.log(meta);
     }
 
     switch (options.type) {
