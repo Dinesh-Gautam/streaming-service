@@ -18,6 +18,7 @@ import Select from "./elements/customSelect/CustomSelect";
 import MoreInfo from "./title/MoreInfo";
 import YoutubeControlButtons from "./videoPlayer/youtube/youtubePlayerControlsButtons";
 import { useYoutubePlayer } from "./videoPlayer/youtube/youtubePlayerContext";
+import { useExtension } from "../extension/manager";
 
 const otherElementsAnimation = {
   initial: {
@@ -68,6 +69,7 @@ function TitleView({ result, layout_type }) {
             moreInfoOpen={moreInfoOpen}
             setMoreInfoOpen={setMoreInfoOpen}
           />
+          <ExtensionElements type="button" />
         </HideWhenPlayerIsPlaying>
         <div>
           {result.media_type === "tv" && <TvSeasonsDrawer result={result} />}
@@ -280,6 +282,7 @@ function OpenedMoreInfo({ result, moreInfoOpen, setMoreInfoOpen }) {
 
 function Buttons({ result }) {
   const { playerState } = useYoutubePlayer();
+
   return (
     <>
       {result.original && (
@@ -617,6 +620,20 @@ function TvSeasonsDrawer({ result }) {
       </HideWhenPlayerIsPlaying>
     )
   );
+}
+
+function ExtensionElements({ type }) {
+  const { extensionElements } = useExtension();
+
+  const elements = extensionElements();
+
+  return elements
+    .filter((e) => e.type === type)
+    .map((e, index) => {
+      const { content } = e.opts;
+
+      return <button key={index}> {content} </button>;
+    });
 }
 
 export default TitleView;

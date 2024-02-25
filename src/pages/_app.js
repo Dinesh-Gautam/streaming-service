@@ -5,6 +5,7 @@ import "@vidstack/react/player/styles/default/layouts/video.css";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "@next/font/google";
 import NextNProgress from "nextjs-progressbar";
+import { ExtensionProvider } from "../extension/manager";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -22,8 +23,10 @@ export default function App({ Component, pageProps }) {
         }
       `}</style>
       <SessionProvider session={pageProps.session}>
-        <NextNProgress color="rgba(255,255,255,0.8)" />
-        {getLayout(<Component {...pageProps} />)}
+        <ExtensionProvider>
+          <NextNProgress color="rgba(255,255,255,0.8)" />
+          {getLayout(<Component {...pageProps} />)}
+        </ExtensionProvider>
       </SessionProvider>
     </>
   );
