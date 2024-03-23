@@ -14,20 +14,33 @@ This project is a streaming service developed for a college project. It is built
 ## 📸 Screenshots
 
 - **Home Page**
+  
   ![Home page](./screenshots/home.png)
+  
 - **Search**
+
   ![Search results](./screenshots/search.png)
   ![Search page](./screenshots/searchResult.png)
+  
 - **Title Page**
+  
   ![Title page](./screenshots/titlePage.png)
   ![Title page](./screenshots/moreInfo.png)
   ![More Info](./screenshots/titleView.png)
+  
 - **User Authentication**
+  
   ![LogIn](./screenshots/login.png)
   ![SignUp](./screenshots/signUp.png)
+  
 - **Uploading Movies**
+  
   ![Upload](./screenshots/upload.png)
+  
 - **Managing Users**
+  
   ![Manage Users](./screenshots/manageUser.png)
+  
 - **Video Player**
+  
   ![Player](./screenshots/player.png)
