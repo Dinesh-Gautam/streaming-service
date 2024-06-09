@@ -1,30 +1,61 @@
-import React from "react";
-
-import { MediaPlayer, MediaProvider } from "@vidstack/react";
-import {
-  DefaultVideoLayout,
-  defaultLayoutIcons,
-} from "@vidstack/react/player/layouts/default";
-
-// import "shaka-player/dist/controls.css";
-import "@vidstack/react/player/styles/default/layouts/video.css";
-import "@vidstack/react/player/styles/default/theme.css";
+import React, { useEffect, useRef } from "react";
+import "shaka-player/dist/controls.css";
 import styles from "./shakaPlayer.module.scss";
 
-function VidStackPlayer({ manifestUrl }) {
+const shaka = require("shaka-player/dist/shaka-player.ui.js");
+
+function ShakaVideoPlayer({ manifestUrl }) {
+  const videoRef = useRef(null);
+  const videoContainerRef = useRef(null);
+  const playerRef = useRef(null);
+  useEffect(() => {
+    if (playerRef.current) return;
+    var manifestUri = manifestUrl;
+
+    let video = videoRef.current;
+    let videoContainer = videoContainerRef.current;
+
+    if (!video || !videoContainer) {
+      console.error("Refs are null");
+      return;
+    }
+    playerRef.current = new shaka.Player(video);
+    const player = playerRef.current;
+    const ui = new shaka.ui.Overlay(player, videoContainer, video);
+    const controls = ui.getControls();
+
+    console.log(Object.keys(shaka.ui));
+
+    const onError = (error) => {
+      // Log the error.
+      console.error("Error code", error.code, "object", error);
+    };
+    console.log(controls);
+    player
+      .load(manifestUri)
+      .then(function () {
+        // This runs if the asynchronous load is successful.
+        console.log("The video has now been loaded!");
+      })
+      .catch(onError); // onError is executed if the asynchronous load fails.
+  }, []);
+
   return (
-    <div style={{ position: "relative" }} className={styles.videoContainer}>
-      <Player manifestUrl={manifestUrl} />
+    <div
+      //   className="shadow-lg mx-auto max-w-full"
+      ref={videoContainerRef}
+      className={styles.videoContainer + " videoContainer"}
+    >
+      <video
+        id="video"
+        ref={videoRef}
+        autoPlay={true}
+        className={styles.video}
+        // className="w-full h-full"
+        // poster={this.props.posterUrl}
+      ></video>
     </div>
   );
 }
 
-function Player({ manifestUrl }) {
-  return (
-    <MediaPlayer className={styles.container} src={manifestUrl}>
-      <MediaProvider />
-      <DefaultVideoLayout icons={defaultLayoutIcons} />
-    </MediaPlayer>
-  );
-}
-export default VidStackPlayer;
+export default ShakaVideoPlayer;
