@@ -11,6 +11,8 @@ This project is a streaming service developed for a college project. It is built
 - Upload Movies
 - Manage Users
 
+https://github.com/Dinesh-Gautam/streaming-service/assets/69267018/751ac296-92e3-4a44-95c3-efa198993e7a
+
 ## 📸 Screenshots
 
 - **Home Page**
